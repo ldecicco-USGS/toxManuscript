@@ -28,3 +28,6 @@ chemPlot <- ggplot(tableData)+
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) 
 
 chemPlot
+
+dir.create(file.path("plots"), showWarnings = FALSE)
+ggsave(chemPlot, filename = "plots/SI4_chem_counts.png", width = 5, height = 5)

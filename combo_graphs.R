@@ -231,7 +231,8 @@ gt <- ggplot2::ggplot_gtable(gb)
 gt$layout$clip[gt$layout$name=="panel-1-1"] <- "off"
 gt$layout$clip[gt$layout$name=="panel-2-1"] <- "off"
 
-png("EEQ_Toxp.png", width = 1000, height = 400, res = 142)
+dir.create(file.path("plots"), showWarnings = FALSE)
+png("plots/EEQ_Toxp.png", width = 1000, height = 400, res = 142)
 grid::grid.draw(gt)
 dev.off()
 

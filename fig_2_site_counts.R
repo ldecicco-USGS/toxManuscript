@@ -65,4 +65,7 @@ gt <- ggplot2::ggplot_gtable(gb)
 
 gt$layout$clip[gt$layout$name=="panel-1-1"] <- "off"
 
+dir.create(file.path("plots"), showWarnings = FALSE)
+png("plots/site_count.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
+dev.off()
