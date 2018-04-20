@@ -2,7 +2,7 @@
 
 ```r
 # Create all the figures....
-
+rm(list=ls())
 # Fig 1:
 source("fig1_combo_graph.R")
 

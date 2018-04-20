@@ -1,8 +1,8 @@
 # Create all the figures....
 
 # Fig 1:
-
-
+source("fig1_combo_graph.R")
+rm(list=ls())
 # Fig 2:
 source("fig_2_site_counts.R")
 rm(list=ls())

@@ -17,6 +17,10 @@ source(file = "data_setup_concentrations.R")
 # Special funtion:
 source(file = "combo_graph_function.R")
 
+graphData_wq <- graph_chem_data(chemicalSummary_wqp)
+graphData_wq$guide_side <- "WQ Guidelines\nMaximum Toxicity Quotient per Site"
+graphData_eeq <- graph_chem_data(chemicalSummary_eeq)
+graphData_eeq$guide_side <- "Estradiol Equivalents"
 graphData_tox <- graph_chem_data(chemicalSummary)
 graphData_tox$guide_side <- "ToxCast\nMaximum EAR per Site"
 
