@@ -13,3 +13,10 @@ source("SI3_heat.R")
 
 # SI 4:
 source("SI4_chem_counts.R")
+
+# SI 6:
+source("SI6_sub_families.R")
+
+# SI 7:
+source("SI7_class_stacks.R")
+

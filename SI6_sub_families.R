@@ -86,3 +86,6 @@ subPlot <- subPlot +
   geom_text(data=countNonZero, aes(x=subFamily, y=xmin,label=nonZero),size=3) 
 
 subPlot
+
+dir.create(file.path("plots"), showWarnings = FALSE)
+ggsave(subPlot, filename = "plots/SI6_subFamilies.png", width = 5, height = 5)

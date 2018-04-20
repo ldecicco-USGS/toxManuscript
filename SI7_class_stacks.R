@@ -8,7 +8,8 @@ source(file = "data_setup.R")
 
 chem_site <- tox_list[["chem_site"]]
 
-pdf("class_stacks.pdf", width = 11, height = 9)
+dir.create(file.path("plots"), showWarnings = FALSE)
+pdf("plots/class_stacks.pdf", width = 11, height = 9)
 for(class in unique(chemicalSummary$Class)){
   grid.newpage()
   sub_class <- filter(chemicalSummary, Class %in% class)
