@@ -1,0 +1,12 @@
+"CAS","numSitesOccur.x","EARmax.x","numSitesOccur.y","EARmax.y","Class","chnm","EEF_max_in.vitro_or_in.vivo","AqT_EPA_acute","AqT_EPA_chronic","AqT_other_acute","AqT_other_chronic","Maximum laboratory reporting level","Maximum method detection level"
+"80-05-7",21,2.21328372173376,21,2.21328372173376,"Antioxidants","Bisphenol A",0.00016,NA,NA,NA,NA,0.04,0.02
+"84852-15-3",10,0.772680853443785,10,0.772680853443785,"Detergent Metabolites","4-Nonylphenol (sum of all isomers)",0.0036,28,6.6,NA,1,1.6,0.8
+"126-73-8",17,0.00585831113287427,17,0.00585831113287427,"Fire Retardants","Tributyl phosphate",NA,NA,NA,NA,NA,0.064,0.032
+"78-51-3",21,0.0146596240351775,21,0.0146596240351775,"Fire Retardants","Tris(2-butoxyethyl) phosphate",NA,NA,NA,NA,NA,0.64,0.32
+"119-61-9",17,0.00624895920359793,17,0.00624895920359793,"Flavors and Fragrances","Benzophenone",NA,NA,NA,NA,NA,0.08,0.04
+"1912-24-9",23,0.384149829093044,23,0.384149829093044,"Herbicides","Atrazine",NA,360,60,NA,1.8,0.16,0.08
+"51218-45-2",27,0.170818894083864,27,0.170818894083864,"Herbicides","Metolachlor",NA,NA,NA,NA,7.8,0.04,0.02
+"134-62-3",47,0.012547084468857,47,0.012547084468857,"Insecticides","N,N-diethyl-meta-toluamide (DEET)",NA,NA,NA,NA,NA,0.04,0.02
+"58-08-2",21,0.0331185020161714,21,0.0331185020161714,"Nonprescription drugs","Caffeine",NA,NA,NA,NA,NA,0.08,0.04
+"50-32-8",23,0.020348501703816,23,0.020348501703816,"PAHs","Benzo[a]pyrene",NA,3.98,0.014,0.24,0.015,0.02,0.01
+"206-44-0",30,0.0339320325926144,30,0.0339320325926144,"PAHs","Fluoranthene",NA,29.6,7.11,3980,0.04,0.02,0.01
