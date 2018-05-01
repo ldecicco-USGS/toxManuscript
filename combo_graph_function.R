@@ -39,17 +39,47 @@ combo_plot_matches <- function(gd_1, gd_2,
   graphData_1_2$Class <- factor(graphData_1_2$Class, levels = class_order$Class)
   graphData_1_2$chnm <- factor(graphData_1_2$chnm, levels = orderChem_1_2$chnm)
   
-  chems_in_1_2 <- select(graphData_1_2, guide_side, chnm) %>%
-    distinct() %>%
-    select(-guide_side) %>%
-    table() %>%
-    data.frame() %>%
-    filter(Freq == 2) %>%
-    mutate(chnm = unlist(`.`)) %>%
-    select(chnm)
+
+
   
   if(drop){
-    graphData_1_2 <- filter(graphData_1_2, chnm %in% chems_in_1_2$chnm)
+    if(grid){
+      chems_in_A <- filter(graphData_1_2, guide_up == gd_2$guide_up[1]) %>%
+        select(guide_side, chnm) %>%
+        distinct() 
+      
+      chems_in_A <- chems_in_A$chnm[duplicated(chems_in_A$chnm)]
+      if(length(chems_in_B) > 0){
+        chems_in_A <- data.frame(chnm = chems_in_A, guide_up = gd_2$guide_up[1], stringsAsFactors = FALSE)
+      } else {
+        chems_in_A <- data.frame(chnm = NA, guide_up = gd_2$guide_up[1], stringsAsFactors = FALSE)
+      }
+      
+      chems_in_B <- filter(graphData_1_2, guide_up == gd_3$guide_up[1]) %>%
+        select(guide_side, chnm) %>%
+        distinct()
+      
+      chems_in_B <- chems_in_B$chnm[duplicated(chems_in_B$chnm)]
+      if(length(chems_in_B) > 0){
+        chems_in_B <- data.frame(chnm=chems_in_B, guide_up = gd_3$guide_up[1], stringsAsFactors = FALSE)
+      } else {
+        chems_in_B <- data.frame(chnm = NA, guide_up = gd_2$guide_up[1], stringsAsFactors = FALSE)
+      }
+      
+      chems_in <- bind_rows(chems_in_A, chems_in_B)
+      
+      graphData_1_2 <- graphData_1_2 %>%
+        right_join(chems_in, by=c("chnm","guide_up"))
+    } else {
+      chems_in_1_2 <- graphData_1_2 %>%
+        select(guide_side, chnm) %>%
+        distinct() 
+      
+      chems_in_1_2 <- chems_in_1_2$chnm[duplicated(chems_in_1_2$chnm)]
+      
+      graphData_1_2 <- filter(graphData_1_2, chnm %in% chems_in_1_2$chnm)
+    }
+    
   }
   
   guide_side_1 <- gd_1$guide_side[1]
@@ -93,7 +123,9 @@ combo_plot_matches <- function(gd_1, gd_2,
   toxPlot_1_2 <- ggplot(data=graphData_1_2) +
     scale_y_log10(labels=toxEval:::fancyNumbers)  +
     geom_boxplot(aes(x=chnm, y=maxEAR, fill=Class),
-                 lwd=0.1,outlier.size=1) 
+                 lwd=0.1,outlier.size=1) +
+    theme_minimal() +
+    coord_flip() 
   
   if(grid){
     toxPlot_1_2 <- toxPlot_1_2 +
@@ -106,8 +138,6 @@ combo_plot_matches <- function(gd_1, gd_2,
   }
   
   toxPlot_1_2 <- toxPlot_1_2 +
-    theme_minimal() +
-    coord_flip() +
     theme(axis.text = element_text( color = "black"),
           axis.text.y = element_text(size=7),
           axis.title=element_blank(),
@@ -143,32 +173,28 @@ combo_plot_matches <- function(gd_1, gd_2,
   if(!drop){
 
     if(!all(is.null(gd_3))){
-      chm_side_top <- bind_rows(select(orderChem_1_2,-median),
-                            select(orderChem_1_2,-median)) %>%
-        mutate(guide_side = factor(c(rep(guide_side_1,nrow(orderChem_1_2)),
-                                     rep(guide_side_2,nrow(orderChem_1_2))),
-                                   levels = c(guide_side_1, guide_side_2)),
-               guide_up = c(rep(gd_2$guide_up[1],nrow(orderChem_1_2)),
-                            rep(gd_2$guide_up[1],nrow(orderChem_1_2)))) %>%
-        filter(chnm %in% c(levels(gd_1$chnm)[levels(gd_1$chnm) %in% levels(gd_2$chnm)],
-                                  levels(gd_2$chnm)[!(levels(gd_2$chnm) %in% levels(gd_1$chnm))]))
-
-      chm_side_bottom <- bind_rows(select(orderChem_1_2,-median),
-                                select(orderChem_1_2,-median)) %>%
-        mutate(guide_side = factor(c(rep(guide_side_1,nrow(orderChem_1_2)),
-                                     rep(guide_side_2,nrow(orderChem_1_2))),
-                                   levels = c(guide_side_1, guide_side_2)),
-               guide_up = c(rep(gd_3$guide_up[1],nrow(orderChem_1_2)),
-                            rep(gd_3$guide_up[1],nrow(orderChem_1_2)))) %>%
-        filter(chnm %in% c(levels(gd_1$chnm)[levels(gd_1$chnm) %in% levels(gd_3$chnm)],
-                           levels(gd_3$chnm)[!(levels(gd_3$chnm) %in% levels(gd_1$chnm))]))
       
+      plot_data <- select(toxPlot_1_2$data, chnm, guide_side, guide_up) %>%
+        distinct()
       
-      chm_side <- bind_rows(chm_side_top, chm_side_bottom)
+      chem_A <- unique(plot_data$chnm[plot_data$guide_up == gd_2$guide_up[1]])
+      chem_B <- unique(plot_data$chnm[plot_data$guide_up == gd_3$guide_up[1]])
+      
+      chm_side_A <- data.frame(chnm = chem_A,
+                               guide_up = gd_2$guide_up[1])
+      
+      chm_side_B <- data.frame(chnm = chem_B,
+                               guide_up = gd_3$guide_up[1])
+      
+      chm_side <- bind_rows(mutate(chm_side_A, guide_side = guide_side_1),
+                            mutate(chm_side_A, guide_side = guide_side_2),
+                            mutate(chm_side_B, guide_side = guide_side_1),
+                            mutate(chm_side_B, guide_side = guide_side_3))
       
       chm_side$chnm <- factor(chm_side$chnm, levels = levels(graphData_1_2$chnm))
+      chm_side$guide_side <- factor(chm_side$guide_side, levels = levels(graphData_1_2$guide_side))
 
-      countNonZero_1_2 <- right_join(countNonZero_1_2, chm_side, by=c("chnm","Class","guide_side","guide_up"))
+      countNonZero_1_2 <- right_join(countNonZero_1_2, chm_side, by=c("chnm","guide_side","guide_up"))
       
     } else {
       chm_side <- bind_rows(select(orderChem_1_2,-median),
@@ -189,9 +215,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   countNonZero_1_2 <- countNonZero_1_2 %>%
     mutate(ymin = ifelse(guide_side == guide_side_1, xmin_1, xmin_2),
            ymax = ifelse(guide_side == guide_side_1, xmax_1, xmax_2))
-  
-  
-  
+
   labels_1_2 <- data.frame(x = rep(Inf,4),
                            y = c(xmin_1,thres_1,
                                  xmin_2,thres_2),
