@@ -1,5 +1,6 @@
-source("data_setup.R")
 library(dplyr)
+
+source("data_setup.R")
 
 chem_info <- tox_list[[2]]
 names(chem_info)[2] <- "chnm"
