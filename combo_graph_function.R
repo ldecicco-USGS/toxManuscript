@@ -120,11 +120,13 @@ combo_plot_matches <- function(gd_1, gd_2,
                 "#FFFF00","#78C15A","#79AEAE","#FF0000","#00FF00","#B1611D",
                 "#FFA500","#F4426e", "#800000", "#808000")
   
+  pretty_logs_new <- toxEval:::prettyLogs(graphData_1_2$maxEAR)
+  
   toxPlot_1_2 <- ggplot(data=graphData_1_2) +
-    scale_y_log10(labels=toxEval:::fancyNumbers)  +
+    scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
     geom_boxplot(aes(x=chnm, y=maxEAR, fill=Class),
                  lwd=0.1,outlier.size=1) +
-    theme_minimal() +
+    theme_bw() +
     coord_flip() 
   
   if(grid){
@@ -250,7 +252,7 @@ combo_plot_matches <- function(gd_1, gd_2,
               aes(x= chnm, label = nonZero, y=ymin)) +
     geom_text(data=countNonZero_1_2, size=2.5, 
               aes(x= chnm, label = hits, y=ymax)) +
-    geom_text(data=labels_1_2, size=2.5,
+    geom_text(data=labels_1_2, size=2.5,vjust=0,
               aes(x = x,  y=y, label = label)) +
     geom_segment(data = thresh_df, aes(y = thres, yend = thres),
                  linetype="dashed", 
