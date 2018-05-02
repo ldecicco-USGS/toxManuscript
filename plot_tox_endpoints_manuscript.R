@@ -140,7 +140,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     pretty_logs_new <-  pretty_logs[log_index] 
     
     stackedPlot <- ggplot(data = chemicalSummary)+
-      scale_y_log10(y_label,labels=fancyNumbers,breaks=pretty_logs_new) +
+      scale_y_log10(y_label,labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
       theme_minimal() +
       xlab("") +
       theme(axis.text.y = element_text(vjust = .25,hjust=1)) +
@@ -223,7 +223,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     graphData$endPoint <- factor(graphData$endPoint, levels = orderedLevelsEP)
     
     stackedPlot <- ggplot(graphData)+
-      scale_y_log10(y_label,labels=fancyNumbers,breaks=pretty_logs_new) +
+      scale_y_log10(y_label,labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
       theme_minimal() +
       xlab("") +
       theme(axis.text.y = element_text(vjust = .25,hjust=1)) 
