@@ -56,5 +56,5 @@ for (i in 1:length(endpoints)){
   
 }
 
-write.csv(updated_benchmarks,file="udated_benchmarks.csv",row.names = FALSE)
+write.csv(updated_benchmarks,file="updated_benchmarks.csv",row.names = FALSE)
   
