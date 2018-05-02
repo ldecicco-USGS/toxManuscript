@@ -13,7 +13,7 @@ source(file = "plot_tox_endpoints_manuscript.R")
 #4. Match with AOPs and color the boxplots differently for those with AOPs and those without
 
 threshold <- 0.001
-siteThreshold <- 20
+siteThreshold <- 10
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -22,7 +22,8 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   summarize(EARmax = max(EARsum)) %>%
   filter(EARmax >= threshold) %>%
   group_by(endPoint) %>%
-  summarize(numSites = n_distinct(site))
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites))
 
 siteRows <- which(endpoints_sites_hits$numSites >= siteThreshold)
 priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
@@ -30,6 +31,7 @@ priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
 chemicalSummaryPriority <- chemicalSummary[which(chemicalSummary$endPoint %in% priority_endpoints),]
 
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority)
+
 #  not sure how to put the number of chemicals per endpoint on the right side.
 #  need to add color to distinguish endpoints with associated AOPs
 
@@ -42,3 +44,16 @@ dir.create(file.path("plots"), showWarnings = FALSE)
 png("plots/fig3_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
 dev.off()
+
+
+# Determine number of chemicals per endpoint
+endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
+  group_by(endPoint) %>%
+  summarize(numChems = n_distinct(CAS))
+
+sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_sites_hits)
+
+unique(test$CAS)
+ATG_PXRE_CIS_up
+CLD_CYP1A1_6hr
+write.csv(endpoints_sites_hits,file="sitesChemsPerEndoint.csv",row.names = FALSE)
