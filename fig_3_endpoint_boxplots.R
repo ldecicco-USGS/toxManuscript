@@ -24,8 +24,8 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint) %>%
   summarize(numSites = n_distinct(site))
 
-test <- which(endpoints_sites_hits$numSites >= siteThreshold)
-priority_endpoints <- pull(endpoints_sites_hits,endPoint)[test]
+siteRows <- which(endpoints_sites_hits$numSites >= siteThreshold)
+priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
 
 chemicalSummaryPriority <- chemicalSummary[which(chemicalSummary$endPoint %in% priority_endpoints),]
 
