@@ -64,20 +64,13 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
                               manual_remove = NULL,
                               hit_threshold = NA,
                               mean_logic = FALSE, 
+                              sum_logic = TRUE,
                               font_size = NA,
                               title = NA,
                               pallette = NA){
   
   match.arg(category, c("Biological","Chemical Class","Chemical"))
-  mean_logic <- as.character(mean_logic)
-  match.arg(mean_logic, c("mean","max","noSum","TRUE","FALSE"))
-  
-  pretty_cat <- switch(category, 
-                       "Chemical" = "k = all chemicals for a given sample",
-                       "Biological" = "k = chemicals within a specified biological activity grouping for a given sample",
-                       "Chemical Class" = "k = chemicals within a specified class for a given sample"
-  )
-  
+
   site <- endPoint <- EAR <- sumEAR <- meanEAR <- x <- y <- ".dplyr"
   
   if(category == "Biological"){
@@ -90,6 +83,8 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
       
   single_site <- length(unique(chemicalSummary$site)) == 1
   
+  y_label <- toxEval:::fancyLabels(category, mean_logic, sum_logic, single_site)
+  
   if(filterBy != "All"){
     if(!(filterBy %in% unique(chemicalSummary$category))){
       stop("filterBy argument doesn't match data")
@@ -100,14 +95,6 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
   }
   
   if(single_site){
-    
-    if(category == "Chemical Class"){
-      y_label <- "All EARs within a chemical class"
-    } else if (category == "Biological") {
-      y_label <- "All EARs within a biological grouping"
-    } else {
-      y_label <- "All EARs"
-    }
     
     countNonZero <- chemicalSummary %>%
       group_by(endPoint) %>%
@@ -133,11 +120,8 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     }
     
     chemicalSummary$endPoint <- factor(chemicalSummary$endPoint, levels = orderedLevelsEP)
-    pretty_range <- range(chemicalSummary$EAR[chemicalSummary$EAR > 0])
-    pretty_logs <- 10^(-10:10)
-    log_index <- which(pretty_logs < pretty_range[2] & pretty_logs > pretty_range[1])
-    log_index <- c(log_index[1]-1,log_index, log_index[length(log_index)]+1)
-    pretty_logs_new <-  pretty_logs[log_index] 
+    
+    pretty_logs_new <- toxEval:::prettyLogs(chemicalSummary$EAR)
     
     stackedPlot <- ggplot(data = chemicalSummary)+
       scale_y_log10(y_label,labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
@@ -158,29 +142,13 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     
   } else {
     
-    y_label <- bquote(atop("max" ~ group("[",EAR[chemical*"[" *k* "]"], "]")[site],  .(pretty_cat)))
-    if(mean_logic %in% c("TRUE","mean")){
-      y_label <- bquote(atop("mean" ~ group("[",sum(" "  ~ group("(",EAR[chemical*"[" *k* "]"],")")), "]")[site], .(pretty_cat)))
-    }
-    if(mean_logic %in% c("FALSE","max")){
-      y_label <- bquote(atop("max" ~ group("[",sum(" "  ~ group("(",EAR[chemical*"[" *k* "]"],")")), "]")[site],  .(pretty_cat)))
-    }
-    
-    if(mean_logic == "noSum"){
+    if(!sum_logic){
       graphData <- chemicalSummary %>%
         group_by(site, category,endPoint) %>%
         summarise(meanEAR=max(EAR)) %>%
         data.frame() %>%
         mutate(category=as.character(category))      
     } else {
-      
-      if(mean_logic %in% c("TRUE","mean")){
-        mean_logic <- TRUE
-      }
-      if(mean_logic %in% c("FALSE","max")){
-        mean_logic <- FALSE
-      }
-      
       graphData <- chemicalSummary %>%
         group_by(site,date,category,endPoint) %>%
         summarise(sumEAR=sum(EAR)) %>%
@@ -191,11 +159,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
         mutate(category=as.character(category))      
     }
   
-    pretty_range <- range(graphData$meanEAR[graphData$meanEAR > 0])
-    pretty_logs <- 10^(-10:10)
-    log_index <- which(pretty_logs < pretty_range[2] & pretty_logs > pretty_range[1])
-    log_index <- c(log_index[1]-1,log_index, log_index[length(log_index)]+1)
-    pretty_logs_new <-  pretty_logs[log_index] 
+    pretty_logs_new <- toxEval:::prettyLogs(graphData$meanEAR)
     
     countNonZero <- graphData %>%
       group_by(endPoint) %>%
