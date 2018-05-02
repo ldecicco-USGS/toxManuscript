@@ -30,6 +30,17 @@ priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
 
 chemicalSummaryPriority <- chemicalSummary[which(chemicalSummary$endPoint %in% priority_endpoints),]
 
+AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+
+AOP <- AOP_crosswalk %>%
+  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
+  distinct()
+
+eps_with_ids <- unique(AOP$endPoint)
+
+chemicalSummaryPriority$has_AOP <- "Undefined AOP"
+chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_ids] <- "Has AOP"
+
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority)
 
 #  not sure how to put the number of chemicals per endpoint on the right side.
