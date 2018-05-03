@@ -13,7 +13,7 @@ source(file = "plot_tox_endpoints_manuscript.R")
 #4. Match with AOPs and color the boxplots differently for those with AOPs and those without
 
 threshold <- 0.001
-siteThreshold <- 10
+siteThreshold <- 20
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -38,8 +38,8 @@ AOP <- AOP_crosswalk %>%
 
 eps_with_ids <- unique(AOP$endPoint)
 
-chemicalSummaryPriority$has_AOP <- "Undefined AOP"
-chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_ids] <- "Has AOP"
+chemicalSummaryPriority$has_AOP <- "AOP Undefined"
+chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_ids] <- "AOP Associated"
 
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority)
 
