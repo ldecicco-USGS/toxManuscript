@@ -57,7 +57,7 @@ grid::grid.draw(gt)
 dev.off()
 
 
-# Determine number of chemicals per endpoint
+# Determine number of chemicals and sites per endpoint
 endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
   group_by(endPoint) %>%
   summarize(numChems = n_distinct(CAS))
