@@ -57,12 +57,16 @@ grid::grid.draw(gt)
 dev.off()
 
 
-# Determine number of chemicals per endpoint
+# Determine number of chemicals and sites per endpoint
 endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
   group_by(endPoint) %>%
   summarize(numChems = n_distinct(CAS))
 
-sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_sites_hits)
+endpoints_unique_sites <- filter(chemicalSummaryPriority,EAR > 0) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site))
+
+sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 
 # unique(test$CAS)
 # ATG_PXRE_CIS_up
