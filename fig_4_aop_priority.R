@@ -8,7 +8,7 @@ library(dataRetrieval)
 ####################################
 source(file = "data_setup.R")
 
-AOP_EAR_thres <- 0.01
+AOP_EAR_thres <- 0.1
 chemical_thres <- 0.01
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
