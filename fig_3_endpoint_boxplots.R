@@ -64,7 +64,7 @@ endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
 
 sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_sites_hits)
 
-unique(test$CAS)
-ATG_PXRE_CIS_up
-CLD_CYP1A1_6hr
-write.csv(endpoints_sites_hits,file="sitesChemsPerEndoint.csv",row.names = FALSE)
+# unique(test$CAS)
+# ATG_PXRE_CIS_up
+# CLD_CYP1A1_6hr
+# write.csv(endpoints_sites_hits,file="sitesChemsPerEndoint.csv",row.names = FALSE)
