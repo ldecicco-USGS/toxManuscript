@@ -23,12 +23,12 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   filter(EARmax >= threshold) %>%
   group_by(endPoint) %>%
   summarize(numSites = n_distinct(site)) %>%
-  arrange(desc(numSites))
+  arrange(desc(numSites)) %>%
+  filter(numSites >= siteThreshold)
 
-siteRows <- which(endpoints_sites_hits$numSites >= siteThreshold)
-priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
+priority_endpoints <- endpoints_sites_hits$endPoint
 
-chemicalSummaryPriority <- chemicalSummary[which(chemicalSummary$endPoint %in% priority_endpoints),]
+chemicalSummaryPriority <- filter(chemicalSummary, endPoint %in% priority_endpoints)
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
 
