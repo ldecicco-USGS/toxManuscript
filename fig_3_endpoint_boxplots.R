@@ -13,7 +13,7 @@ source(file = "plot_tox_endpoints_manuscript.R")
 #4. Match with AOPs and color the boxplots differently for those with AOPs and those without
 
 threshold <- 0.001
-siteThreshold <- 20
+siteThreshold <- 15
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -42,3 +42,11 @@ dir.create(file.path("plots"), showWarnings = FALSE)
 png("plots/fig3_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
 dev.off()
+
+# Write info about the priority endpoints to a csv
+priority_endpoint_rows <- which(endPointInfo$assay_component_endpoint_name %in% priority_endpoints)
+priority_endpoint_description <- endPointInfo[priority_endpoint_rows,]
+
+write.csv(priority_endpoint_description,
+          file=paste0("priority_endpoints",siteThreshold,"_sites_thresh_",threshold,".csv"),
+          row.names = FALSE)
