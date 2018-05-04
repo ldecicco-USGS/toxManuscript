@@ -11,14 +11,14 @@ combo_plot_matches <- function(gd_1, gd_2,
     orderChem_1_2 <- bind_rows(gd_1,
                                filter(gd_2, !(chnm %in% levels(gd_1$chnm)))) %>%
       group_by(chnm,Class) %>%
-      summarise(median = quantile(maxEAR[maxEAR != 0],0.5)) %>%
+      summarise(median = quantile(meanEAR[meanEAR != 0],0.5)) %>%
       data.frame()
   } else {
     orderChem_1_2 <- bind_rows(gd_1, 
                                filter(gd_2, !(chnm %in% levels(gd_1$chnm))),
                                filter(gd_3, !(chnm %in% c(levels(gd_1$chnm),levels(gd_2$chnm))))) %>%
       group_by(chnm,Class) %>%
-      summarise(median = quantile(maxEAR[maxEAR != 0],0.5)) %>%
+      summarise(median = quantile(meanEAR[meanEAR != 0],0.5)) %>%
       data.frame()      
   }
 
@@ -88,7 +88,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   if(all(is.null(gd_3))){
     countNonZero_1_2 <- graphData_1_2 %>%
       group_by(site, chnm, Class, guide_side) %>%
-      summarise(meanEAR = mean(maxEAR, na.rm=TRUE)) %>%
+      summarise(meanEAR = mean(meanEAR, na.rm=TRUE)) %>%
       group_by(chnm, Class, guide_side) %>%
       summarise(nonZero = as.character(sum(meanEAR>0)),
                 hits = as.character(sum(meanEAR > ifelse(guide_side == guide_side_1, thres_1, thres_2)))) %>%
@@ -98,7 +98,7 @@ combo_plot_matches <- function(gd_1, gd_2,
     guide_side_3 <- gd_3$guide_side[1]
     countNonZero_1_2 <- graphData_1_2 %>%
       group_by(site, chnm, Class, guide_side, guide_up) %>%
-      summarise(meanEAR = mean(maxEAR, na.rm=TRUE)) %>%
+      summarise(meanEAR = mean(meanEAR, na.rm=TRUE)) %>%
       group_by(chnm, Class, guide_side, guide_up) %>%
       summarise(nonZero = as.character(sum(meanEAR>0)),
                 hits = as.character(sum(meanEAR > ifelse(guide_side == guide_side_1, thres_1, thres_2)))) %>%
@@ -120,11 +120,13 @@ combo_plot_matches <- function(gd_1, gd_2,
                 "#FFFF00","#78C15A","#79AEAE","#FF0000","#00FF00","#B1611D",
                 "#FFA500","#F4426e", "#800000", "#808000")
   
+  pretty_logs_new <- toxEval:::prettyLogs(graphData_1_2$meanEAR)
+  
   toxPlot_1_2 <- ggplot(data=graphData_1_2) +
-    scale_y_log10(labels=toxEval:::fancyNumbers)  +
-    geom_boxplot(aes(x=chnm, y=maxEAR, fill=Class),
+    scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
+    geom_boxplot(aes(x=chnm, y=meanEAR, fill=Class),
                  lwd=0.1,outlier.size=1) +
-    theme_minimal() +
+    theme_bw() +
     coord_flip() 
   
   if(grid){
@@ -250,7 +252,7 @@ combo_plot_matches <- function(gd_1, gd_2,
               aes(x= chnm, label = nonZero, y=ymin)) +
     geom_text(data=countNonZero_1_2, size=2.5, 
               aes(x= chnm, label = hits, y=ymax)) +
-    geom_text(data=labels_1_2, size=2.5,
+    geom_text(data=labels_1_2, size=2.5,vjust=0,
               aes(x = x,  y=y, label = label)) +
     geom_segment(data = thresh_df, aes(y = thres, yend = thres),
                  linetype="dashed", 

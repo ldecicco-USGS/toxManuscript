@@ -116,7 +116,7 @@ plot_tox_endpoints_special <- function(chemicalSummary,
         theme(legend.title=element_blank())
     } else {
       stackedPlot <- stackedPlot +
-        theme(legend.position = "none")
+        theme(legend.title = element_blank())
     }
     
   } else {

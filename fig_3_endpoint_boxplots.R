@@ -22,14 +22,27 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   summarize(EARmax = max(EARsum)) %>%
   filter(EARmax >= threshold) %>%
   group_by(endPoint) %>%
-  summarize(numSites = n_distinct(site))
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites))
 
-test <- which(endpoints_sites_hits$numSites >= siteThreshold)
-priority_endpoints <- pull(endpoints_sites_hits,endPoint)[test]
+siteRows <- which(endpoints_sites_hits$numSites >= siteThreshold)
+priority_endpoints <- pull(endpoints_sites_hits,endPoint)[siteRows]
 
 chemicalSummaryPriority <- chemicalSummary[which(chemicalSummary$endPoint %in% priority_endpoints),]
 
+AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+
+AOP <- AOP_crosswalk %>%
+  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
+  distinct()
+
+eps_with_ids <- unique(AOP$endPoint)
+
+chemicalSummaryPriority$has_AOP <- "AOP Undefined"
+chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_ids] <- "AOP Associated"
+
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority)
+
 #  not sure how to put the number of chemicals per endpoint on the right side.
 #  need to add color to distinguish endpoints with associated AOPs
 
@@ -43,10 +56,19 @@ png("plots/fig3_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
 dev.off()
 
-# Write info about the priority endpoints to a csv
-priority_endpoint_rows <- which(endPointInfo$assay_component_endpoint_name %in% priority_endpoints)
-priority_endpoint_description <- endPointInfo[priority_endpoint_rows,]
+# Determine number of chemicals and sites per endpoint
+endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
+  group_by(endPoint) %>%
+  summarize(numChems = n_distinct(CAS))
 
-write.csv(priority_endpoint_description,
-          file=paste0("priority_endpoints",siteThreshold,"_sites_thresh_",threshold,".csv"),
-          row.names = FALSE)
+endpoints_unique_sites <- filter(chemicalSummaryPriority,EAR > 0) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site))
+
+sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
+
+# unique(test$CAS)
+# ATG_PXRE_CIS_up
+# CLD_CYP1A1_6hr
+# write.csv(endpoints_sites_hits,file="sitesChemsPerEndoint.csv",row.names = FALSE)
+

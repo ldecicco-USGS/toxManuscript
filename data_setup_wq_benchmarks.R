@@ -6,6 +6,20 @@ full_path <- file.path(file_name)
 
 tox_list_wq_benchmarks <- create_toxEval(full_path)
 
+x <- tox_list_wq_benchmarks$benchmarks
+
+name_fix <- tox_chemicals %>%
+  select(CAS=Substance_CASRN, chnm = Substance_Name) %>%
+  filter(CAS %in% unique(x$CAS))
+
+x <- x %>%
+  rename(orig_name=chnm) %>%
+  left_join(name_fix, by="CAS")
+
+x$chnm[is.na(x$chnm)] <- x$orig_name[is.na(x$chnm)]
+
+tox_list_wq_benchmarks$benchmarks <- x
+
 chemicalSummary_bench <- get_chemical_summary(tox_list_wq_benchmarks)
 
 #Trim some names:
