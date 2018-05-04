@@ -67,7 +67,7 @@ aopPlot <- ggplot(data = graphData)+
         panel.border = element_blank(),
         axis.ticks = element_blank(),
         plot.title = element_text(hjust = 0.5, vjust = 0, margin = margin(-0.5,0,0,0))) +
-  geom_boxplot(aes(x=ID, y=sumEAR_AOP),lwd=0.1,outlier.size=1, fill = "steelblue")       +
+  geom_boxplot(aes(x=ID, y=sumEAR_AOP),lwd=0.1,outlier.size=1, fill = "orange")       +
   coord_flip()
 
 plot_info <- ggplot_build(aopPlot)
