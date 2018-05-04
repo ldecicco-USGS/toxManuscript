@@ -9,6 +9,9 @@ rm(list=ls())
 # Fig 3:
 source("fig_3_endpoint_boxplots.R")
 rm(list=ls())
+# Fig 3:
+source("fig_4_aop_priority.R")
+rm(list=ls())
 # SI 2:
 source("SI2_detection_levels.R")
 rm(list=ls())
