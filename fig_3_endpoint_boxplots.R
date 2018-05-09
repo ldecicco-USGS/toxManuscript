@@ -76,4 +76,5 @@ unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and si
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
 AOP_OWC <-  left_join(AOP_crosswalk,endpoints_sites_hits,by=c("Component.Endpoint.Name"="endPoint")) %>%
   filter(!is.na(numSites))
+unique(AOP_OWC$Assay.Endpoint.ID)
 write.csv(AOP_OWC,file="AOPs_for_Great_Lakes_OWC_study.csv",row.names = FALSE)
