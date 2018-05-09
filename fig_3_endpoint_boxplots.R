@@ -70,11 +70,11 @@ sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 ####Determine a few things for the text: 
 #how many endpoints when using threshold and siteThreshold
 
-unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and siteThreshold = 10
-
-# merge the priority endpoints with the endpoint crosswalk for transmittal to EPA for relevance evaluation
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
-AOP_OWC <-  left_join(AOP_crosswalk,endpoints_sites_hits,by=c("Component.Endpoint.Name"="endPoint")) %>%
-  filter(!is.na(numSites))
-unique(AOP_OWC$Assay.Endpoint.ID)
-write.csv(AOP_OWC,file="AOPs_for_Great_Lakes_OWC_study.csv",row.names = FALSE)
+# unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and siteThreshold = 10
+# 
+# # merge the priority endpoints with the endpoint crosswalk for transmittal to EPA for relevance evaluation
+# AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+# AOP_OWC <-  left_join(AOP_crosswalk,endpoints_sites_hits,by=c("Component.Endpoint.Name"="endPoint")) %>%
+#   filter(!is.na(numSites))
+# unique(AOP_OWC$Assay.Endpoint.ID)
+# write.csv(AOP_OWC,file="AOPs_for_Great_Lakes_OWC_study.csv",row.names = FALSE)
