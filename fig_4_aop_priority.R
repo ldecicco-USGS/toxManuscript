@@ -50,7 +50,7 @@ nSites <- chemicalSummary %>%
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
-  ylab("") +
+  ylab("ToxCast Endpoint Name") +
   xlab("AOP ID") +
   labs(fill="Mean EAR") +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
@@ -63,14 +63,8 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
-<<<<<<< HEAD
-        plot.title = element_text(hjust = 0.5, vjust = 0, margin = margin(-0.5,0,0,0))) +
-  geom_boxplot(aes(x=ID, y=sumEAR_AOP),lwd=0.1,outlier.size=1, fill = "orange")       +
-  coord_flip()
-=======
         panel.border = element_blank(),
         plot.background = element_rect(fill = "transparent",colour = NA))
->>>>>>> 2e0554a7bbe70af46e12911e720d00f4d528c4f3
 
 plot_info <- ggplot_build(aop_ep)
 layout_stuff <- plot_info$layout
