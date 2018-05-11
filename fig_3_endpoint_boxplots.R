@@ -13,7 +13,7 @@ source(file = "plot_tox_endpoints_manuscript.R")
 #4. Match with AOPs and color the boxplots differently for those with AOPs and those without
 
 threshold <- 0.001
-siteThreshold <- 20
+siteThreshold <- 10
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -56,7 +56,6 @@ png("plots/fig3_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
 dev.off()
 
-
 # Determine number of chemicals and sites per endpoint
 endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%
   group_by(endPoint) %>%
@@ -68,7 +67,14 @@ endpoints_unique_sites <- filter(chemicalSummaryPriority,EAR > 0) %>%
 
 sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 
-# unique(test$CAS)
-# ATG_PXRE_CIS_up
-# CLD_CYP1A1_6hr
-# write.csv(endpoints_sites_hits,file="sitesChemsPerEndoint.csv",row.names = FALSE)
+####Determine a few things for the text: 
+#how many endpoints when using threshold and siteThreshold
+
+# unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and siteThreshold = 10
+# 
+# # merge the priority endpoints with the endpoint crosswalk for transmittal to EPA for relevance evaluation
+# AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+# AOP_OWC <-  left_join(AOP_crosswalk,endpoints_sites_hits,by=c("Component.Endpoint.Name"="endPoint")) %>%
+#   filter(!is.na(numSites))
+# unique(AOP_OWC$Assay.Endpoint.ID)
+# write.csv(AOP_OWC,file="AOPs_for_Great_Lakes_OWC_study.csv",row.names = FALSE)

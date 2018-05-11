@@ -141,6 +141,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     scale_y_log10(y_label,labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
     theme_minimal() +
     xlab("") +
+    ylab("ToxCast Endpoint Name") +
     theme(axis.text.y = element_text(vjust = .25,hjust=1)) 
   
   if(!is.na(hit_threshold)){
