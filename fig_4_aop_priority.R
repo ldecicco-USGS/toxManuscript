@@ -56,6 +56,8 @@ nSites <- boxData %>%
 
 boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
+chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
+
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxEAR)
 
@@ -89,9 +91,9 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
-                       trans = 'log',limits = c(0.001,0.1),
+                       trans = 'log',limits = c(1e-9,1),
                        low = "white", high = "steelblue",
-                       breaks = c(0.0005,0.001,0.005,0.01,0.05,0.1),
+                       breaks = c(1e-9,1e-7,1e-5,1e-5,1e-3,1e-1,1),
                        labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
