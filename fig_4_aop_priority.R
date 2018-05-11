@@ -4,20 +4,38 @@ library(dplyr)
 library(tidyr)
 library(data.table)
 library(dataRetrieval)
+library(cowplot)
 
 ####################################
 source(file = "data_setup.R")
 
-mean_thres <- 0.0001
+ear_thresh <- 0.01
+siteThres <- 10
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
+boxData <- chemicalSummary %>%
+  left_join(AOP, by="endPoint") %>%
+  group_by(ID, endPoint, site, date) %>%
+  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
+  group_by(ID, site) %>%
+  summarize(maxEAR = max(sumEAR)) %>%
+  ungroup() %>%
+  filter(!is.na(ID),
+         maxEAR > ear_thresh) %>%
+  mutate(ID = as.factor(ID))
+
+priority_AOPs <- boxData %>%
+  group_by(ID) %>%
+  summarise(siteDet = n_distinct(site)) %>%
+  filter(siteDet >= siteThres)
+
 chem_sum_AOP <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
-  group_by(site, date, ID, endPoint) %>%
+  group_by(ID, endPoint, site, date) %>%
   summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
   group_by(ID, endPoint, site) %>%
   summarise(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
@@ -25,42 +43,19 @@ chem_sum_AOP <- chemicalSummary %>%
   summarize(meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   data.frame() %>%
-  filter(meanEAR > mean_thres,
-         !is.na(ID)) %>%
+  filter(!is.na(ID)) %>%
   mutate(ID = as.factor(ID),
-         endPoint = as.factor(endPoint),
-         guide_up = "A") 
+         endPoint = as.factor(endPoint)) 
 
-priority_AOPs <- chem_sum_AOP %>%
+nSites <- boxData %>%
   group_by(ID) %>%
-  summarise(nEndPoints = n()) %>%
-  filter(nEndPoints > 1)
-
-chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
-
-nSites <- chemicalSummary %>%
-  left_join(AOP, by="endPoint") %>%
-  group_by(site, date, ID, endPoint) %>%
-  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
-  group_by(ID, site) %>%
-  summarize(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
-  group_by(ID) %>%
-  summarize(sitehits = sum(maxEAR > mean_thres)) %>%
+  summarize(sitehits = sum(maxEAR > ear_thresh)) %>%
   filter(!is.na(ID),
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
 
-boxData <- chemicalSummary %>%
-  left_join(AOP, by="endPoint") %>%
-  group_by(site, date, ID, endPoint) %>%
-  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
-  group_by(ID, site) %>%
-  summarize(maxEAR = max(sumEAR)) %>%
-  ungroup() %>%
-  filter(!is.na(ID),
-         ID %in% priority_AOPs$ID) %>%
-  mutate(ID = as.factor(ID),
-         guide_up = "B")
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxEAR)
 
@@ -117,6 +112,7 @@ site_graph <- ggplot() +
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank())
+
 
 png("aop_cow.png", width = 1200, height = 1200, res = 142)
 plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(4/10, 1/10, 1/2))
