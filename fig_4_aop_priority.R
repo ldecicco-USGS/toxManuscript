@@ -19,9 +19,11 @@ chem_sum_AOP <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(site, date, ID, endPoint) %>%
   summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
+  group_by(ID, endPoint, site) %>%
+  summarise(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
   group_by(ID, endPoint) %>%
-  summarize(meanEAR = mean(sumEAR, na.rm = TRUE),
-            medianEAR = median(sumEAR, na.rm = TRUE)) %>%
+  summarize(meanEAR = mean(maxEAR, na.rm = TRUE),
+            medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   data.frame() %>%
   filter(meanEAR > mean_thres,
          !is.na(ID)) %>%
@@ -40,9 +42,9 @@ nSites <- chemicalSummary %>%
   group_by(site, date, ID, endPoint) %>%
   summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
   group_by(ID, site) %>%
-  summarize(meanEAR = mean(sumEAR, na.rm = TRUE)) %>%
+  summarize(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
   group_by(ID) %>%
-  summarize(sitehits = sum(meanEAR > mean_thres)) %>%
+  summarize(sitehits = sum(maxEAR > mean_thres)) %>%
   filter(!is.na(ID),
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
