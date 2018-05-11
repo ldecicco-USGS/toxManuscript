@@ -28,7 +28,8 @@ chem_sum_AOP <- chemicalSummary %>%
   filter(meanEAR > mean_thres,
          !is.na(ID)) %>%
   mutate(ID = as.factor(ID),
-         endPoint = as.factor(endPoint)) 
+         endPoint = as.factor(endPoint),
+         guide_up = "A") 
 
 priority_AOPs <- chem_sum_AOP %>%
   group_by(ID) %>%
@@ -49,6 +50,41 @@ nSites <- chemicalSummary %>%
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
 
+boxData <- chemicalSummary %>%
+  left_join(AOP, by="endPoint") %>%
+  group_by(site, date, ID, endPoint) %>%
+  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
+  group_by(ID, site) %>%
+  summarize(maxEAR = max(sumEAR)) %>%
+  ungroup() %>%
+  filter(!is.na(ID),
+         ID %in% priority_AOPs$ID) %>%
+  mutate(ID = as.factor(ID),
+         guide_up = "B")
+
+pretty_logs_new <- toxEval:::prettyLogs(boxData$maxEAR)
+
+y_label <- bquote("max" ~ 
+                    group("[", 
+                          group("(",
+                                sum(" "  ~ EAR["[" *i* "]"]),
+                                ")")["[" *j* "]"],
+                          "]")
+                  ["[" *k* "]"])
+
+boxplot_top <- ggplot(data = boxData) +
+  geom_boxplot(aes(x=ID, y=maxEAR), fill = "steelblue") +
+  theme_bw() +
+  theme(axis.ticks.x = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank()) +
+        # axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
+  scale_y_log10(y_label,
+                labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)
+
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
@@ -67,30 +103,68 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
         panel.border = element_blank(),
+        legend.position = "none",
         plot.background = element_rect(fill = "transparent",colour = NA))
 
-plot_info <- ggplot_build(aop_ep)
-layout_stuff <- plot_info$layout
-
-ymax <- layout_stuff$panel_ranges[[1]]$y.range[2]
-
-aop_ep <- aop_ep +
+site_graph <- ggplot() +
   geom_text(data = nSites, 
-            aes(x = ID, y=Inf, label = as.character(sitehits)), 
+            aes(x = ID, y="# Sites", label = as.character(sitehits)), 
             vjust = 0, size = 2) +
-  geom_text(data = data.frame(x=-Inf, y=Inf, label = "# Sites:", stringsAsFactors = FALSE),
-            aes(x=x, y=y, label = label),
-            vjust = 0, size = 2, hjust = 1)
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank())
 
-
-
-
-png("aop.png", width = 1200, height = 600, res = 142) 
-gb <- ggplot2::ggplot_build(aop_ep)
-gt <- ggplot2::ggplot_gtable(gb)
-gt$layout$clip[gt$layout$name=="panel"] <- "off"
-grid::grid.draw(gt)
+png("aop_cow.png", width = 1200, height = 1200, res = 142)
+plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(4/10, 1/10, 1/2))
 dev.off()
+
+# library(gtable)
+# g2 <- ggplotGrob(boxplot_top)
+# g3 <- ggplotGrob(aop_ep)
+# g4 <- ggplotGrob(site_graph)
+# g <- rbind(g2, g3, size = "first")
+# g$widths <- unit.pmax(g2$widths, g3$widths)
+# grid.newpage()
+
+png("aop_combo.png", width = 1200, height = 1200, res = 142)
+grid.draw(g)
+dev.off()
+
+g4$heights[1] <- unit(2, "pt")
+g4$heights[10] <- unit(2, "pt")
+g <- rbind(g2, g4, g3, size = "first")
+g$widths <- unit.pmax(g2$widths, g4$widths, g3$widths)
+g$heights <- unit.pmax(g2$heights, g4$heights, g3$heights)
+
+grid.newpage()
+
+png("aop_combo2.png", width = 1200, height = 1200, res = 142)
+grid.draw(g)
+dev.off()
+
+library(gridExtra)
+library(scales)
+gA=ggplot_gtable(ggplot_build(boxData))
+gB=ggplot_gtable(ggplot_build(aop_ep))
+maxWidth = grid::unit.pmax(gA$widths[2:3], gB$widths[2:3])
+gA$widths[2:3] <- as.list(maxWidth)
+gB$widths[2:3] <- as.list(maxWidth)
+grid.newpage()
+
+pdf('graphs/test.pdf',
+    width=8,
+    height=6)
+grid.arrange(
+  arrangeGrob(gA,gB,nrow=2,heights=c(.8,.3))
+)
+dev.off()
+
+
+
 
 
 # file_name <- "landuse.csv"
