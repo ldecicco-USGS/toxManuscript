@@ -52,7 +52,7 @@ nSites <- chemicalSummary %>%
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
-  ylab("") +
+  ylab("ToxCast Endpoint Name") +
   xlab("AOP ID") +
   labs(fill="Mean EAR") +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
