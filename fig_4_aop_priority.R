@@ -5,11 +5,12 @@ library(tidyr)
 library(data.table)
 library(dataRetrieval)
 library(cowplot)
+library(grid)
 
 ####################################
 source(file = "data_setup.R")
 
-ear_thresh <- 0.01
+ear_thresh <- 0.001
 siteThres <- 10
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
@@ -19,10 +20,10 @@ AOP <- AOP_crosswalk %>%
 
 boxData <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
-  group_by(ID, endPoint, site, date) %>%
-  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
+  group_by(ID, chnm, site, date) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
   group_by(ID, site) %>%
-  summarize(maxEAR = max(sumEAR)) %>%
+  summarize(maxEAR = max(maxEAR)) %>%
   ungroup() %>%
   filter(!is.na(ID),
          maxEAR > ear_thresh) %>%
@@ -33,12 +34,11 @@ priority_AOPs <- boxData %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-chem_sum_AOP <- chemicalSummary %>%
-  left_join(AOP, by="endPoint") %>%
-  group_by(ID, endPoint, site, date) %>%
-  summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
-  group_by(ID, endPoint, site) %>%
-  summarise(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+
+chem_sum_AOP <- boxData %>%
+  left_join(select(chemicalSummary, site, EAR, endPoint),
+            by=c("site","maxEAR"="EAR")) %>%
   group_by(ID, endPoint) %>%
   summarize(meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
@@ -54,10 +54,8 @@ nSites <- boxData %>%
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
 
-boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
 chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
-
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxEAR)
 
@@ -91,9 +89,9 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
-                       trans = 'log',limits = c(1e-9,1),
+                       trans = 'log',limits = c(1e-3,1),
                        low = "white", high = "steelblue",
-                       breaks = c(1e-9,1e-7,1e-5,1e-5,1e-3,1e-1,1),
+                       breaks = c(1e-4,1e-3,1e-2,1e-1,1),
                        labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
@@ -116,53 +114,9 @@ site_graph <- ggplot() +
         panel.border = element_blank())
 
 
-png("aop_cow.png", width = 1200, height = 1200, res = 142)
-plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(4/10, 1/10, 1/2))
+png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
+plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(5/20, 1/20, 7/10))
 dev.off()
-
-# library(gtable)
-# g2 <- ggplotGrob(boxplot_top)
-# g3 <- ggplotGrob(aop_ep)
-# g4 <- ggplotGrob(site_graph)
-# g <- rbind(g2, g3, size = "first")
-# g$widths <- unit.pmax(g2$widths, g3$widths)
-# grid.newpage()
-
-png("aop_combo.png", width = 1200, height = 1200, res = 142)
-grid.draw(g)
-dev.off()
-
-g4$heights[1] <- unit(2, "pt")
-g4$heights[10] <- unit(2, "pt")
-g <- rbind(g2, g4, g3, size = "first")
-g$widths <- unit.pmax(g2$widths, g4$widths, g3$widths)
-g$heights <- unit.pmax(g2$heights, g4$heights, g3$heights)
-
-grid.newpage()
-
-png("aop_combo2.png", width = 1200, height = 1200, res = 142)
-grid.draw(g)
-dev.off()
-
-library(gridExtra)
-library(scales)
-gA=ggplot_gtable(ggplot_build(boxData))
-gB=ggplot_gtable(ggplot_build(aop_ep))
-maxWidth = grid::unit.pmax(gA$widths[2:3], gB$widths[2:3])
-gA$widths[2:3] <- as.list(maxWidth)
-gB$widths[2:3] <- as.list(maxWidth)
-grid.newpage()
-
-pdf('graphs/test.pdf',
-    width=8,
-    height=6)
-grid.arrange(
-  arrangeGrob(gA,gB,nrow=2,heights=c(.8,.3))
-)
-dev.off()
-
-
-
 
 
 # file_name <- "landuse.csv"
