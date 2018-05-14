@@ -68,7 +68,7 @@ y_label <- bquote("max" ~
                   ["[" *k* "]"])
 
 boxplot_top <- ggplot(data = boxData) +
-  geom_boxplot(aes(x=ID, y=maxEAR)) +
+  geom_boxplot(aes(x=ID, y=maxEAR), outlier.size = 0.5) +
   theme_bw() +
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
