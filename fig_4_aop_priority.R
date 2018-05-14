@@ -5,6 +5,7 @@ library(tidyr)
 library(data.table)
 library(dataRetrieval)
 library(cowplot)
+library(grid)
 
 ####################################
 source(file = "data_setup.R")
@@ -116,53 +117,9 @@ site_graph <- ggplot() +
         panel.border = element_blank())
 
 
-png("aop_cow.png", width = 1200, height = 1200, res = 142)
-plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(4/10, 1/10, 1/2))
+png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
+plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(5/20, 1/20, 7/10))
 dev.off()
-
-# library(gtable)
-# g2 <- ggplotGrob(boxplot_top)
-# g3 <- ggplotGrob(aop_ep)
-# g4 <- ggplotGrob(site_graph)
-# g <- rbind(g2, g3, size = "first")
-# g$widths <- unit.pmax(g2$widths, g3$widths)
-# grid.newpage()
-
-png("aop_combo.png", width = 1200, height = 1200, res = 142)
-grid.draw(g)
-dev.off()
-
-g4$heights[1] <- unit(2, "pt")
-g4$heights[10] <- unit(2, "pt")
-g <- rbind(g2, g4, g3, size = "first")
-g$widths <- unit.pmax(g2$widths, g4$widths, g3$widths)
-g$heights <- unit.pmax(g2$heights, g4$heights, g3$heights)
-
-grid.newpage()
-
-png("aop_combo2.png", width = 1200, height = 1200, res = 142)
-grid.draw(g)
-dev.off()
-
-library(gridExtra)
-library(scales)
-gA=ggplot_gtable(ggplot_build(boxData))
-gB=ggplot_gtable(ggplot_build(aop_ep))
-maxWidth = grid::unit.pmax(gA$widths[2:3], gB$widths[2:3])
-gA$widths[2:3] <- as.list(maxWidth)
-gB$widths[2:3] <- as.list(maxWidth)
-grid.newpage()
-
-pdf('graphs/test.pdf',
-    width=8,
-    height=6)
-grid.arrange(
-  arrangeGrob(gA,gB,nrow=2,heights=c(.8,.3))
-)
-dev.off()
-
-
-
 
 
 # file_name <- "landuse.csv"
