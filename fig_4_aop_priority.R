@@ -105,7 +105,6 @@ boxplot_top <- ggplot(data = boxData) +
         panel.grid.minor.y = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank()) +
-        # axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
   scale_y_log10(y_label,
                 labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)
 
@@ -115,7 +114,8 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   scale_x_discrete(position="top") +
   ylab("ToxCast Endpoint Name") +
   labs(fill="Mean EAR") +
-  theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank()) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
                        trans = 'log',limits = c(1e-5,1),
@@ -134,7 +134,7 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
 site_graph <- ggplot() +
   geom_text(data = nSites, 
             aes(x = ID, y="# Sites", label = as.character(sitehits)), 
-            vjust = 0, size = 2) +
+            vjust = 0.5, size = 2) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title = element_blank(),
@@ -143,9 +143,22 @@ site_graph <- ggplot() +
         panel.grid.minor = element_blank(),
         panel.border = element_blank())
 
+aop_label_graph <- ggplot() +
+  geom_text(data = nSites, 
+            aes(x = ID, y="AOP ID", label = as.character(ID)), 
+            vjust = 0.5, size = 3.5, angle = 90) +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(face = "bold"),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank())
 
 png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
-plot_grid(site_graph, boxplot_top, aop_ep, align = "v", nrow = 3, rel_heights = c(1/20, 5/20, 7/10))
+plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
 dev.off()
 
 
