@@ -12,22 +12,35 @@ source(file = "data_setup.R")
 
 ear_thresh <- 0.001
 siteThres <- 10
+ep_percent_thres <- 0.5
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
-boxData <- chemicalSummary %>%
+boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(ID, chnm, site, date) %>%
-  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE),
+            endPoint_used = endPoint[which.max(EAR)]) %>%
+  ungroup() %>%
+  filter(maxEAR > 0) %>%
+  mutate(ID = as.factor(ID))
+
+boxData_tots <- boxData_max %>%
+  group_by(ID,site,date) %>%
+  summarize(total = sum(maxEAR))  %>%
+  ungroup() 
+
+boxData <- boxData_tots %>%
+  mutate(ID = as.factor(ID)) %>%
   group_by(ID, site) %>%
-  summarize(maxEAR = max(maxEAR)) %>%
+  summarize(maxMaxEAR = max(total, na.rm = TRUE),
+            date_picked = date[which.max(total)]) %>%
   ungroup() %>%
   filter(!is.na(ID),
-         maxEAR > ear_thresh) %>%
-  mutate(ID = as.factor(ID))
+         maxMaxEAR > ear_thresh) 
 
 priority_AOPs <- boxData %>%
   group_by(ID) %>%
@@ -35,13 +48,29 @@ priority_AOPs <- boxData %>%
   filter(siteDet >= siteThres)
 
 boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
+boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
 
-chem_sum_AOP <- boxData %>%
-  left_join(select(chemicalSummary, site, EAR, endPoint),
-            by=c("site","maxEAR"="EAR")) %>%
+fractions <- boxData_tots %>%
+  left_join(boxData_max, by=c("ID","site","date")) %>%
+  right_join(boxData, by=c("ID","site","date"="date_picked")) %>%
+  group_by(ID, site, date, chnm, endPoint_used) %>%
+  summarize(fraction = maxEAR/total) %>%
+  ungroup()
+
+endpoints_that_contribute <- fractions %>%
+  filter(fraction > ep_percent_thres) %>%
+  select(endPoint_used) %>%
+  distinct() %>%
+  pull(endPoint_used)
+
+chem_sum_AOP <- select(chemicalSummary, EAR, site, endPoint, chnm, date) %>%
+  right_join(boxData, by=c("site","date"="date_picked")) %>%
+  filter(endPoint %in% endpoints_that_contribute) %>%
   group_by(ID, endPoint) %>%
-  summarize(meanEAR = mean(maxEAR, na.rm = TRUE),
-            medianEAR = median(maxEAR, na.rm = TRUE)) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE),
+            meanEAR = mean(EAR, na.rm = TRUE),
+            medianEAR = median(EAR, na.rm = TRUE)) %>%
   data.frame() %>%
   filter(!is.na(ID)) %>%
   mutate(ID = as.factor(ID),
@@ -49,7 +78,7 @@ chem_sum_AOP <- boxData %>%
 
 nSites <- boxData %>%
   group_by(ID) %>%
-  summarize(sitehits = sum(maxEAR > ear_thresh)) %>%
+  summarize(sitehits = sum(maxMaxEAR > ear_thresh)) %>%
   filter(!is.na(ID),
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
@@ -57,7 +86,7 @@ nSites <- boxData %>%
 chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
 chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
 
-pretty_logs_new <- toxEval:::prettyLogs(boxData$maxEAR)
+pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 
 y_label <- bquote("max" ~ 
                     group("[", 
@@ -68,7 +97,7 @@ y_label <- bquote("max" ~
                   ["[" *k* "]"])
 
 boxplot_top <- ggplot(data = boxData) +
-  geom_boxplot(aes(x=ID, y=maxEAR), outlier.size = 0.5) +
+  geom_boxplot(aes(x=ID, y=maxMaxEAR), outlier.size = 0.5) +
   theme_bw() +
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
@@ -83,20 +112,21 @@ boxplot_top <- ggplot(data = boxData) +
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
+  scale_x_discrete(position="top") +
   ylab("ToxCast Endpoint Name") +
-  xlab("AOP ID") +
   labs(fill="Mean EAR") +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 0.975)) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
-                       trans = 'log',limits = c(1e-3,1),
+                       trans = 'log',limits = c(1e-5,1),
                        low = "white", high = "steelblue",
-                       breaks = c(1e-4,1e-3,1e-2,1e-1,1),
+                       breaks = c(1e-6,1e-4,1e-2,1,10),
                        labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
         panel.border = element_blank(),
         legend.position = "none",
         plot.background = element_rect(fill = "transparent",colour = NA))
@@ -115,7 +145,7 @@ site_graph <- ggplot() +
 
 
 png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
-plot_grid(boxplot_top, site_graph, aop_ep, align = "v", nrow = 3, rel_heights = c(5/20, 1/20, 7/10))
+plot_grid(site_graph, boxplot_top, aop_ep, align = "v", nrow = 3, rel_heights = c(1/20, 5/20, 7/10))
 dev.off()
 
 
