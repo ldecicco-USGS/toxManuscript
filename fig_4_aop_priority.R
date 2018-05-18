@@ -76,17 +76,17 @@ endpoints_that_contribute <- fractions %>%
   distinct() %>%
   pull(endPoint_used)
 
-chem_sum_AOP <- select(chemicalSummary, EAR, site, endPoint, chnm, date) %>%
-  right_join(boxData, by=c("site","date"="date_picked")) %>%
-  filter(endPoint %in% endpoints_that_contribute) %>%
-  group_by(ID, endPoint) %>%
-  summarize(maxEAR = max(EAR, na.rm = TRUE),
-            meanEAR = mean(EAR, na.rm = TRUE),
-            medianEAR = median(EAR, na.rm = TRUE)) %>%
+chem_sum_AOP <- boxData_max %>%
+  right_join(select(boxData, -ID), by=c("site","date"="date_picked")) %>%
+  filter(endPoint_used %in% endpoints_that_contribute) %>%
+  group_by(ID, endPoint_used) %>%
+  summarize(maxEAR = max(maxEAR, na.rm = TRUE),
+            meanEAR = mean(maxEAR, na.rm = TRUE),
+            medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   data.frame() %>%
   filter(!is.na(ID)) %>%
   mutate(ID = as.factor(ID),
-         endPoint = as.factor(endPoint)) 
+         endPoint = as.factor(endPoint_used)) 
 
 nSites <- boxData %>%
   group_by(ID) %>%
@@ -126,19 +126,18 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   scale_x_discrete(position="top") +
   ylab("ToxCast Endpoint Name") +
   labs(fill="Mean EAR") +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank()) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(size=7)) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
-                       trans = 'log',limits = c(1e-5,1),
+                       trans = 'log',limits = c(1e-4,1),
                        low = "white", high = "steelblue",
-                       breaks = c(1e-6,1e-4,1e-2,1,10),
+                       breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
                        labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
-        axis.title.x = element_blank(),
         panel.border = element_blank(),
         # legend.position = "none",
         plot.background = element_rect(fill = "transparent",colour = NA))
