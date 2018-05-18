@@ -19,6 +19,13 @@ AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
+relavence <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
+
+relavence <- relavence %>%
+  rename(ID=AOP,
+         endPoint = Endpoint.s.) %>%
+  mutate(ID = factor(ID))
+
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(ID, chnm, site, date) %>%
@@ -50,6 +57,11 @@ priority_AOPs <- boxData %>%
 boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
 boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+
+relavence$ID <- factor(as.character(relavence$ID), levels = levels(boxData$ID))
+
+boxData <- boxData %>%
+  left_join(select(relavence, ID, Relevant), by="ID")
 
 fractions <- boxData_tots %>%
   left_join(boxData_max, by=c("ID","site","date")) %>%
@@ -97,7 +109,7 @@ y_label <- bquote("max" ~
                   ["[" *k* "]"])
 
 boxplot_top <- ggplot(data = boxData) +
-  geom_boxplot(aes(x=ID, y=maxMaxEAR), outlier.size = 0.5) +
+  geom_boxplot(aes(x=ID, y=maxMaxEAR, fill = Relevant), outlier.size = 0.5) +
   theme_bw() +
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
@@ -128,38 +140,44 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
         axis.ticks = element_blank(),
         axis.title.x = element_blank(),
         panel.border = element_blank(),
-        legend.position = "none",
+        # legend.position = "none",
         plot.background = element_rect(fill = "transparent",colour = NA))
 
-site_graph <- ggplot() +
-  geom_text(data = nSites, 
-            aes(x = ID, y="# Sites", label = as.character(sitehits)), 
-            vjust = 0.5, size = 2) +
-  theme_bw() +
-  theme(axis.text.x = element_blank(),
-        axis.title = element_blank(),
-        axis.ticks = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank())
 
-aop_label_graph <- ggplot() +
-  geom_text(data = nSites, 
-            aes(x = ID, y="AOP ID", label = as.character(ID)), 
-            vjust = 0.5, size = 3.5, angle = 90) +
-  theme_bw() +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        axis.title.y = element_blank(),
-        axis.text.y = element_text(face = "bold"),
-        axis.ticks = element_blank(),
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.border = element_blank())
-
-png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
-plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
+png("plots/aop_cow_leg.png", width = 1200, height = 1200, res = 142)
+plot_grid(boxplot_top,  aop_ep, align = "v", nrow = 2, rel_heights = c(4/10, 6/10))
 dev.off()
+
+
+# site_graph <- ggplot() +
+#   geom_text(data = nSites, 
+#             aes(x = ID, y="# Sites", label = as.character(sitehits)), 
+#             vjust = 0.5, size = 2) +
+#   theme_bw() +
+#   theme(axis.text.x = element_blank(),
+#         axis.title = element_blank(),
+#         axis.ticks = element_blank(),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_blank())
+# 
+# aop_label_graph <- ggplot() +
+#   geom_text(data = nSites, 
+#             aes(x = ID, y="AOP ID", label = as.character(ID)), 
+#             vjust = 0.5, size = 3.5, angle = 90) +
+#   theme_bw() +
+#   theme(axis.text.x = element_blank(),
+#         axis.title.x = element_blank(),
+#         axis.title.y = element_blank(),
+#         axis.text.y = element_text(face = "bold"),
+#         axis.ticks = element_blank(),
+#         panel.grid.major.y = element_blank(),
+#         panel.grid.minor.y = element_blank(),
+#         panel.border = element_blank())
+# 
+# png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
+# plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
+# dev.off()
 
 
 # file_name <- "landuse.csv"
