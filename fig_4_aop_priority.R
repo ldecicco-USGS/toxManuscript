@@ -19,9 +19,9 @@ AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
-relavence <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
+relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
 
-relavence <- relavence %>%
+relevance <- relevance %>%
   rename(ID=AOP,
          endPoint = Endpoint.s.) %>%
   mutate(ID = factor(ID))
@@ -58,10 +58,10 @@ boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
 boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
 
-relavence$ID <- factor(as.character(relavence$ID), levels = levels(boxData$ID))
+relevance$ID <- factor(as.character(relevance$ID), levels = levels(boxData$ID))
 
 boxData <- boxData %>%
-  left_join(select(relavence, ID, Relevant), by="ID")
+  left_join(select(relevance, ID, Relevant), by="ID")
 
 fractions <- boxData_tots %>%
   left_join(boxData_max, by=c("ID","site","date")) %>%
@@ -146,6 +146,19 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
 png("plots/aop_cow_leg.png", width = 1200, height = 1200, res = 142)
 plot_grid(boxplot_top,  aop_ep, align = "v", nrow = 2, rel_heights = c(4/10, 6/10))
 dev.off()
+
+# How many AOPs are included, and how many are yes and maybe for relevance
+endpoints <- unique(boxData$ID)
+relevanceAOPs <- boxData %>% #filter(grepl("Yes",Relevant,ignore.case = TRUE)) %>%
+  group_by(ID,Relevant) %>%
+  summarize(medianEAR = median(maxMaxEAR)) %>%
+  arrange(Relevant,desc(medianEAR)) %>%
+  left_join(relevance,by=c("ID","Relevant"))
+
+unique(yesAOPs$ID)
+
+
+maybeAOPs <- boxData %>% filter(grepl("Maybe",Relevant,ignore.case = TRUE))
 
 
 # site_graph <- ggplot() +
