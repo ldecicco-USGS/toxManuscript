@@ -152,13 +152,13 @@ endpoints <- unique(boxData$ID)
 relevanceAOPs <- boxData %>% #filter(grepl("Yes",Relevant,ignore.case = TRUE)) %>%
   group_by(ID,Relevant) %>%
   summarize(medianEAR = median(maxMaxEAR)) %>%
+  left_join(relevance,by=c("ID","Relevant")) %>%
+  group_by(ID,Relevant,Rationale) %>%
+  summarize(medianEAR = median(medianEAR))%>%
   arrange(Relevant,desc(medianEAR)) %>%
-  left_join(relevance,by=c("ID","Relevant"))
+  filter(grepl(c("Yes|Maybe"),Relevant,ignore.case = TRUE))
 
-unique(yesAOPs$ID)
-
-
-maybeAOPs <- boxData %>% filter(grepl("Maybe",Relevant,ignore.case = TRUE))
+write.csv(relevanceAOPs,file="relevanceAOPs.csv",row.names=FALSE)
 
 
 # site_graph <- ggplot() +
