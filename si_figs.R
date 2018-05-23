@@ -1,0 +1,140 @@
+
+
+# Figure concept for SI:
+#   
+# 1. Heat map with sites on the x-axis, organized like 
+# the bar chart tab. AOP on the y-axis. color the heat 
+# map by EAR like is done in Fig 4. Limit to AOPs that 
+# have EAR > 10^-3 for at least 10 sites to keep it focused 
+# on the priorities.
+# 
+# 2. Heat map with sites on the x-axis, organized like 
+# the bar chart tab. Chemicals on the y-axis. Color the heat 
+# map by EAR like is done in Fig 4. Limit to chemicals 
+# that have EAR > 10^-3 to keep it sane.
+# --start this one using the Heat map tab from the app, but 
+# reducing the chemicals that have EAR > 10^-3 to keep it focused. 
+# We may or may not need the categories on the right, but leave 
+# them in for now.
+
+library(toxEval)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+####################################
+source(file = "data_setup.R")
+
+
+ear_thresh <- 0.001
+siteThres <- 10
+
+AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP <- AOP_crosswalk %>%
+  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
+  distinct()
+
+boxData_max <- chemicalSummary %>%
+  left_join(AOP, by="endPoint") %>%
+  group_by(ID, chnm, site, date) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(maxEAR > 0) %>%
+  mutate(ID = as.factor(ID))
+
+boxData_tots <- boxData_max %>%
+  group_by(ID,site,date) %>%
+  summarize(total = sum(maxEAR))  %>%
+  ungroup() 
+
+boxData <- boxData_tots %>%
+  mutate(ID = as.factor(ID)) %>%
+  group_by(ID, site) %>%
+  summarize(maxMaxEAR = max(total, na.rm = TRUE)) %>%
+  ungroup() %>%
+  filter(!is.na(ID)) 
+
+priority_AOPs <- boxData %>%
+  filter(maxMaxEAR > ear_thresh) %>%
+  group_by(ID) %>%
+  summarise(siteDet = n_distinct(site)) %>%
+  filter(siteDet >= siteThres)
+
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
+boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+
+boxData <- boxData %>%
+  left_join(select(tox_list$chem_site, 
+                   site=SiteID, name=`Short Name`,site_grouping), by="site")
+
+si1 <- ggplot(data = boxData) +
+  geom_tile(aes(x = name, y = ID, fill = maxMaxEAR)) +
+  theme_bw() +
+  ylab("AOP ID") +
+  labs(fill="Max EAR") +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(angle=90, hjust=1),
+        legend.position = "none") +
+  facet_grid( ~ site_grouping, scales="free", space="free") +
+  scale_y_discrete(drop=TRUE) +
+  scale_fill_gradient( guide = "legend",
+                       trans = 'log',#limits = c(1e-4,1),
+                       low = "white", high = "steelblue",
+                       # breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
+                       # labels = toxEval:::fancyNumbers2,
+                       na.value = 'transparent') +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        strip.background = element_rect(fill="transparent"),
+        panel.spacing = unit(0.05, "lines"),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+png("plots/si1.png", width = 1200, height = 1200, res = 142)
+si1
+dev.off()
+
+
+#################################################3
+# Now by chemical:
+
+
+
+chemData <- chemicalSummary %>%
+  group_by(chnm, site, date) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
+  group_by(chnm,site) %>%
+  summarize(total = sum(maxEAR))  %>%
+  ungroup() %>%
+  left_join(select(tox_list$chem_site, 
+                   site=SiteID, name=`Short Name`,site_grouping), by="site")
+
+ggplot(data = chemData) +
+  geom_tile(aes(x = name, y = chnm, fill = total)) +
+  theme_bw() +
+  ylab("Chemical") +
+  labs(fill="Max EAR") +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(angle=90, hjust=1),
+        legend.position = "none") +
+  facet_grid( ~ site_grouping, scales="free", space="free") +
+  scale_y_discrete(drop=TRUE) +
+  scale_fill_gradient( guide = "legend",
+                       trans = 'log',#limits = c(1e-4,1),
+                       low = "white", high = "steelblue",
+                       # breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
+                       # labels = toxEval:::fancyNumbers2,
+                       na.value = 'transparent') +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        strip.background = element_rect(fill="transparent"),
+        panel.spacing = unit(0.05, "lines"),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+png("plots/si2.png", width = 1600, height = 1200, res = 142)
+plot_tox_heatmap(chemicalSummary, tox_list$chem_site,  category = "Chemical")
+dev.off()
+
