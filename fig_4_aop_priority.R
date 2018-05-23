@@ -40,10 +40,8 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
 
 priority_endpoints <- endpoints_sites_hits$endPoint
 
-
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
-  filter(endPoint %in% priority_endpoints) %>%
   group_by(ID, chnm, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE),
             endPoint_used = endPoint[which.max(EAR)]) %>%
@@ -65,6 +63,7 @@ boxData <- boxData_tots %>%
   filter(!is.na(ID)) 
 
 priority_AOPs <- boxData %>%
+  filter(maxMaxEAR > ear_thresh) %>%
   group_by(ID) %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
@@ -208,10 +207,11 @@ aop_label_graph <- ggplot() +
         panel.grid.minor.y = element_blank(),
         panel.border = element_blank())
 
-legend_box <- get_legend(boxplot_top + theme(legend.position="bottom"))
+legend_box <- get_legend(boxplot_top + 
+                         theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
+png("plots/aop_cow.png", width = 1800, height = 1200, res = 142)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
