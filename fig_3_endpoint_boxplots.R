@@ -69,7 +69,7 @@ sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 
 ####Determine a few things for the text: 
 #how many endpoints when using threshold and siteThreshold
-
+# unique(chemicalSummaryPriority$endPoint)
 # unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and siteThreshold = 10
 # 
 # # merge the priority endpoints with the endpoint crosswalk for transmittal to EPA for relevance evaluation
@@ -78,3 +78,17 @@ sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 #   filter(!is.na(numSites))
 # unique(AOP_OWC$Assay.Endpoint.ID)
 # write.csv(AOP_OWC,file="AOPs_for_Great_Lakes_OWC_study.csv",row.names = FALSE)
+
+# How many endpoints per AOP
+
+endpoints_per_AOP <- left_join(AOP,chemicalSummaryPriority,by="endPoint") %>%
+  filter(EAR > 0) %>%
+  group_by(ID) %>%
+  summarize(numEndpoints = n_distinct(endPoint))
+range(endpoints_per_AOP$numEndpoints)
+
+endpoints_per_AOP <- left_join(AOP,chemicalSummary,by="endPoint") %>%
+  filter(EAR > 0) %>%
+  group_by(ID) %>%
+  summarize(numEndpoints = n_distinct(endPoint))
+range(endpoints_per_AOP$numEndpoints)
