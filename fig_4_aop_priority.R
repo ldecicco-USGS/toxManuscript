@@ -23,8 +23,7 @@ relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
 
 relevance <- relevance %>%
   rename(ID=AOP,
-         endPoint = Endpoint.s.) %>%
-  mutate(ID = factor(ID))
+         endPoint = Endpoint.s.) 
 
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
@@ -44,18 +43,11 @@ boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(ID, chnm, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE),
-            endPoint_used = endPoint[which.max(EAR)]) %>%
-  ungroup() %>%
-  filter(maxEAR > 0) %>%
-  mutate(ID = as.factor(ID))
+            endPoint_used = endPoint[which.max(EAR)])
 
-boxData_tots <- boxData_max %>%
+boxData <- boxData_max %>%
   group_by(ID,site,date) %>%
   summarize(total = sum(maxEAR))  %>%
-  ungroup() 
-
-boxData <- boxData_tots %>%
-  mutate(ID = as.factor(ID)) %>%
   group_by(ID, site) %>%
   summarize(maxMaxEAR = max(total, na.rm = TRUE),
             date_picked = date[which.max(total)]) %>%
@@ -68,14 +60,16 @@ priority_AOPs <- boxData %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-boxData <- filter(boxData, ID %in% priority_AOPs$ID)
-boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
 boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 
-relevance$ID <- factor(as.character(relevance$ID), levels = levels(boxData$ID))
+relevance <- relevance %>%
+  filter(ID %in% priority_AOPs$ID) 
 
 boxData <- boxData %>%
-  left_join(select(relevance, ID, Relevant), by="ID")
+  left_join(select(relevance, ID, Relevant), by="ID") %>%
+  mutate(ID = factor(ID)) 
+
 
 # fractions <- boxData_tots %>%
 #   left_join(boxData_max, by=c("ID","site","date")) %>%
@@ -91,13 +85,12 @@ boxData <- boxData %>%
 #   pull(endPoint_used)
 
 chem_sum_AOP <- boxData_max %>%
-  right_join(select(boxData, -ID), by=c("site","date"="date_picked")) %>%
   filter(endPoint_used %in% priority_endpoints) %>%
   group_by(ID, endPoint_used) %>%
   summarize(maxEAR = max(maxEAR, na.rm = TRUE),
             meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
-  data.frame() %>%
+  ungroup() %>%
   filter(!is.na(ID)) %>%
   mutate(ID = as.factor(ID),
          endPoint = as.factor(endPoint_used)) 
