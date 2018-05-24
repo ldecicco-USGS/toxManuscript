@@ -89,7 +89,7 @@ si1 <- ggplot(data = boxData) +
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
-        axis.ticks = element_blank(),
+        # axis.ticks = element_blank(),
         panel.border = element_blank(),
         strip.background = element_rect(fill="transparent"),
         panel.spacing = unit(0.05, "lines"),
@@ -102,43 +102,10 @@ dev.off()
 
 #################################################3
 # Now by chemical:
+source(file = "plot_tox_heatmap_manuscript.R")
 
-
-
-chemData <- chemicalSummary %>%
-  group_by(chnm, site, date) %>%
-  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
-  group_by(chnm,site) %>%
-  summarize(total = sum(maxEAR))  %>%
-  ungroup() %>%
-  left_join(select(tox_list$chem_site, 
-                   site=SiteID, name=`Short Name`,site_grouping), by="site")
-
-ggplot(data = chemData) +
-  geom_tile(aes(x = name, y = chnm, fill = total)) +
-  theme_bw() +
-  ylab("Chemical") +
-  labs(fill="Max EAR") +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle=90, hjust=1),
-        legend.position = "none") +
-  facet_grid( ~ site_grouping, scales="free", space="free") +
-  scale_y_discrete(drop=TRUE) +
-  scale_fill_gradient( guide = "legend",
-                       trans = 'log',#limits = c(1e-4,1),
-                       low = "white", high = "steelblue",
-                       # breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
-                       # labels = toxEval:::fancyNumbers2,
-                       na.value = 'transparent') +
-  theme(panel.grid.major.y = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        axis.ticks = element_blank(),
-        panel.border = element_blank(),
-        strip.background = element_rect(fill="transparent"),
-        panel.spacing = unit(0.05, "lines"),
-        plot.background = element_rect(fill = "transparent",colour = NA))
 
 png("plots/si2.png", width = 1600, height = 1200, res = 142)
-plot_tox_heatmap(chemicalSummary, tox_list$chem_site,  category = "Chemical")
+plot_tox_heatmap_manuscript(chemicalSummary, tox_list$chem_site,  category = "Chemical")
 dev.off()
 
