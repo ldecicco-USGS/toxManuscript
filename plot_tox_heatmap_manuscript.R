@@ -146,16 +146,16 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           plot.background = element_rect(fill = "transparent",colour = NA)) 
-    # expand_limits(x = -2) +
+    # expand_limits(x = -10) +
     # geom_rect(ymin = 0, ymax = length(levels(graphData$chnm))+1, xmin = -5, xmax = 0, fill = "white") +
-    # # fake axis layer, aligned below y = 0
-    # geom_text(aes(colour = v, label = chnm, y = chnm), x = 0, hjust = 1.1) +
-    # # # specify the font colours for fake axis
+    # # # fake axis layer, aligned below y = 0
+    # geom_text(data = distinct(filter(select(graphData, v, chnm, site_grouping, Class), site_grouping == "Lake Superior")), aes(color = v, label = chnm, y=chnm), x = 0) +
+    # # # # specify the font colours for fake axis
     # scale_colour_manual(values = c("black", "red"), guide = F) +
-    # # hide the actual x-axis text / ticks
+    # # # hide the actual x-axis text / ticks
     # theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+    # # 
     # 
-  
   return(heat)
   
 }
