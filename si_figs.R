@@ -24,7 +24,6 @@ library(tidyr)
 ####################################
 source(file = "data_setup.R")
 
-
 ear_thresh <- 0.001
 siteThres <- 10
 
@@ -36,20 +35,15 @@ AOP <- AOP_crosswalk %>%
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(ID, chnm, site, date) %>%
-  summarize(maxEAR = max(EAR, na.rm = TRUE)) %>%
-  ungroup() %>%
-  filter(maxEAR > 0) %>%
-  mutate(ID = as.factor(ID))
+  summarize(maxEAR = max(EAR, na.rm = TRUE),
+            endPoint_used = endPoint[which.max(EAR)])
 
-boxData_tots <- boxData_max %>%
+boxData <- boxData_max %>%
   group_by(ID,site,date) %>%
   summarize(total = sum(maxEAR))  %>%
-  ungroup() 
-
-boxData <- boxData_tots %>%
-  mutate(ID = as.factor(ID)) %>%
   group_by(ID, site) %>%
-  summarize(maxMaxEAR = max(total, na.rm = TRUE)) %>%
+  summarize(maxMaxEAR = max(total, na.rm = TRUE),
+            date_picked = date[which.max(total)]) %>%
   ungroup() %>%
   filter(!is.na(ID)) 
 
@@ -59,13 +53,24 @@ priority_AOPs <- boxData %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-boxData <- filter(boxData, ID %in% priority_AOPs$ID)
-boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
 boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+
+relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
+
+relevance <- relevance %>%
+  rename(ID=AOP,
+         endPoint = Endpoint.s.) %>%
+  filter(ID %in% priority_AOPs$ID) 
 
 boxData <- boxData %>%
-  left_join(select(tox_list$chem_site, 
-                   site=SiteID, name=`Short Name`,site_grouping), by="site")
+  left_join(select(relevance, ID, Relevant), by="ID") %>%
+  mutate(ID = factor(ID)) 
+
+boxData <- boxData %>%
+  left_join(select(tox_list$chem_site, site=SiteID, site_grouping, name=`Short Name`), by="site")
+
+boxData <- filter(boxData, Relevant %in% c("Yes","Maybe"))
 
 si1 <- ggplot(data = boxData) +
   geom_tile(aes(x = name, y = ID, fill = maxMaxEAR)) +
@@ -73,15 +78,14 @@ si1 <- ggplot(data = boxData) +
   ylab("AOP ID") +
   labs(fill="Max EAR") +
   theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(angle=90, hjust=1),
-        legend.position = "none") +
+        axis.text.x = element_text(angle=90, hjust=1, vjust=0.5)) +
   facet_grid( ~ site_grouping, scales="free", space="free") +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
-                       trans = 'log',#limits = c(1e-4,1),
+                       trans = 'log', limits = c(1e-8,1),
                        low = "white", high = "steelblue",
-                       # breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
-                       # labels = toxEval:::fancyNumbers2,
+                       breaks = c(1e-8,1e-6,1e-4,1e-2,1),
+                       labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
@@ -91,7 +95,7 @@ si1 <- ggplot(data = boxData) +
         panel.spacing = unit(0.05, "lines"),
         plot.background = element_rect(fill = "transparent",colour = NA))
 
-png("plots/si1.png", width = 1200, height = 1200, res = 142)
+png("plots/si1.png", width = 1200, height = 800, res = 142)
 si1
 dev.off()
 
