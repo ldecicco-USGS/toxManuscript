@@ -124,6 +124,7 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
   fill_text <- ifelse(mean_logic, "Mean EAR", "Max EAR")
   
   # colors <- ifelse(levels(graphData$chnm) %in% as.character(priority_chems),"red","black")
+  graphData$v <- ifelse(graphData$chnm %in% as.character(priority_chems), "red", "black" )
   
   heat <- ggplot(data = graphData) +
     geom_tile(aes(x = `Short Name`, y=chnm, fill=meanEAR)) +
@@ -144,7 +145,16 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
           panel.spacing = unit(0.05, "lines"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          plot.background = element_rect(fill = "transparent",colour = NA))
+          plot.background = element_rect(fill = "transparent",colour = NA)) 
+    # expand_limits(x = -2) +
+    # geom_rect(ymin = 0, ymax = length(levels(graphData$chnm))+1, xmin = -5, xmax = 0, fill = "white") +
+    # # fake axis layer, aligned below y = 0
+    # geom_text(aes(colour = v, label = chnm, y = chnm), x = 0, hjust = 1.1) +
+    # # # specify the font colours for fake axis
+    # scale_colour_manual(values = c("black", "red"), guide = F) +
+    # # hide the actual x-axis text / ticks
+    # theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+    # 
   
   return(heat)
   
