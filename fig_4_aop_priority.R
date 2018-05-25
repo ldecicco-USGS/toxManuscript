@@ -113,7 +113,7 @@ pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 y_label <- bquote("max" ~ 
                     group("[", 
                           group("(",
-                                sum(" "  ~ EAR["[" *i* "]"]),
+                                sum(" max("  ~ EAR["[" *i* "]"] ~ ")"),
                                 ")")["[" *j* "]"],
                           "]")
                   ["[" *k* "]"])
