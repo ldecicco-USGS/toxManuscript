@@ -62,3 +62,7 @@ nSite_table_wide$nChems <- apply(tableData2, MARGIN = 1, function(x) sum(x>0, na
 nSite_table_wide <- nSite_table_wide[,c("Family", "subFamily","ID",
                           "endPoint", "nChems",
                           rev(levels(chemicalSummary$chnm))[rev(levels(chemicalSummary$chnm)) %in% names(nSite_table_wide)])]  
+
+# New SI 6:
+#
+# 
