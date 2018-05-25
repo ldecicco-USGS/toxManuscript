@@ -204,7 +204,7 @@ legend_box <- get_legend(boxplot_top +
                          theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-png("plots/aop_cow.png", width = 1800, height = 1200, res = 142)
+png("plots/Fig4_aop_cow.png", width = 1800, height = 1200, res = 142)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
@@ -212,6 +212,10 @@ plot_grid(site_graph, boxplot_top,
           rel_heights = c(1/20, 4/20, 1/20, 6/10,1/10),
           labels = c("A","","","B",""))
 dev.off()
+
+#Code for exploring data to be included in manuscript text
+test <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
+range(test$maxMaxEAR)
 
 # png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
 # plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
