@@ -126,7 +126,7 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
   # colors <- ifelse(levels(graphData$chnm) %in% as.character(priority_chems),"red","black")
   graphData$v <- ifelse(graphData$chnm %in% as.character(priority_chems), "red", "black" )
   
-  heat <- ggplot(data = graphData) +
+heat <- ggplot(data = graphData) +
     geom_tile(aes(x = `Short Name`, y=chnm, fill=meanEAR)) +
     theme_bw() +
     ylab("") +
@@ -141,19 +141,21 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
     theme(strip.text.y = element_text(angle=0, hjust=0), 
           strip.background = element_rect(fill="transparent", colour = NA),
           axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1),
-          # axis.text.y = element_text(color = c(rep("black",2),"red",rep("black",2),"blue")),
           panel.spacing = unit(0.05, "lines"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          plot.background = element_rect(fill = "transparent",colour = NA)) 
-    # expand_limits(x = -10) +
-    # geom_rect(ymin = 0, ymax = length(levels(graphData$chnm))+1, xmin = -5, xmax = 0, fill = "white") +
+          plot.background = element_rect(fill = "transparent",colour = NA)) +
+    expand_limits(x = -20, data = data.frame(site_grouping = "Lake Superior")) +
+    geom_rect(data = data.frame(site_grouping = "Lake Superior") ,ymin = 0, ymax = length(levels(graphData$chnm))+1, 
+              xmin = -20, xmax = 0, fill = "white") +
     # # # fake axis layer, aligned below y = 0
-    # geom_text(data = distinct(filter(select(graphData, v, chnm, site_grouping, Class), site_grouping == "Lake Superior")), aes(color = v, label = chnm, y=chnm), x = 0) +
+    geom_text(data = distinct(filter(select(graphData, v, chnm, site_grouping, Class), site_grouping == "Lake Superior")), 
+              aes(color = v, label = chnm, y=chnm), x = 0, 
+              hjust = 1, size = 3, vjust = 0.25) +
     # # # # specify the font colours for fake axis
-    # scale_colour_manual(values = c("black", "red"), guide = F) +
+    scale_colour_manual(values = c("black", "red"), guide = F) +
     # # # hide the actual x-axis text / ticks
-    # theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
     # # 
     # 
   return(heat)
