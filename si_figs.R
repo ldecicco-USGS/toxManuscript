@@ -105,7 +105,7 @@ dev.off()
 source(file = "plot_tox_heatmap_manuscript.R")
 
 
-png("plots/si2.png", width = 1600, height = 1200, res = 142)
-plot_tox_heatmap_manuscript(chemicalSummary, tox_list$chem_site,  category = "Chemical")
-dev.off()
+plot_out <- plot_tox_heatmap_manuscript(chemicalSummary, tox_list$chem_site,  category = "Chemical")
+
+ggsave(plot_out, file = "plots/si2.png", width = 11, height = 9)
 

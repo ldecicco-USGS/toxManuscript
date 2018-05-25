@@ -12,8 +12,6 @@ plot_tox_heatmap_manuscript <- function(chemicalSummary,
   
   match.arg(category, c("Biological","Chemical Class","Chemical"))
   
-  
-
   SiteID <- site_grouping <- `Short Name` <- chnm <- maxEAR <- ".dplyr"
   site <- EAR <- sumEAR <- meanEAR <- ".dplyr"
   
@@ -123,10 +121,18 @@ plot_heat_chemicals_manuscript <- function(chemicalSummary,
   
   fill_text <- ifelse(mean_logic, "Mean EAR", "Max EAR")
   
-  # colors <- ifelse(levels(graphData$chnm) %in% as.character(priority_chems),"red","black")
-  graphData$v <- ifelse(graphData$chnm %in% as.character(priority_chems), "red", "black" )
+
+  color_df <- data.frame(chnm = levels(graphData$chnm)) %>%
+    mutate(color = ifelse(as.character(chnm) %in% as.character(priority_chems), "red", "black")) %>%
+    left_join(distinct(select(graphData, chnm, Class)), by="chnm") %>%
+    mutate(site_grouping = factor(rep("Lake Superior",length(levels(graphData$chnm))), levels = levels(graphData$site_grouping)),
+           chnm = factor(chnm, levels = levels(graphData$chnm)))
+
+  if(packageVersion("ggplot2") < "2.2.1.9000"){
+    stop("Need to get development version of ggplot2")
+  }
   
-heat <- ggplot(data = graphData) +
+  heat <- ggplot(data = graphData) +
     geom_tile(aes(x = `Short Name`, y=chnm, fill=meanEAR)) +
     theme_bw() +
     ylab("") +
@@ -145,17 +151,17 @@ heat <- ggplot(data = graphData) +
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           plot.background = element_rect(fill = "transparent",colour = NA)) +
-    expand_limits(x = -20, data = data.frame(site_grouping = "Lake Superior")) +
-    geom_rect(data = data.frame(site_grouping = "Lake Superior") ,ymin = 0, ymax = length(levels(graphData$chnm))+1, 
-              xmin = -20, xmax = 0, fill = "white") +
+    coord_cartesian(clip = "off") +
     # # # fake axis layer, aligned below y = 0
-    geom_text(data = distinct(filter(select(graphData, v, chnm, site_grouping, Class), site_grouping == "Lake Superior")), 
-              aes(color = v, label = chnm, y=chnm), x = 0, 
-              hjust = 1, size = 3, vjust = 0.25) +
+    geom_text(data = color_df, 
+            aes(color = color, label = chnm, y=chnm), x = 0.2,
+            size = 3, # match font size to theme
+            hjust = 1, vjust = 0.3) +
     # # # # specify the font colours for fake axis
     scale_colour_manual(values = c("black", "red"), guide = F) +
     # # # hide the actual x-axis text / ticks
-    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+    theme(axis.text.y = element_blank(), 
+          axis.title.y = element_text(margin = margin(r = 125)))
     # # 
     # 
   return(heat)
