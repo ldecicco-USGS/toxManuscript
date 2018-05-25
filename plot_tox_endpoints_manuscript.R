@@ -95,13 +95,10 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
   }
 
   graphData <- chemicalSummary %>%
-    group_by(site,date,category,endPoint,has_AOP) %>%
+    group_by(site,date,endPoint,has_AOP) %>%
     summarise(sumEAR=sum(EAR)) %>%
-    data.frame() %>%
-    group_by(site, category,endPoint,has_AOP) %>%
-    summarise(meanEAR=ifelse(mean_logic,mean(sumEAR),max(sumEAR))) %>%
-    data.frame() %>%
-    mutate(category=as.character(category))      
+    group_by(site, endPoint,has_AOP) %>%
+    summarise(meanEAR=ifelse(mean_logic,mean(sumEAR),max(sumEAR))) 
     
   
   pretty_logs_new <- toxEval:::prettyLogs(graphData$meanEAR)

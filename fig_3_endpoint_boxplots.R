@@ -41,7 +41,7 @@ eps_with_ids <- unique(AOP$endPoint)
 chemicalSummaryPriority$has_AOP <- "AOP Undefined"
 chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_ids] <- "AOP Associated"
 
-endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority)
+endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority, category = "Chemical")
 
 #  not sure how to put the number of chemicals per endpoint on the right side.
 #  need to add color to distinguish endpoints with associated AOPs

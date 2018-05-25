@@ -12,7 +12,7 @@ source(file = "data_setup.R")
 
 ear_thresh <- 0.001
 siteThres <- 10
-ep_percent_thres <- 0.5
+# ep_percent_thres <- 0.5
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
@@ -23,74 +23,84 @@ relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
 
 relevance <- relevance %>%
   rename(ID=AOP,
-         endPoint = Endpoint.s.) %>%
-  mutate(ID = factor(ID))
+         endPoint = Endpoint.s.) 
+
+
+endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,date) %>%
+  summarize(EARsum = sum(EAR)) %>%
+  group_by(site,endPoint) %>%
+  summarize(EARmax = max(EARsum)) %>%
+  filter(EARmax >= ear_thresh) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites)) %>%
+  filter(numSites >= siteThres)
+
+priority_endpoints <- endpoints_sites_hits$endPoint
 
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
   group_by(ID, chnm, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE),
-            endPoint_used = endPoint[which.max(EAR)]) %>%
-  ungroup() %>%
-  filter(maxEAR > 0) %>%
-  mutate(ID = as.factor(ID))
+            endPoint_used = endPoint[which.max(EAR)])
 
-boxData_tots <- boxData_max %>%
+boxData <- boxData_max %>%
   group_by(ID,site,date) %>%
   summarize(total = sum(maxEAR))  %>%
-  ungroup() 
-
-boxData <- boxData_tots %>%
-  mutate(ID = as.factor(ID)) %>%
   group_by(ID, site) %>%
   summarize(maxMaxEAR = max(total, na.rm = TRUE),
             date_picked = date[which.max(total)]) %>%
   ungroup() %>%
-  filter(!is.na(ID),
-         maxMaxEAR > ear_thresh) 
+  filter(!is.na(ID)) 
 
 priority_AOPs <- boxData %>%
+  filter(maxMaxEAR > ear_thresh) %>%
   group_by(ID) %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-boxData <- filter(boxData, ID %in% priority_AOPs$ID)
-boxData_tots <- filter(boxData_tots, ID %in% priority_AOPs$ID)
 boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 
-relevance$ID <- factor(as.character(relevance$ID), levels = levels(boxData$ID))
+relevance <- relevance %>%
+  filter(ID %in% priority_AOPs$ID) 
 
 boxData <- boxData %>%
-  left_join(select(relevance, ID, Relevant), by="ID")
+  left_join(select(relevance, ID, Relevant), by="ID") %>%
+  mutate(ID = factor(ID)) 
 
-fractions <- boxData_tots %>%
-  left_join(boxData_max, by=c("ID","site","date")) %>%
-  right_join(boxData, by=c("ID","site","date"="date_picked")) %>%
-  group_by(ID, site, date, chnm, endPoint_used) %>%
-  summarize(fraction = maxEAR/total) %>%
-  ungroup()
 
-endpoints_that_contribute <- fractions %>%
-  filter(fraction > ep_percent_thres) %>%
-  select(endPoint_used) %>%
-  distinct() %>%
-  pull(endPoint_used)
+# fractions <- boxData_tots %>%
+#   left_join(boxData_max, by=c("ID","site","date")) %>%
+#   right_join(boxData, by=c("ID","site","date"="date_picked")) %>%
+#   group_by(ID, site, date, chnm, endPoint_used) %>%
+#   summarize(fraction = maxEAR/total) %>%
+#   ungroup()
+# 
+# endpoints_that_contribute <- fractions %>%
+#   filter(fraction > ep_percent_thres) %>%
+#   select(endPoint_used) %>%
+#   distinct() %>%
+#   pull(endPoint_used)
 
 chem_sum_AOP <- boxData_max %>%
-  right_join(select(boxData, -ID), by=c("site","date"="date_picked")) %>%
-  filter(endPoint_used %in% endpoints_that_contribute) %>%
+  filter(endPoint_used %in% priority_endpoints) %>%
   group_by(ID, endPoint_used) %>%
   summarize(maxEAR = max(maxEAR, na.rm = TRUE),
             meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
-  data.frame() %>%
+  ungroup() %>%
   filter(!is.na(ID)) %>%
   mutate(ID = as.factor(ID),
          endPoint = as.factor(endPoint_used)) 
 
 nSites <- boxData %>%
+  select(ID, maxMaxEAR,site) %>%
+  distinct() %>%
   group_by(ID) %>%
   summarize(sitehits = sum(maxMaxEAR > ear_thresh)) %>%
+  ungroup() %>%
   filter(!is.na(ID),
          ID %in% priority_AOPs$ID) %>%
   mutate(ID = as.factor(ID))
@@ -103,7 +113,7 @@ pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 y_label <- bquote("max" ~ 
                     group("[", 
                           group("(",
-                                sum(" "  ~ EAR["[" *i* "]"]),
+                                sum(" max("  ~ EAR["[" *i* "]"] ~ ")"),
                                 ")")["[" *j* "]"],
                           "]")
                   ["[" *k* "]"])
@@ -116,7 +126,8 @@ boxplot_top <- ggplot(data = boxData) +
         panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         axis.text.x = element_blank(),
-        axis.title.x = element_blank()) +
+        axis.title.x = element_blank(),
+        legend.position = "none") +
   scale_y_log10(y_label,
                 labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)
 
@@ -127,7 +138,8 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   ylab("ToxCast Endpoint Name") +
   labs(fill="Mean EAR") +
   theme(axis.title.x = element_blank(),
-        axis.text.x = element_text(size=7)) +
+        axis.text.x = element_blank(),#element_text(size=7),
+        legend.position = "none") +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
                        trans = 'log',limits = c(1e-4,1),
@@ -139,54 +151,68 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
         panel.border = element_blank(),
-        # legend.position = "none",
         plot.background = element_rect(fill = "transparent",colour = NA))
 
 
 png("plots/aop_cow_leg.png", width = 1200, height = 1200, res = 142)
-plot_grid(boxplot_top,  aop_ep, align = "v", nrow = 2, rel_heights = c(4/10, 6/10))
+plot_grid(boxplot_top,  aop_ep, align = "v", 
+          nrow = 2, rel_heights = c(4/10, 6/10),labels = c("A","B"))
 dev.off()
 
 # How many AOPs are included, and how many are yes and maybe for relevance
-endpoints <- unique(boxData$ID)
-relevanceAOPs <- boxData %>% #filter(grepl("Yes",Relevant,ignore.case = TRUE)) %>%
-  group_by(ID,Relevant) %>%
-  summarize(medianEAR = median(maxMaxEAR)) %>%
-  left_join(relevance,by=c("ID","Relevant")) %>%
-  group_by(ID,Relevant,Rationale) %>%
-  summarize(medianEAR = median(medianEAR))%>%
-  arrange(Relevant,desc(medianEAR)) %>%
-  filter(grepl(c("Yes|Maybe"),Relevant,ignore.case = TRUE))
-
-write.csv(relevanceAOPs,file="relevanceAOPs.csv",row.names=FALSE)
-
-
-# site_graph <- ggplot() +
-#   geom_text(data = nSites, 
-#             aes(x = ID, y="# Sites", label = as.character(sitehits)), 
-#             vjust = 0.5, size = 2) +
-#   theme_bw() +
-#   theme(axis.text.x = element_blank(),
-#         axis.title = element_blank(),
-#         axis.ticks = element_blank(),
-#         panel.grid.major = element_blank(),
-#         panel.grid.minor = element_blank(),
-#         panel.border = element_blank())
+# endpoints <- unique(boxData$ID)
 # 
-# aop_label_graph <- ggplot() +
-#   geom_text(data = nSites, 
-#             aes(x = ID, y="AOP ID", label = as.character(ID)), 
-#             vjust = 0.5, size = 3.5, angle = 90) +
-#   theme_bw() +
-#   theme(axis.text.x = element_blank(),
-#         axis.title.x = element_blank(),
-#         axis.title.y = element_blank(),
-#         axis.text.y = element_text(face = "bold"),
-#         axis.ticks = element_blank(),
-#         panel.grid.major.y = element_blank(),
-#         panel.grid.minor.y = element_blank(),
-#         panel.border = element_blank())
+# relevanceAOPs <- boxData %>% #filter(grepl("Yes",Relevant,ignore.case = TRUE)) %>%
+#   group_by(ID,Relevant) %>%
+#   summarize(medianEAR = median(maxMaxEAR)) %>%
+#   left_join(relevance,by=c("ID","Relevant")) %>%
+#   group_by(ID,Relevant,Rationale) %>%
+#   summarize(medianEAR = median(medianEAR))%>%
+#   arrange(Relevant,desc(medianEAR)) %>%
+#   filter(grepl(c("Yes|Maybe"),Relevant,ignore.case = TRUE))
 # 
+# write.csv(relevanceAOPs,file="relevanceAOPs.csv",row.names=FALSE)
+
+
+site_graph <- ggplot() +
+  geom_text(data = nSites,
+            aes(x = ID, y="# Sites", label = as.character(sitehits)),
+            vjust = 0.5, size = 2) +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank())
+
+aop_label_graph <- ggplot() +
+  geom_text(data = nSites,
+            aes(x = ID, y="AOP ID", label = as.character(ID)),
+            vjust = 0.5, size = 2, angle = 0) +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_text(face = "bold"),
+        axis.ticks = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_blank())
+
+legend_box <- get_legend(boxplot_top + 
+                         theme(legend.position = "bottom") )
+legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
+
+png("plots/aop_cow.png", width = 1800, height = 1200, res = 142)
+plot_grid(site_graph, boxplot_top, 
+          aop_label_graph, aop_ep, 
+          plot_grid(legend_box, legend_aop, ncol = 2),
+          align = "v", nrow = 5, 
+          rel_heights = c(1/20, 4/20, 1/20, 6/10,1/10),
+          labels = c("A","","","B",""))
+dev.off()
+
 # png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
 # plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
 # dev.off()
