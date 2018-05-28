@@ -9,6 +9,7 @@ library(grid)
 
 ####################################
 source(file = "data_setup.R")
+source(file = "MakeTitles.R")
 
 ear_thresh <- 0.001
 siteThres <- 10
@@ -20,11 +21,11 @@ AOP <- AOP_crosswalk %>%
   distinct()
 
 relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
+relevance$Relevant <- MakeTitles(relevance$Relevant)
 
 relevance <- relevance %>%
   rename(ID=AOP,
          endPoint = Endpoint.s.) 
-
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -210,7 +211,11 @@ dev.off()
 
 #Code for exploring data to be included in manuscript text
 test <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
-range(test$maxMaxEAR)
+range(test$maxMaxEAR) # Get max EAR
+
+# Determine which chemicals for each AOP, range of EARs, and how many sites
+
+
 
 # png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
 # plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
