@@ -109,7 +109,8 @@ unique(mixtures_by_sample_AOP$chemVector)
 range(test$numOccur)
 unique(test$CAS)
 
-### Mixtures more thoroughly
+####################################################################################
+### Mixtures analysis more thoroughly
 
 Chem_vectors_by_site <- filter(chemicalSummary, CAS %in% priority_chems$CAS) %>%
   filter(EAR > 0.0001) %>%
@@ -153,7 +154,7 @@ for(i in 1:dim(priority_chems)[1]) {
       for(l in 3:dim(priority_chems)[1]){
         chem4 <- as.character(priority_chems[l,"CAS"])
         if(!grepl(chem4,chems3)){
-          chems4 <- paste0(chems2,"; ",chem3)
+          chems4 <- paste0(chems3,"; ",chem4)
           sites_by_vector <- filter(sites_by_vector,grepl(chem4,chemVector))
           Num_sites_by_vector <- data.frame(numSites =length(unique(sites_by_vector$site)))
           Num_sites_by_vector$chemVector <- chems4
@@ -166,6 +167,10 @@ for(i in 1:dim(priority_chems)[1]) {
 }
 Num_sites_by_mixture <- filter(Num_sites_by_mixture,numSites>0) %>%
   arrange(nChems,desc(numSites))
+
+
+#########################################################################################
+
 
 chemRows <- sum(grepl(chem,Chem_vectors_by_site$chemVector))
 unique(Chem_vectors_by_site[chemRows,"site"]
