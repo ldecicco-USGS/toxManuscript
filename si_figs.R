@@ -95,7 +95,7 @@ si1 <- ggplot(data = boxData) +
         panel.spacing = unit(0.05, "lines"),
         plot.background = element_rect(fill = "transparent",colour = NA))
 
-png("plots/si1.png", width = 1200, height = 800, res = 142)
+png("plots/si3.png", width = 1200, height = 800, res = 142)
 si1
 dev.off()
 
@@ -107,5 +107,5 @@ source(file = "plot_tox_heatmap_manuscript.R")
 
 plot_out <- plot_tox_heatmap_manuscript(chemicalSummary, tox_list$chem_site,  category = "Chemical")
 
-ggsave(plot_out, file = "plots/si2.png", width = 11, height = 9)
+ggsave(plot_out, file = "plots/si4.png", width = 11, height = 9)
 
