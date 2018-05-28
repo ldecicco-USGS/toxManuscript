@@ -18,7 +18,7 @@ source("SI7_class_stacks.R")
 rm(list=ls())
 
 
-filenms <- c("SI2_detection_levels.png", "si3.png","SI4_chem_counts.png","si5.png")
+filenms <- c("SI2_detection_levels.png", "si3.png","SI5_chem_counts.png","si6.png")
 file_path <- "./plots"
 
 source("merge.png.files.R")

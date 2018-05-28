@@ -95,7 +95,7 @@ si1 <- ggplot(data = boxData) +
         panel.spacing = unit(0.05, "lines"),
         plot.background = element_rect(fill = "transparent",colour = NA))
 
-png("plots/si5.png", width = 1200, height = 800, res = 142)
+png("plots/si6.png", width = 1200, height = 800, res = 142)
 si1
 dev.off()
 
