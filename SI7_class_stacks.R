@@ -9,7 +9,7 @@ source(file = "data_setup.R")
 chem_site <- tox_list[["chem_site"]]
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-pdf("plots/class_stacks.pdf", width = 11, height = 9)
+pdf("plots/SI4_class_stacks.pdf", width = 11, height = 9)
 i <- 1
 for(class in unique(chemicalSummary$Class)){
   grid.newpage()
