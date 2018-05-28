@@ -42,7 +42,7 @@ priority_endpoints <- endpoints_sites_hits$endPoint
 
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
-  group_by(ID, chnm, site, date) %>%
+  group_by(ID, chnm, CAS, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE),
             endPoint_used = endPoint[which.max(EAR)])
 
@@ -209,12 +209,48 @@ plot_grid(site_graph, boxplot_top,
           labels = c("A","","","B",""))
 dev.off()
 
+
+######################################################################################
 #Code for exploring data to be included in manuscript text
-test <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
-range(test$maxMaxEAR) # Get max EAR
+relevantEARs <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
+range(relevantEARs$maxMaxEAR) # Get max EAR
 
 # Determine which chemicals for each AOP, range of EARs, and how many sites
 
+  #Start with chems identified from Fig1: present at 10 or more sites with EARmaxChem > 10-3 at 5 or more sites
+priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = TRUE)
+
+AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
+  left_join(relevance,by=("ID")) %>%
+  filter(maxEAR > 0) %>%
+  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE))%>%
+  group_by(ID,chnm,CAS) %>%
+  summarize(nSites = n_distinct(site),
+            maxEAR = max(maxEAR),
+            maxEndpoint = endPoint[which.max(maxEAR)]) %>%
+  filter(maxEAR > 0.001) %>%
+  arrange(ID,nSites)
+
+unique(AOPs_by_priority_chem$chnm)
+priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
+
+# AOPs_by_chnm_all <- left_join(boxData_max,relevance,by=("ID")) %>%
+#   filter(maxEAR > 0) %>%
+#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+#   group_by(ID,chnm) %>%
+#   summarize(nSites = n_distinct(site),
+#             maxEAR = max(maxEAR)) %>%
+#   arrange(ID,nSites)
+#   
+# 
+# AOPs_by_chnm_thresh <- left_join(boxData_max,relevance,by=("ID")) %>%
+#   filter(maxEAR > ear_thresh) %>%
+#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+#   group_by(ID,chnm) %>%
+#   summarize(nSites = n_distinct(site),
+#             maxEAR = max(maxEAR)) %>%
+#   filter(nSites > siteThres) %>%
+#   arrange(ID,nSites)
 
 
 # png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
