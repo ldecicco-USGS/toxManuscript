@@ -12,18 +12,10 @@ rm(list=ls())
 # Fig 3:
 source("fig_4_aop_priority.R")
 rm(list=ls())
-# SI 2:
-source("SI2_detection_levels.R")
-rm(list=ls())
-# SI 3 and 5: 
-source("SI3_heat.R")
-rm(list=ls())
-# SI 4:
-source("SI4_chem_counts.R")
-rm(list=ls())
-# SI 6:
-source("SI6_sub_families.R")
-rm(list=ls())
-# SI 7:
-source("SI7_class_stacks.R")
-rm(list=ls())
+
+
+filenms <- c("fig1.png", "fig2_site_count.png","fig3_endpoint_boxplots.png","Fig4_aop_cow.png")
+file_path <- "./plots"
+
+source("merge.png.files.R")
+merge.png.pdf(pdfFile = "plots/figs.pdf",pngFiles = filenms,file_path,deletePngFiles = FALSE)
