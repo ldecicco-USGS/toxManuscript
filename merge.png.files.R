@@ -11,7 +11,7 @@ merge.png.pdf <- function(pdfFile, pngFiles, path, deletePngFiles=FALSE) {
   }
   #########################
   
-  pdf(pdfFile)
+  pdf(pdfFile,width=7,height=7)
   
   n <- length(pngFiles)
   

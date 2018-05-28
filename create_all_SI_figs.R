@@ -4,17 +4,17 @@ rm(list=ls())
 source("SI2_detection_levels.R")
 rm(list=ls())
 
-# Figs SI 3 & 5:
+# Figs SI 3 & 6:
 source("si_figs.R")
 rm(list=ls())
 
 
 # Fig SI 2:
-source("SI4_chem_counts.R")
+source("SI5_chem_counts.R")
 rm(list=ls())
 
-# SI 7:
-source("SI7_class_stacks.R")
+# SI 4:
+source("SI4_class_stacks.R")
 rm(list=ls())
 
 
