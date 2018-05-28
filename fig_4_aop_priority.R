@@ -154,11 +154,6 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
         plot.background = element_rect(fill = "transparent",colour = NA))
 
 
-png("plots/aop_cow_leg.png", width = 1200, height = 1200, res = 142)
-plot_grid(boxplot_top,  aop_ep, align = "v", 
-          nrow = 2, rel_heights = c(4/10, 6/10),labels = c("A","B"))
-dev.off()
-
 # How many AOPs are included, and how many are yes and maybe for relevance
 # endpoints <- unique(boxData$ID)
 # 
