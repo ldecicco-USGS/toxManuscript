@@ -34,3 +34,7 @@ plot_DL <- plot_tox_boxplots(chemicalSummary, "Chemical",title = "EAR per endPoi
 dir.create(file.path("plots"), showWarnings = FALSE)
 ggsave(plot_DL, filename = "plots/SI2_detection_levels.png", width = 5, height = 5)
 
+# Determine a few things for the text in the manuscript
+range(chemicalSummary$EAR)
+chemicalSummary[which.max(chemicalSummary$EAR),"chnm"]
+chemicalSummary[which.max(chemicalSummary$EAR),"endPoint"]

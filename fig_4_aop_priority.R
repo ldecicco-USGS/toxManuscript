@@ -9,6 +9,7 @@ library(grid)
 
 ####################################
 source(file = "data_setup.R")
+source(file = "MakeTitles.R")
 
 ear_thresh <- 0.001
 siteThres <- 10
@@ -20,11 +21,11 @@ AOP <- AOP_crosswalk %>%
   distinct()
 
 relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
+relevance$Relevant <- MakeTitles(relevance$Relevant)
 
 relevance <- relevance %>%
   rename(ID=AOP,
          endPoint = Endpoint.s.) 
-
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -41,7 +42,7 @@ priority_endpoints <- endpoints_sites_hits$endPoint
 
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
-  group_by(ID, chnm, site, date) %>%
+  group_by(ID, chnm, CAS, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE),
             endPoint_used = endPoint[which.max(EAR)])
 
@@ -199,7 +200,7 @@ legend_box <- get_legend(boxplot_top +
                          theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-png("plots/aop_cow.png", width = 1800, height = 1200, res = 142)
+png("plots/Fig4_aop_cow.png", width = 1800, height = 1200, res = 142)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
@@ -207,6 +208,50 @@ plot_grid(site_graph, boxplot_top,
           rel_heights = c(1/20, 4/20, 1/20, 6/10,1/10),
           labels = c("A","","","B",""))
 dev.off()
+
+
+######################################################################################
+#Code for exploring data to be included in manuscript text
+relevantEARs <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
+range(relevantEARs$maxMaxEAR) # Get max EAR
+
+# Determine which chemicals for each AOP, range of EARs, and how many sites
+
+  #Start with chems identified from Fig1: present at 10 or more sites with EARmaxChem > 10-3 at 5 or more sites
+priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = TRUE)
+
+AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
+  left_join(relevance,by=("ID")) %>%
+  filter(maxEAR > 0) %>%
+  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE))%>%
+  group_by(ID,chnm,CAS) %>%
+  summarize(nSites = n_distinct(site),
+            maxEAR = max(maxEAR),
+            maxEndpoint = endPoint[which.max(maxEAR)]) %>%
+  filter(maxEAR > 0.001) %>%
+  arrange(ID,nSites)
+
+unique(AOPs_by_priority_chem$chnm)
+priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
+
+# AOPs_by_chnm_all <- left_join(boxData_max,relevance,by=("ID")) %>%
+#   filter(maxEAR > 0) %>%
+#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+#   group_by(ID,chnm) %>%
+#   summarize(nSites = n_distinct(site),
+#             maxEAR = max(maxEAR)) %>%
+#   arrange(ID,nSites)
+#   
+# 
+# AOPs_by_chnm_thresh <- left_join(boxData_max,relevance,by=("ID")) %>%
+#   filter(maxEAR > ear_thresh) %>%
+#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+#   group_by(ID,chnm) %>%
+#   summarize(nSites = n_distinct(site),
+#             maxEAR = max(maxEAR)) %>%
+#   filter(nSites > siteThres) %>%
+#   arrange(ID,nSites)
+
 
 # png("plots/aop_cow.png", width = 1200, height = 1200, res = 142)
 # plot_grid(site_graph, boxplot_top, aop_label_graph, aop_ep, align = "v", nrow = 4, rel_heights = c(1/20, 4/20, 1/20, 7/10))
