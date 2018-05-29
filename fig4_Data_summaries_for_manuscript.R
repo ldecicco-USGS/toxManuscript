@@ -72,7 +72,21 @@ priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE)
 AOP_priority_CAS[!AOP_priority_CAS %in% priority_chems$CAS]
 priority_chems[!priority_chems$CAS %in% AOP_priority_CAS,"chnm"]
 
-Chem_vectors_by_site <- filter(chemicalSummary, CAS %in% AOP_priority_CAS) %>% 
+EAR_thresh <- 0.001
+chemSummaryAOP <- chemicalSummary %>%
+  filter(EAR > 0) %>%
+  left_join(AOP_relevance, by="endPoint") %>%
+  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+  group_by(ID, site, date) %>%
+  summarize(EARsum = sum(EAR, na.rm = TRUE))%>%
+  filter(EARsum > EAR_thresh) %>%
+  mutate(sample = paste(site,date))
+
+EAR_thresh_individual_chem <- 0.0001
+Chem_vectors_by_site <- chemicalSummary %>%
+  mutate(sample = paste(site,date)) %>%
+  filter(sample %in% chemSummaryAOP$sample)%>%
+  filter(CAS %in% AOP_priority_CAS) %>% 
   filter(EAR > 0.000001) %>%
   group_by(site,date) %>%
   summarize(chemVector = paste(sort(unique(CAS)),collapse = "; "))
@@ -94,7 +108,7 @@ for(i in 1:length(AOP_priority_CAS)) {
   for(j in i:length(AOP_priority_CAS)){
     chem2 <- AOP_priority_CAS[j]
     if(chem2 != chem){
-      chems2 <- paste0(chem,"; ",chem2)
+      chems2 <- paste0(sort(AOP_priority_CAS[c(i,j)]),collapse="; ")
       sites_by_vector <- filter(sites_by_vector,grepl(chem2,chemVector)) %>%
         filter(site %in% allSTAIDs1)
       STAIDs <- unique(sites_by_vector$site)
@@ -123,7 +137,7 @@ for(i in 1:length(AOP_priority_CAS)) {
       }
       allSTAIDs4 <- character()
       for(l in i:length(AOP_priority_CAS)){
-        chem3 <- AOP_priority_CAS[l]
+        chem4 <- AOP_priority_CAS[l]
         if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l)]))){
           chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="; ")
           sites_by_vector <- filter(sites_by_vector,grepl(chem4,chemVector)) %>%
