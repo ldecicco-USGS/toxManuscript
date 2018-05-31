@@ -170,13 +170,11 @@ combo_plot_matches <- function(gd_1, gd_2,
     xmax_1 <- 10^(layout_stuff$panel_scales_y[[1]]$range$range[2])
     xmin_2 <- 10^(layout_stuff$panel_scales_y[[2]]$range$range[1])
     xmax_2 <- 10^(layout_stuff$panel_scales_y[[2]]$range$range[2])
-    # ymax <- floor(layout_stuff$panel_scales_x[[2]]$range$range[2])
   } else {
     xmin_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[1])
     xmax_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[2])
     xmin_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[1])
     xmax_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[2])
-    # ymax <- floor(layout_stuff$panel_ranges[[2]]$y.range[2])
   }
   
   
@@ -260,7 +258,7 @@ combo_plot_matches <- function(gd_1, gd_2,
               aes(x= chnm, label = nonZero, y=ymin)) +
     geom_text(data=countNonZero_1_2, size=2.5, 
               aes(x= chnm, label = hits, y=ymax)) +
-    geom_text(data=labels_1_2, size=2.5,vjust=0,
+    geom_text(data=labels_1_2, size=2.5,vjust=-0.5,
               aes(x = x,  y=y, label = label)) +
     geom_segment(data = thresh_df, aes(y = thres, yend = thres),
                  linetype="dashed", 
