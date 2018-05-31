@@ -5,7 +5,7 @@ source("SI2_detection_levels.R", print.eval=TRUE)
 rm(list=ls())
 
 # Figs SI 3 & 6:
-source("si_figs.R")
+source("si_figs.R", print.eval=TRUE)
 rm(list=ls())
 
 
