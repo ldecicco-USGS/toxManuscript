@@ -124,7 +124,7 @@ for(i in 1:length(AOP_priority_CAS)) {
     for(k in i:length(AOP_priority_CAS)){
       chem3 <- AOP_priority_CAS[k]
       if(all(!duplicated(AOP_priority_CAS[c(i,j,k)]))){
-      chems3 <- paste0(sort(AOP_priority_CAS[c(i,j,k)]),collapse="; ")
+        chems3 <- paste0(sort(AOP_priority_CAS[c(i,j,k)]),collapse="; ")
         sites_by_vector <- filter(sites_by_vector,grepl(chem3,chemVector)) %>%
           filter(site %in% allSTAIDs2)
         STAIDs <- unique(sites_by_vector$site)
@@ -154,8 +154,8 @@ for(i in 1:length(AOP_priority_CAS)) {
     }
   }
 }
-        
-        
+
+
 Num_sites_by_mixture <- filter(Num_sites_by_mixture,numSites>0) %>%
   group_by(chemVector,STAIDs) %>%
   summarize(numSites =max(numSites),
@@ -201,17 +201,99 @@ test <- filter(chemicalSummary,shortName=="BlackOH") %>%
 #run boxplots for each row in Num_sites_by_mixture. one page for 2 chems, one page for 3...
 
 Chem_vectors_by_site <- filter(chemicalSummary, CAS %in% AOP_priority_CAS) %>% #priority_chems$CAS) %>%
-  filter(EAR > 0.000001) %>%
+  filter(EAR > 0.00001) %>%
   group_by(site,date) %>%
   summarize(chems = paste0(unique(chnm),collapse=";"))
 
-for(i in 2:5){
-  sub_Num_sites <- Num_sites_by_mixture %>%
-    filter(numSites == i)
-  for(j in 1:dim(sub_Num_sites)[1]){
-    CASnums <- strsplit(sub_Num_sites$CAS,"; ")
-    subChemSummary <- chemicalSummary %>%
-      group_by(site,date) %>%
-      filter(all(CASnums %in% CAS))
-    
-    
+filenm <- "mixtureBoxplots.pdf"
+pdf(filenm)
+EAR_thresh <- 0.00001
+
+i <- 2
+sub_Num_sites <- Num_sites_by_mixture %>%
+  filter(nChems == i,numSites>4)
+par(mfrow=c(3,4))
+for(j in 1:dim(sub_Num_sites)[1]){
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
+  
+  # subChemSummary <- chemicalSummary %>%
+  #   filter(EAR > EAR_thresh) %>%
+  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
+  #   group_by(site,date)
+  #   mutate(CASnums = paste0(CAS)
+  subChemSummary <- chemicalSummary %>%
+    filter(EAR > EAR_thresh) %>%
+    group_by(site,date) %>%
+    filter(grepl(paste(CASnums,collapse="|"), CAS))
+  
+  subChemSummary <- subChemSummary %>%
+    left_join(AOP_relevance, by="endPoint") %>%
+    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+    group_by(site,date,ID) %>%
+    summarize(EARsum = sum(EAR))
+  
+  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
+}
+
+
+i <- 3
+
+sub_Num_sites <- Num_sites_by_mixture %>%
+  filter(nChems == i,numSites>3)
+par(mfrow=c(2,3))
+for(j in 1:dim(sub_Num_sites)[1]){
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
+  
+  # subChemSummary <- chemicalSummary %>%
+  #   filter(EAR > EAR_thresh) %>%
+  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
+  #   group_by(site,date)
+  #   mutate(CASnums = paste0(CAS)
+  subChemSummary <- chemicalSummary %>%
+    filter(EAR > EAR_thresh) %>%
+    group_by(site,date) %>%
+    filter(grepl(paste(CASnums,collapse="|"), CAS))
+  
+  subChemSummary <- subChemSummary %>%
+    left_join(AOP_relevance, by="endPoint") %>%
+    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+    group_by(site,date,ID) %>%
+    summarize(EARsum = sum(EAR))
+  
+  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
+}
+
+
+i <- 4
+
+sub_Num_sites <- Num_sites_by_mixture %>%
+  filter(nChems == i,numSites>3)
+par(mfrow=c(2,3))
+for(j in 1:dim(sub_Num_sites)[1]){
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
+  
+  # subChemSummary <- chemicalSummary %>%
+  #   filter(EAR > EAR_thresh) %>%
+  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
+  #   group_by(site,date)
+  #   mutate(CASnums = paste0(CAS)
+  subChemSummary <- chemicalSummary %>%
+    filter(EAR > EAR_thresh) %>%
+    group_by(site,date) %>%
+    filter(grepl(paste(CASnums,collapse="|"), CAS))
+  
+  subChemSummary <- subChemSummary %>%
+    left_join(AOP_relevance, by="endPoint") %>%
+    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+    group_by(site,date,ID) %>%
+    summarize(EARsum = sum(EAR))
+  
+  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
+}
+
+dev.off()
+shell.exec(filenm)
+
