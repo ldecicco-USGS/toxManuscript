@@ -71,6 +71,7 @@ boxData <- boxData %>%
   left_join(select(relevance, ID, Relevant), by="ID") %>%
   mutate(ID = factor(ID)) 
 
+boxData$Relevant <- factor(boxData$Relevant, levels = c("Yes","No","Maybe"))
 
 # fractions <- boxData_tots %>%
 #   left_join(boxData_max, by=c("ID","site","date")) %>%
@@ -129,8 +130,10 @@ boxplot_top <- ggplot(data = boxData) +
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
         legend.position = "none") +
+  scale_fill_manual(values=c("#E69F00", "#009E73", "#F0E442","#999999")) +
   scale_y_log10(y_label,
-                labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)
+                labels=toxEval:::fancyNumbers,
+                breaks=pretty_logs_new)
 
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
@@ -173,7 +176,7 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
 site_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="# Sites", label = as.character(sitehits)),
-            vjust = 0.5, size = 2) +
+            vjust = 0.5, size = 3) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title = element_blank(),
@@ -185,7 +188,7 @@ site_graph <- ggplot() +
 aop_label_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="AOP ID", label = as.character(ID)),
-            vjust = 0.5, size = 2, angle = 0) +
+            vjust = 0.5, size = 3, angle = 0) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
@@ -205,7 +208,7 @@ plot_grid(site_graph, boxplot_top,
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
           align = "v", nrow = 5, 
-          rel_heights = c(1/20, 4/20, 1/20, 6/10,1/10),
+          rel_heights = c(1/20, 8/20, 1/20, 8/20,1/10),
           labels = c("A","","","B",""))
 dev.off()
 
