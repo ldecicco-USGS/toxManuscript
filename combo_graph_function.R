@@ -165,12 +165,20 @@ combo_plot_matches <- function(gd_1, gd_2,
   plot_info <- ggplot_build(toxPlot_1_2)
   layout_stuff <- plot_info$layout
   
-  xmin_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[1])
-  xmax_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[2])
-  xmin_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[1])
-  xmax_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[2])
+  if(packageVersion("ggplot2") >= "2.2.1.9000"){
+    xmin_1 <- 10^(layout_stuff$panel_scales_y[[1]]$range$range[1])
+    xmax_1 <- 10^(layout_stuff$panel_scales_y[[1]]$range$range[2])
+    xmin_2 <- 10^(layout_stuff$panel_scales_y[[2]]$range$range[1])
+    xmax_2 <- 10^(layout_stuff$panel_scales_y[[2]]$range$range[2])
+    # ymax <- floor(layout_stuff$panel_scales_x[[2]]$range$range[2])
+  } else {
+    xmin_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[1])
+    xmax_1 <- 10^(layout_stuff$panel_ranges[[1]]$x.range[2])
+    xmin_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[1])
+    xmax_2 <- 10^(layout_stuff$panel_ranges[[2]]$x.range[2])
+    # ymax <- floor(layout_stuff$panel_ranges[[2]]$y.range[2])
+  }
   
-  ymax <- floor(layout_stuff$panel_ranges[[2]]$y.range[2])
   
   if(!drop){
 
@@ -257,7 +265,7 @@ combo_plot_matches <- function(gd_1, gd_2,
     geom_segment(data = thresh_df, aes(y = thres, yend = thres),
                  linetype="dashed", 
                  x = 1,
-                 xend = ymax) 
+                 xend = Inf) 
   
   return(toxPlot_1_2)
   
