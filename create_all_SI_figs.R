@@ -9,7 +9,7 @@ source("si_figs.R", print.eval=TRUE)
 rm(list=ls())
 
 
-# Fig SI 2:
+# Fig SI 5:
 source("SI5_chem_counts.R")
 rm(list=ls())
 
