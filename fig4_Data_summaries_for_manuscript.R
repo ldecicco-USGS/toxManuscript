@@ -75,11 +75,38 @@ AOP_priority_CAS <-unique(filtered_chems$CAS)
 
 boxplot(EAR_percent ~ chnm,data=boxData_pct,log="x",horizontal=TRUE,las=2)
 
+test <- boxData_pct%>% filter(chnm %in% AOP_priority_chems)
+test$chnm <- as.character(test$chnm)
+
+options(scipen=10)
+par(mar =c(5,15,2,1))
+boxplot(EAR_percent ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+boxplot(EARsum ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+
+#Check 3,4-dichlorophenyl isocyanate
+test <- chemicalSummary %>% filter(CAS == "102-36-3") %>%
+  filter(EAR>0.00)
+range(test$EAR)
+test$chnm <- as.character(test$chnm)
+boxplot(EAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+
 
 ####################################################################################
 ### Thorough mixtures analysis up to 4 chemicals
 
-# 
+# Mixtures analysis
+# ------------------
+# 1. Join EAR data with AOP relevance information
+# 2. Remove AOPs that are not relevant
+# 3. Filter by max EAR per chemical per endpoint
+# 4. sum EARs by sample and AOP (EARsumAOP)
+# 5. Retain only samples with EARsumAOP > 10^-3
+# 6. Take note of which samples remain
+# 7. Go back to original data set and subset only chemicals that result from step 6
+# 8. Subset to "priority chemicals" defined above.
+# 9. Remove individual instances of EAR < 0.00001 (this is < 1% of potential influence in individual EARsumAOP values) and it makes the resulting data set more manageable for mixture analysis
+# 10. Determine how many sites that 2-, 3-, and 4-chemical combinations occur at.
+# 11. Examine EARsumAOPs for resulting data
 
 
 priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
@@ -87,15 +114,6 @@ AOP_priority_CAS[!AOP_priority_CAS %in% priority_chems$CAS]
 priority_chems[!priority_chems$CAS %in% AOP_priority_CAS,"chnm"]
 
 EAR_thresh <- 0.001
-# chemSummaryAOP <- chemicalSummary %>%
-#   filter(EAR > 0) %>%
-#   left_join(AOP_relevance, by="endPoint") %>%
-#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
-#   group_by(ID, site, date) %>%
-#   summarize(EARsum = sum(EAR, na.rm = TRUE))%>%
-#   filter(EARsum > EAR_thresh) %>%
-#   mutate(sample = paste(site,date))
-
 
 chemSummaryAOP <- boxData_max %>%
   group_by(ID, site, date) %>%

@@ -1,0 +1,25 @@
+Choosing priority chemicals
+
+1. Join EAR data with AOP relevance information
+2. Remove AOPs that are not relevant
+3. Filter by max EAR per chemical per endpoint
+4. sum EARs by sample and AOP (EARsumAOP)
+5. Retain only samples with EARsumAOP > 10^-3
+6. Remove chemicals in each sample that do not contribute at least 1% of EARsumAOP
+7. Retain only chemicals that show up at a minimum of 5 sites
+
+
+Mixtures analysis
+1. Join EAR data with AOP relevance information
+2. Remove AOPs that are not relevant
+3. Filter by max EAR per chemical per endpoint
+4. sum EARs by sample and AOP (EARsumAOP)
+5. Retain only samples with EARsumAOP > 10^-3
+6. Take note of which samples remain
+7. Go back to original data set and subset only chemicals that result from step 6
+8. Subset to "priority chemicals" defined above.
+9. Remove individual instances of EAR < 0.00001 (this is < 1% of potential influence in individual EARsumAOP values) and it makes the resulting data set more manageable for mixture analysis
+10. Determine how many sites that 2-, 3-, and 4-chemical combinations occur at.
+11. Examine EARsumAOPs for resulting data
+
+
