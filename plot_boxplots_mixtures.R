@@ -7,6 +7,9 @@ source("data_setup.R")
 source(file = "data_setup.R")
 source(file = "MakeTitles.R")
 
+#This script requires running fig4_Data_summaries_for_manuscript.R and saving the
+#data frame "Num_sites_by_mixture.csv" before running these plots.
+
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
 
