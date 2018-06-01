@@ -1,15 +1,15 @@
 rm(list=ls())
 
 # Fig SI 2:
-source("SI2_detection_levels.R")
+source("SI2_detection_levels.R", print.eval=TRUE)
 rm(list=ls())
 
 # Figs SI 3 & 6:
-source("si_figs.R")
+source("si_figs.R", print.eval=TRUE)
 rm(list=ls())
 
 
-# Fig SI 2:
+# Fig SI 5:
 source("SI5_chem_counts.R")
 rm(list=ls())
 

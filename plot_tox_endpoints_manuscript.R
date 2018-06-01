@@ -178,7 +178,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
     geom_text(data=data.frame(), aes(x=namesToPlotEP, y=ymin,label=nSamplesEP),size=ifelse(is.na(font_size),3,0.30*font_size)) +
     geom_text(data=data.frame(), aes(x=namesToPlotEP, y=ymax,label=nChemsEP),size=ifelse(is.na(font_size),3,0.30*font_size)) +
     geom_text(data=data.frame(x = Inf, y=c(ymin,ymax), label = label, stringsAsFactors = FALSE), 
-              aes(x = x,  y=y, label = label),
+              aes(x = x,  y=y, label = label), vjust = -0.5,
               size=ifelse(is.na(font_size),3,0.30*font_size))     
   
   if(isTRUE(sum(as.numeric(nHitsEP), na.rm = TRUE) > 0)) {

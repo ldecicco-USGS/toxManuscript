@@ -61,8 +61,8 @@ textData <- data.frame(guide_up = c("A","A","B","B"),
 toxPlot_wq <- toxPlot_wq +
   geom_text(data = textData, aes(label = textExplain, x = chnm, y=y),size = 3)
 
-dir.create(file.path("plots"), showWarnings = FALSE)
-ggsave(toxPlot_wq, filename = "plots/fig1.png", width = 12, height = 12)
+# dir.create(file.path("plots"), showWarnings = FALSE)
+# ggsave(toxPlot_wq, filename = "plots/fig1.png", width = 12, height = 12)
 
 
 png("plots/fig1_no_clip.png", width = 1200, height = 1200, res = 142)
