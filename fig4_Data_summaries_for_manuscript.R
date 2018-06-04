@@ -11,6 +11,17 @@ library(grid)
 source(file = "data_setup.R")
 source(file = "MakeTitles.R")
 
+# Choosing priority chemicals
+# ---------------------------
+# 1. Join EAR data with AOP relevance information
+# 2. Remove AOPs that are not relevant
+# 3. Filter by max EAR per chemical per endpoint
+# 4. sum EARs by sample and AOP (EARsumAOP)
+# 5. Retain only samples with EARsumAOP > 10^-3
+# 6. Remove chemicals in each sample that do not contribute at least 1% of EARsumAOP
+# 7. Retain only chemicals that show up at a minimum of 5 sites
+
+
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
 
@@ -27,7 +38,6 @@ relevance <- relevance %>%
 
 
 AOP_relevance <- left_join(AOP,relevance,by="ID")
-
 
 boxData_max <- chemicalSummary %>%
   filter(EAR > 0) %>%
@@ -65,29 +75,60 @@ AOP_priority_CAS <-unique(filtered_chems$CAS)
 
 boxplot(EAR_percent ~ chnm,data=boxData_pct,log="x",horizontal=TRUE,las=2)
 
+test <- boxData_pct%>% filter(chnm %in% AOP_priority_chems)
+test$chnm <- as.character(test$chnm)
+
+options(scipen=10)
+par(mar =c(5,15,2,1))
+boxplot(EAR_percent ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+boxplot(EARsum ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+
+#Check 3,4-dichlorophenyl isocyanate
+test <- chemicalSummary %>% filter(CAS == "102-36-3") %>%
+  filter(EAR>0.00)
+range(test$EAR)
+test$chnm <- as.character(test$chnm)
+boxplot(EAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+
 
 ####################################################################################
-### Thorough mixtures analysis up to 5 chemicals
-priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE)
+### Thorough mixtures analysis up to 4 chemicals
+
+# Mixtures analysis
+# ------------------
+# 1. Join EAR data with AOP relevance information
+# 2. Remove AOPs that are not relevant
+# 3. Filter by max EAR per chemical per endpoint
+# 4. sum EARs by sample and AOP (EARsumAOP)
+# 5. Retain only samples with EARsumAOP > 10^-3
+# 6. Take note of which samples remain
+# 7. Go back to original data set and subset only chemicals that result from step 6
+# 8. Subset to "priority chemicals" defined above.
+# 9. Remove individual instances of EAR < 0.00001 (this is < 1% of potential influence in individual EARsumAOP values) and it makes the resulting data set more manageable for mixture analysis
+# 10. Determine how many sites that 2-, 3-, and 4-chemical combinations occur at.
+# 11. Examine EARsumAOPs for resulting data
+
+
+priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
 AOP_priority_CAS[!AOP_priority_CAS %in% priority_chems$CAS]
 priority_chems[!priority_chems$CAS %in% AOP_priority_CAS,"chnm"]
 
 EAR_thresh <- 0.001
-chemSummaryAOP <- chemicalSummary %>%
-  filter(EAR > 0) %>%
-  left_join(AOP_relevance, by="endPoint") %>%
-  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+
+chemSummaryAOP <- boxData_max %>%
   group_by(ID, site, date) %>%
-  summarize(EARsum = sum(EAR, na.rm = TRUE))%>%
+  summarize(EARsum = sum(maxEAR, na.rm = TRUE))%>%
   filter(EARsum > EAR_thresh) %>%
   mutate(sample = paste(site,date))
 
-EAR_thresh_individual_chem <- 0.0001
+
+EAR_thresh_individual_chem <- 0.000001
 Chem_vectors_by_site <- chemicalSummary %>%
   mutate(sample = paste(site,date)) %>%
   filter(sample %in% chemSummaryAOP$sample)%>%
   filter(CAS %in% AOP_priority_CAS) %>% 
-  filter(EAR > 0.000001) %>%
+  
+  filter(EAR > EAR_thresh_individual_chem) %>%
   group_by(site,date) %>%
   summarize(chemVector = paste(sort(unique(CAS)),collapse = "; "))
 
@@ -188,112 +229,4 @@ Num_sites_by_mixture$chnmVector <- chemColumn
 
 #write.csv(Num_sites_by_mixture,file="Num_sites_by_mixture.csv",row.names = FALSE)
 
-#########################################################################################
-
-Num_sites_by_mixture <- read.csv(file="Num_sites_by_mixture.csv",stringsAsFactors = FALSE)
-test <- filter(chemicalSummary,shortName=="BlackOH") %>%
-  group_by(site,date) %>%
-  summarize(EARsum = sum(EAR))
-
-
-#find samples with the chemicals in each defined mixture
-#Add AOP info
-#run boxplots for each row in Num_sites_by_mixture. one page for 2 chems, one page for 3...
-
-Chem_vectors_by_site <- filter(chemicalSummary, CAS %in% AOP_priority_CAS) %>% #priority_chems$CAS) %>%
-  filter(EAR > 0.00001) %>%
-  group_by(site,date) %>%
-  summarize(chems = paste0(unique(chnm),collapse=";"))
-
-filenm <- "mixtureBoxplots.pdf"
-pdf(filenm)
-EAR_thresh <- 0.00001
-
-i <- 2
-sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>4)
-par(mfrow=c(3,4))
-for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
-  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
-  
-  # subChemSummary <- chemicalSummary %>%
-  #   filter(EAR > EAR_thresh) %>%
-  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
-  #   group_by(site,date)
-  #   mutate(CASnums = paste0(CAS)
-  subChemSummary <- chemicalSummary %>%
-    filter(EAR > EAR_thresh) %>%
-    group_by(site,date) %>%
-    filter(grepl(paste(CASnums,collapse="|"), CAS))
-  
-  subChemSummary <- subChemSummary %>%
-    left_join(AOP_relevance, by="endPoint") %>%
-    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
-    group_by(site,date,ID) %>%
-    summarize(EARsum = sum(EAR))
-  
-  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
-}
-
-
-i <- 3
-
-sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>3)
-par(mfrow=c(2,3))
-for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
-  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
-  
-  # subChemSummary <- chemicalSummary %>%
-  #   filter(EAR > EAR_thresh) %>%
-  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
-  #   group_by(site,date)
-  #   mutate(CASnums = paste0(CAS)
-  subChemSummary <- chemicalSummary %>%
-    filter(EAR > EAR_thresh) %>%
-    group_by(site,date) %>%
-    filter(grepl(paste(CASnums,collapse="|"), CAS))
-  
-  subChemSummary <- subChemSummary %>%
-    left_join(AOP_relevance, by="endPoint") %>%
-    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
-    group_by(site,date,ID) %>%
-    summarize(EARsum = sum(EAR))
-  
-  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
-}
-
-
-i <- 4
-
-sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>3)
-par(mfrow=c(2,3))
-for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
-  chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
-  
-  # subChemSummary <- chemicalSummary %>%
-  #   filter(EAR > EAR_thresh) %>%
-  #   filter(grepl(paste0(CASnums,collapse="|"))) %>%
-  #   group_by(site,date)
-  #   mutate(CASnums = paste0(CAS)
-  subChemSummary <- chemicalSummary %>%
-    filter(EAR > EAR_thresh) %>%
-    group_by(site,date) %>%
-    filter(grepl(paste(CASnums,collapse="|"), CAS))
-  
-  subChemSummary <- subChemSummary %>%
-    left_join(AOP_relevance, by="endPoint") %>%
-    filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
-    group_by(site,date,ID) %>%
-    summarize(EARsum = sum(EAR))
-  
-  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), log="y",main=paste(chnms),las=2,ylim=c(1e-5,10))
-}
-
-dev.off()
-shell.exec(filenm)
 
