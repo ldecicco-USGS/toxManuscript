@@ -37,22 +37,26 @@ chemSummData_max <- chemicalSummary %>%
   group_by(ID, chnm, CAS, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE)) 
 
-filenm <- "mixtureBoxplots3.pdf"
+filenm <- "mixtureBoxplotsChosen.pdf"
 pdf(filenm)
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(2,3),c(2,3))
+plot_dimensions <- c(2,3)
 margins <- c(2,0.5,4,0)
 outer_margins <- c(2,4,2,1)
 axis_text_cex <- 0.6
 title_text_cex <- 0.7
 
-for(i in 2:4) {
+par(mfrow=plot_dimensions,mar=margins,oma=outer_margins)
+plot_count <- 0
+for(i in 2:3) {
   sub_Num_sites <- Num_sites_by_mixture %>%
     filter(nChems == i,numSites>=4)
-  par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
   for(j in 1:dim(sub_Num_sites)[1]){
+    plot_condition <- (i==2 & j %in% c(3,5)) | (i ==3 & j %in% c(2,5,6))
+    if(plot_condition) {
+      plot_count <- plot_count + 1
     CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
     nMixSites <- sub_Num_sites[j,"numSites"]
     chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
@@ -64,8 +68,7 @@ for(i in 2:4) {
       group_by(site,date,ID) %>%
       summarize(EARsum = sum(maxEAR))
     
-    yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-    yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+    yaxt <- ifelse(plot_count %in% c(1,4),"s","n")
     boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
             log="y",main=paste(chnms),
             las=2,
@@ -76,9 +79,10 @@ for(i in 2:4) {
     mtext(paste(nMixSites,"Sites"),side=3,line=-1,cex=0.7)
     mtext("AOP",side=1,outer=TRUE)
     mtext("EAR sum by sample",side = 2,line=2.5,outer=TRUE)
+    }
   }
   
-  mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
+  mtext(paste("Chosen Mixtures for AOP Network Development"),outer=TRUE)
 }
 dev.off()
 shell.exec(filenm)
