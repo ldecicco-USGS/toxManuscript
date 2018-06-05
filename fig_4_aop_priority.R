@@ -237,6 +237,17 @@ AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
 unique(AOPs_by_priority_chem$chnm)
 priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
 
+
+# Are AOPs 26, 52, and 53 significantly diff than other relevant AOPs?
+relevantData <- boxData %>% 
+#  filter(maxMaxEAR > 0) %>%
+  filter(!Relevant == "No")
+  
+large <- pull(relevantData[relevantData$ID %in% c(26,52,53),],maxMaxEAR)
+small <- pull(relevantData[!relevantData$ID %in% c(26,52,53),],maxMaxEAR)
+
+wilcox.test(large,small)
+
 # AOPs_by_chnm_all <- left_join(boxData_max,relevance,by=("ID")) %>%
 #   filter(maxEAR > 0) %>%
 #   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
