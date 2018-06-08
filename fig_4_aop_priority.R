@@ -284,6 +284,7 @@ relevant_AOP_in_data_info <-relevance %>%
             Key.Event.Name = paste(unique(Key.Event.Name),collapse = "; "),
             KeyEvent.Type = paste(unique(KeyEvent.Type),collapse = "; "))
             
+  write.csv(relevant_AOP_in_data_info,file="relevant_AOPs_in_study.csv",row.names = FALSE)
 
 length(unique(relevant_AOP_in_data_info$ID))
 
