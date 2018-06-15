@@ -5,6 +5,7 @@ library(ggplot2)
 library(grid)
 
 source(file = "data_setup.R")
+source(file = "plot_tox_stacks_manuscript.R")
 
 chem_site <- tox_list[["chem_site"]]
 
@@ -25,7 +26,7 @@ for(class in unique(chemicalSummary$Class)){
 ": Maximum exposure-activity ratio values by site for chemical class
 ", cleaned_class," in Great Lakes tributaries, 2010-2013.")
   i <- i+1
-  upperPlot <- plot_tox_stacks(sub_class, 
+  upperPlot <- plot_tox_stacks_manuscript(sub_class, 
                                chem_site, 
                                title = fancyTitle,
                                category = "Chemical")

@@ -54,7 +54,7 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.background = element_rect(fill = "transparent",colour = NA)) +
-  geom_text(data = label_samples,vjust=0.75,hjust=1,
+  geom_text(data = label_samples,vjust=0.75,hjust=1.1,
             aes(x=x,y=y,label=label),
             size=3,inherit.aes = FALSE)
 
