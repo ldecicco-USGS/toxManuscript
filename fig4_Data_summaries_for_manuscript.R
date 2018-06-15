@@ -60,6 +60,9 @@ pct_check <- boxData_pct %>%
   summarise(pct_sum = sum(EAR_percent))
 range(pct_check$pct_sum) # All good. pct_sum = 1.0
 
+#Look at percent range for benzophenone:
+range(filter(boxData_pct, chnm == "Benzophenone")$EAR_percent) #result: max =1.4%
+
 siteThresh <- 5
 pct_thresh <- 0.01
 filtered_chems <- boxData_pct %>%

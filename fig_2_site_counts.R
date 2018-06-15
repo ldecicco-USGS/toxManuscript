@@ -40,7 +40,7 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
   geom_bar(aes(y=nChem),
            stat = "identity",
            fill = "steelblue") +
-  geom_text(aes(y=-1, label =  count), size = 2.5) +
+  geom_text(aes(y=-1, label =  count), size = 2.5,angle=90) +
   theme_bw() +
   facet_grid(. ~ site_grouping, scales="free", space="free") +
   xlab("") +
