@@ -183,3 +183,72 @@ abline(h=10^-3)
 sum(tboep_EARs$EARmax > 10^-3)
 
 
+## IndChem ## --------------------------------------------------------------
+
+chem <- "4-NP"
+CASnum <- "84852-15-3"
+IndChem <- read.delim("./ECOTOX/ECOTOX4NP.rep",sep = "|")
+#IndChem <- read_xlsx("./ECOTOX/ECOTOXCaffeine.xlsx")
+names(IndChem) <-gsub(" ","",names(IndChem))
+names(IndChem) <-gsub(")","",names(IndChem))
+names(IndChem) <-gsub("\\(","",names(IndChem))
+names(IndChem) <-gsub("%","",names(IndChem))
+names(IndChem) <-gsub("\\.","",names(IndChem))
+names(IndChem) <-gsub("X","",names(IndChem))
+
+IndChem$Conc1MeanStandardized <- as.numeric(IndChem$Conc1MeanStandardized)
+
+IndChemugL <- IndChem[IndChem$Conc1UnitsStandardized == "ug/L",]
+par(mar=c(16,6,3,1))
+
+unique(IndChem$Conc1UnitsStandardized)
+table(IndChem$Conc1UnitsStandardized)
+
+boxplot(IndChemugL$Conc1MeanStandardized~IndChemugL$SpeciesGroup,log="y",las=2,cex.axis=0.6)
+
+
+# Now look at study results
+
+source("data_setup.R")
+concentrations <- read_xlsx("OWC_data_fromSup.xlsx",sheet=1)
+names(concentrations)[2] <- "date"
+
+#Explore IndChem occurrences and range
+
+# IndChem concentrations:
+IndChem_conc <- concentrations %>%
+  filter(Value > 0) %>%
+  filter(CAS == CASnum ) %>%
+  group_by(SiteID) %>%
+  summarize(ConcMax = max(Value))
+
+sum(IndChem_conc$ConcMax > 0.1)
+
+boxplot(IndChem_conc$ConcMax,log="y")
+abline(h=10^-3)
+
+
+# IndChem EARs
+source("data_setup.R")
+concentrations <- read_xlsx("OWC_data_fromSup.xlsx",sheet=1)
+names(concentrations)[2] <- "date"
+
+#Explore IndChem occurrences and range
+
+#sum EARs by chemical per sample and take max sample per site
+IndChem_EARs <- chemicalSummary %>%
+  filter(EAR > 0) %>%
+  group_by(CAS,chnm,site,shortName,date) %>%
+  summarize(EARsum = sum(EAR)) %>%
+  group_by(CAS,chnm,site,shortName) %>%
+  summarize(EARmax = max(EARsum)) %>%
+  filter(CAS == CASnum)
+
+
+boxplot(IndChem_EARs$EARmax,log="y")
+abline(h=10^-3)
+
+#How many sites > 10^-3
+sum(IndChem_EARs$EARmax > 10^-3)
+
+
