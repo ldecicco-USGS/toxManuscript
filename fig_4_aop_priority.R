@@ -237,6 +237,62 @@ AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
 unique(AOPs_by_priority_chem$chnm)
 priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
 
+
+# Are AOPs 26, 52, and 53 significantly diff than other relevant AOPs?
+relevantData <- boxData %>% 
+#  filter(maxMaxEAR > 0) %>%
+  filter(!Relevant == "No")
+  
+large <- pull(relevantData[relevantData$ID %in% c(29,52,53),],maxMaxEAR)
+small <- pull(relevantData[!relevantData$ID %in% c(29,52,53),],maxMaxEAR)
+plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
+points(x=percent_rank(small),small,col="orange")
+
+boxplot(large, log="y")
+wilcox.test(large,small)
+t.test(log(large+10e-9),log(small+10^-9))
+t.test(large,small)
+
+large <- pull(relevantData[relevantData$ID %in% c(29),],maxMaxEAR)
+small <- pull(relevantData[relevantData$ID %in% c(63),],maxMaxEAR)
+plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
+points(x=percent_rank(small),small,col="orange")
+
+wilcox.test(large,small)
+t.test(large,small)
+
+AOPsInData <- as.character(unique(relevantData$ID))
+relevant_AOP_in_data_info <-relevance %>%
+  filter(ID %in% AOPsInData) %>%
+  group_by(ID,Relevant,Rationale) %>%
+  summarize(endpoints = paste(endPoint,collapse="; ")) %>%
+  inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
+  group_by(ID,Relevant,Rationale,endpoints) #%>%
+    
+    AOP_crosswalk$Component.Endpoint.Name <- as.factor(AOP_crosswalk$Component.Endpoint.Name )
+  relevant_AOP_in_data_info <-relevance %>%
+    filter(ID %in% AOPsInData) %>%
+    group_by(ID,Relevant,Rationale) %>%
+    summarize(endpoints = paste(endPoint,collapse="; ")) %>%
+    inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
+    mutate(Component.Endpoint.Name =as.factor(Component.Endpoint.Name)) %>%
+    group_by(ID,Relevant,Rationale,endpoints) %>%
+    summarize(endpointID_crosswalk = paste(Assay.Endpoint.ID,collapse = ";"),
+ #             endpoints_cwalk = paste(unique(Component.Endpoint.Name),collpse = "; "))
+            AOP.Title = paste(unique(AOP.Title),collapse = "; "),
+            KE. = paste(unique(KE.),collapse = "; "),
+            Key.Event.Name = paste(unique(Key.Event.Name),collapse = "; "),
+            KeyEvent.Type = paste(unique(KeyEvent.Type),collapse = "; "))
+            
+  write.csv(relevant_AOP_in_data_info,file="relevant_AOPs_in_study.csv",row.names = FALSE)
+
+length(unique(relevant_AOP_in_data_info$ID))
+
+relevantAOPInfo <- relevance[relevance$ID %in% as.character(unique(relevantData$ID)),] %>%
+  inner_join(AOP_crosswalk,by=c("ID"="AOP.."))
+
+
+
 # AOPs_by_chnm_all <- left_join(boxData_max,relevance,by=("ID")) %>%
 #   filter(maxEAR > 0) %>%
 #   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%

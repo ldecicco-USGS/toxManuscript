@@ -37,7 +37,7 @@ chemSummData_max <- chemicalSummary %>%
   group_by(ID, chnm, CAS, site, date) %>%
   summarize(maxEAR = max(EAR, na.rm = TRUE)) 
 
-filenm <- "mixtureBoxplots3.pdf"
+filenm <- "plots/SI7_mixtureBoxplots.pdf"
 pdf(filenm)
 EAR_thresh <- 0.00001
 
