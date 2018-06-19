@@ -230,6 +230,6 @@ for(i in 1:dim(Num_sites_by_mixture)[1]){
 Num_sites_by_mixture$chnmVector <- chemColumn
 
 
-#write.csv(Num_sites_by_mixture,file="Num_sites_by_mixture.csv",row.names = FALSE)
+#write.csv(Num_sites_by_mixture,file="SI_table7 Num_sites_by_mixture.csv",row.names = FALSE)
 
 
