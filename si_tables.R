@@ -22,12 +22,11 @@ relevance <- relevance %>%
 
 endPointInfo <- clean_endPoint_info(endPointInfo)
 
-si_3_endpoints <- AOP %>%
-  left_join(select(relevance, ID, Relevant), by="ID") %>%
-  left_join(select(endPointInfo, 
-                   endPoint=assay_component_endpoint_name, 
-                   assay_source=assay_source_long_name),
-            by="endPoint") 
+si_3_endpoints <- select(endPointInfo, 
+                         `ToxCast Endpoint`=assay_component_endpoint_name, 
+                         `Assay Source`=assay_source_long_name) %>%
+  distinct() 
+
 dir.create("tables", showWarnings = FALSE)
 write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
 
