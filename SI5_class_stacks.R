@@ -10,7 +10,7 @@ source(file = "plot_tox_stacks_manuscript.R")
 chem_site <- tox_list[["chem_site"]]
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-pdf("plots/SI4_class_stacks.pdf", width = 11, height = 9)
+pdf("plots/SI5_class_stacks.pdf", width = 11, height = 9)
 i <- 1
 for(class in unique(chemicalSummary$Class)){
   grid.newpage()
@@ -22,7 +22,7 @@ for(class in unique(chemicalSummary$Class)){
     cleaned_class <- "PAHs"
   }
   
-  fancyTitle <- paste0("Figure SI-4",LETTERS[i],
+  fancyTitle <- paste0("Figure SI-5",LETTERS[i],
 ": Maximum exposure-activity ratio values by site for chemical class
 ", cleaned_class," in Great Lakes tributaries, 2010-2013.")
   i <- i+1
