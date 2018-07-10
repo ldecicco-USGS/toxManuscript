@@ -50,6 +50,8 @@ title_text_cex <- 0.7
 
 par(mfrow=plot_dimensions,mar=margins,oma=outer_margins)
 plot_count <- 0
+
+stat_stuff <- list()
 for(i in 2:3) {
   sub_Num_sites <- Num_sites_by_mixture %>%
     filter(nChems == i,numSites>=4)
@@ -57,7 +59,7 @@ for(i in 2:3) {
     plot_condition <- (i==2 & j %in% c(3,5)) | (i ==3 & j %in% c(2,5,6))
     if(plot_condition) {
       plot_count <- plot_count + 1
-      CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+      CASnums <- strsplit(sub_Num_sites$chemVector[j],"; ")[[1]]
       nMixSites <- sub_Num_sites[j,"numSites"]
       chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
       
@@ -69,20 +71,37 @@ for(i in 2:3) {
         summarize(EARsum = sum(maxEAR))
       
       yaxt <- ifelse(plot_count %in% c(1,4),"s","n")
-      boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
+      
+      mean_graph <- subChemSummary %>%
+        mutate(ID = as.character(ID)) %>%
+        group_by(ID) %>%
+        summarize(mean = mean(EARsum, na.rm = TRUE))
+      
+      bp_val <- boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
               log="y",main=paste(chnms),
               las=2,
               ylim=c(1e-5,10),
               cex.axis=axis_text_cex,
               cex.main=title_text_cex,
               yaxt=yaxt)
+      
+
+      stat_df <- data.frame(median = bp_val$stats[3,],
+                            max = bp_val$stats[5,], 
+                            ID = bp_val$names,
+                            stringsAsFactors = FALSE) %>%
+        left_join(mean_graph, by="ID") %>%
+        select(ID, median, mean, max)
+      
+      stat_stuff[[paste(chnms, collapse = ";")]] <- stat_df
+
       mtext(paste(nMixSites,"Sites"),side=3,line=-1,cex=0.7)
       mtext("AOP",side=1,outer=TRUE)
       mtext("EAR sum by sample",side = 2,line=2.5,outer=TRUE)
       if(plot_count==1){
         mixtureAOPs = data.frame(paste(chnms,collapse = "; "),
                                  paste(unique(as.character(subChemSummary$ID)),collapse="; "))
-      }else {
+      } else {
         mixtureAOPs = rbind(mixtureAOPs,data.frame(paste(chnms,collapse = "; "),
                                                    paste(unique(as.character(subChemSummary$ID)),collapse="; ")))
       }
@@ -90,7 +109,13 @@ for(i in 2:3) {
   }
   mtext(paste("Chosen Mixtures for AOP Network Development"),outer=TRUE)
 }
+
+
+
 dev.off()
 shell.exec(filenm)
 names(mixtureAOPs) <- c("chnms","AOP_IDs")
 write.csv(mixtureAOPs, file="AOP_IDs_for_priority_mixtures.csv",row.names = FALSE)
+
+library(openxlsx)
+write.xlsx(stat_stuff, file = "EAR_stats.xlsx", append=TRUE)
