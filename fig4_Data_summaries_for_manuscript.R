@@ -232,4 +232,7 @@ Num_sites_by_mixture$chnmVector <- chemColumn
 
 write.csv(Num_sites_by_mixture,file="SI_table7 Num_sites_by_mixture.csv",row.names = FALSE)
 
+TableSI7 <- Num_sites_by_mixture[,c("nChems","numSites","chemVector","chnmVector","siteVector","STAIDs")]
+names(TableSI7) <- c("Number of Chemicals","Number of sites", "CAS#","Chemical Names","Site Short Names","USGS Station IDs")
 
+write.csv(TableSI7,file="Tables/SI_table7_Num_sites_by_mixture.csv",row.names = FALSE)
