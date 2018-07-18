@@ -10,7 +10,7 @@ tox_list <- create_toxEval(full_path)
 ACClong <- get_ACC(tox_list$chem_info$CAS)
 ACClong <- remove_flags(ACClong)
 
-cleaned_ep <- clean_endPoint_info(endPointInfo)
+cleaned_ep <- clean_endPoint_info(end_point_info)
 filtered_ep <- filter_groups(cleaned_ep)
 
 sitesOrdered <- c("StLouis","Nemadji","WhiteWI","Bad","Montreal",
