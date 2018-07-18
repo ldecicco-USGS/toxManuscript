@@ -30,4 +30,4 @@ chemPlot <- ggplot(tableData)+
 chemPlot
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-ggsave(chemPlot, filename = "plots/SI5_chem_counts.png", width = 5, height = 5)
+ggsave(chemPlot, filename = "plots/SI3_chem_counts.png", width = 5, height = 5)

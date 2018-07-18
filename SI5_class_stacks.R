@@ -10,10 +10,10 @@ source(file = "plot_tox_stacks_manuscript.R")
 chem_site <- tox_list[["chem_site"]]
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-pdf("plots/SI5_class_stacks.pdf", width = 11, height = 9)
+pdf("plots/SI5_class_stacks.pdf", width = 11, height = 5)
 i <- 1
 for(class in unique(chemicalSummary$Class)){
-  grid.newpage()
+
   sub_class <- filter(chemicalSummary, Class %in% class)
   
   cleaned_class <- tolower(class)
@@ -25,16 +25,13 @@ for(class in unique(chemicalSummary$Class)){
   fancyTitle <- paste0("Figure SI-5",LETTERS[i],
 ": Maximum exposure-activity ratio values by site for chemical class
 ", cleaned_class," in Great Lakes tributaries, 2010-2013.")
-  i <- i+1
-  upperPlot <- plot_tox_stacks_manuscript(sub_class, 
+
+  splot <- plot_tox_stacks_manuscript(sub_class, 
                                chem_site, 
                                title = fancyTitle,
                                category = "Chemical")
-
-  gb <- ggplot2::ggplot_build(upperPlot)
-  gt <- ggplot2::ggplot_gtable(gb)
-  
-  gt$layout$clip[gt$layout$name=="panel-1-1"] <- "off"
-  grid::grid.draw(gt)
+  print(splot)
+  i <- i+1
 }
 dev.off()
+
