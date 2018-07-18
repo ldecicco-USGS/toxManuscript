@@ -23,6 +23,7 @@ tableData$chnm <- factor(tableData$chnm, levels = tableData$chnm)
 chemPlot <- ggplot(tableData)+
   geom_bar(aes(x=chnm, y=nSites),stat = "identity",fill = "steelblue") +
   theme_bw() +
+  geom_text(aes(x=chnm, y=nSites-1, label = nSites), color = "white") +
   xlab("") +
   ylab("Number of Sites\n with EARmax > 0.001") +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) 
