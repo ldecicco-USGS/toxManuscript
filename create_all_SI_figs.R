@@ -18,6 +18,9 @@ rm(list=ls())
 source("SI6_AOP_heat.R", print.eval=TRUE)
 rm(list=ls())
 
+# Fig SI 6:
+source("SI7_boxplots_mixtures.R", print.eval=TRUE)
+rm(list=ls())
 
 # filenms <- c("SI2_detection_levels.png", "si3.png","SI5_chem_counts.png","si6.png")
 # file_path <- "./plots"
