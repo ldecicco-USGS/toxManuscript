@@ -40,9 +40,15 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
   graphData$Class[is.na(graphData$Class)] <- "AOP not defined"
   graphData$AOP[is.na(graphData$AOP)] <- "None"
   
-  graphData$AOP <- factor(graphData$AOP)
+  class_order <- graphData %>%
+    filter(!(Class %in% c("AOP not defined","Not environmentally relevant"))) %>%
+    group_by(Class) %>%
+    summarize(maxEAR = max(meanEAR)) %>%
+    arrange(desc(maxEAR)) %>%
+    pull(Class)
   
-
+  graphData$AOP <- factor(graphData$AOP)
+  graphData$Class <- factor(graphData$Class, levels = c(class_order,"AOP not defined","Not environmentally relevant"))
   
   fill_text <- ifelse(mean_logic, "Mean EAR", "Max EAR")
   
