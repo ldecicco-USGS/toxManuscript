@@ -37,7 +37,12 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
     left_join(chem_site[, c("SiteID", "site_grouping", "Short Name")],
               by=c("site"="SiteID"))
   
+  graphData$Class[is.na(graphData$Class)] <- "AOP not defined"
+  graphData$AOP[is.na(graphData$AOP)] <- "None"
+  
   graphData$AOP <- factor(graphData$AOP)
+  
+
   
   fill_text <- ifelse(mean_logic, "Mean EAR", "Max EAR")
   
