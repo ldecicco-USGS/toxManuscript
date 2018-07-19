@@ -40,7 +40,7 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
   geom_bar(aes(y=nChem),
            stat = "identity",
            fill = "steelblue") +
-  geom_text(aes(y=-1, label =  count), size = 2.5,angle=90) +
+  geom_text(aes(y=-1, label =  count), size = 2.5) +
   theme_bw() +
   facet_grid(. ~ site_grouping, scales="free", space="free") +
   xlab("") +
@@ -56,16 +56,14 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
         plot.background = element_rect(fill = "transparent",colour = NA)) +
   geom_text(data = label_samples,vjust=0.75,hjust=1.1,
             aes(x=x,y=y,label=label),
-            size=3,inherit.aes = FALSE)
+            size=3,inherit.aes = FALSE) +
+  coord_cartesian(clip="off")
 
 countPlot
 
-gb <- ggplot2::ggplot_build(countPlot)
-gt <- ggplot2::ggplot_gtable(gb)
 
-gt$layout$clip[gt$layout$name=="panel-1-1"] <- "off"
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 png("plots/fig2_site_count.png", width = 1000, height = 800, res = 142)
-grid::grid.draw(gt)
+print(countPlot)
 dev.off()

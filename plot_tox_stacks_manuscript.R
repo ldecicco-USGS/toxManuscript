@@ -82,7 +82,7 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
   }
   
   if(category == "Chemical"){
-    graphData <- graph_chem_data(chemicalSummary = chemicalSummary,
+    graphData <- graph_chem_data(chemical_summary = chemicalSummary,
                                  manual_remove = manual_remove,
                                  mean_logic = mean_logic,
                                  sum_logic = sum_logic)   
@@ -149,12 +149,13 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
       facet_grid(. ~ site_grouping, scales="free", space="free") +
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))+
       geom_text(data = counts, 
-                aes(label = count, x=`Short Name`,y = placement,angle=90), 
+                aes(label = count, x=`Short Name`,y = placement), 
                 size=ifelse(is.na(font_size),3,0.30*font_size),inherit.aes = FALSE) +
       geom_text(data = label_samples,hjust=1,
                 aes(x=x,y=y,label=label),
                 size=ifelse(is.na(font_size),2,0.25*font_size),inherit.aes = FALSE) +
-      labs(caption = y_label[["caption"]])  
+      labs(caption = y_label[["caption"]]) +
+      coord_cartesian(clip="off")
     
   } else {
     
