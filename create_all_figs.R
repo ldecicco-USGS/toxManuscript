@@ -20,14 +20,3 @@ file_path <- "./plots"
 source("merge.png.files.R")
 merge.png.pdf(pdfFile = "plots/figs.pdf",pngFiles = filenms,file_path,deletePngFiles = FALSE)
 
-
-Fig_captions <- character()
-Fig_captions[1] <- "Figure SI-1. Location of sampling locations, watershed boundaries, and watershed land-uses (originally published in Baldwin et al., 2016). Map IDs are defined in Table SI-1."
-
-Fig_captions[2] <- ""
-
-Fig_captions[3] <- ""
-
-Fig_captions[4] <- ""
-
-Fig_captions[5] <- ""
