@@ -55,7 +55,7 @@ for(i in 2:4) {
   for(j in 1:dim(sub_Num_sites)[1]){
     CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
     nMixSites <- sub_Num_sites[j,"numSites"]
-    chnms <- unique(as.data.frame(ACC)[which(ACC$casn %in% CASnums),"chnm"])
+    chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$casn %in% CASnums),"chnm"])
     
     subChemSummary <- chemSummData_max %>%
       filter(maxEAR > EAR_thresh) %>%

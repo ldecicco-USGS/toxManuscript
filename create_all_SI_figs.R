@@ -18,15 +18,16 @@ rm(list=ls())
 source("SI6_AOP_heat.R", print.eval=TRUE)
 rm(list=ls())
 
-# Fig SI 6:
-source("SI7_boxplots_mixtures.R", print.eval=TRUE)
-rm(list=ls())
 
-# filenms <- c("SI2_detection_levels.png", "si3.png","SI5_chem_counts.png","si6.png")
-# file_path <- "./plots"
-# 
-# source("merge.png.files.R")
-# merge.png.pdf(pdfFile = "plots/SI_figs.pdf",pngFiles = filenms,file_path,deletePngFiles = FALSE)
+# Fig SI 7:
+source("fig4_Data_summaries_for_manuscript.R")
+source("SI7_boxplots_mixtures.R", print.eval=TRUE)
+
+filenms <- c("SI2_detection_levels.png", "SI3_chem_counts.png","SI4_heat_map.png","SI6_AOP_heat.png")
+file_path <- "./plots"
+
+source("merge.png.files.R")
+merge.png.pdf(pdfFile = "plots/SI_figs.pdf",pngFiles = filenms,file_path,deletePngFiles = FALSE)
 
 # SI_fig_captions <- character()
 # SI_fig_captions[1] <- "Figure SI-1. Location of sampling locations, watershed boundaries, and watershed land-uses (originally published in Baldwin et al., 2016). Map IDs are defined in Table SI-1."
