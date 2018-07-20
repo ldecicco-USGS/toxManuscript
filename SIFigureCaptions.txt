@@ -1,0 +1,9 @@
+Figure SI-1. Location of water sampling locations, watershed boundaries, and watershed land-uses. Map IDs are defined in Table SI-1.
+Figure SI-2. Exposure activity ratios (EAR) using ToxCast endpoints and the detection level of chemicals monitored in Great Lakes tributaries, 2010-2013.
+Figure SI-3. Maximum exposure activity ratios (EARmaxChem) for monitored chemicals at each of 57 Great Lakes tributaries, 2010-2013.
+Figure SI-4. Number of sites where the exposure acivity ratios (EARmaxChem) for individual chemicals exceeded 0.001. Chemicals in red indicate those that were present at a minimum of 10 sites and had EARmaxChem > 10-3 at a minimum of 5 sites.
+Figure SI-5. CAPTIONS ALREADY INCLUDED IN FIGURES.
+Figure SI-6. Maximum exposure activity ratios (EARmaxAOP) for each adverse outcome pathway identified from evaluation of chemistry data at each of 57 Great Lakes tributaries, 2010-2013.
+Figure SI-7. Boxplots of exposure activity ratios (EARmaxAOP) by adverse outcome pathway for chemical mixtures present in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.
+
+

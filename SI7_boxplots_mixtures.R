@@ -28,7 +28,7 @@ relevance <- relevance %>%
 AOP_relevance <- left_join(AOP,relevance,by="ID")
 
 
-Num_sites_by_mixture <- read.csv(file="SI_table7 Num_sites_by_mixture.csv",stringsAsFactors = FALSE)
+Num_sites_by_mixture <- read.csv(file="SI_table7 Num_sites_by_mixture_temp.csv",stringsAsFactors = FALSE)
 
 chemSummData_max <- chemicalSummary %>%
   filter(EAR > 0) %>%
