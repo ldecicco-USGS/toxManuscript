@@ -3,7 +3,5 @@ Figure SI-2. Exposure activity ratios (EAR) using ToxCast endpoints and the dete
 Figure SI-5. Number of sites with at least one sample that resulted in an exposure activity ratio (EARmaxChem) > 10-3 for chemicals measured in water samples at Great Lakes tributaries, 2010-2013.
 Figure SI-4. Maximum exposure acivity ratios (EARmaxChem) at monitored Great Lakes tributaries, 2010-2013. Chemicals in red indicate those that were present at a minimum of 10 sites and had EARmaxChem > 10-3 at a minimum of 5 sites.
 Figure SI-5. CAPTIONS ALREADY INCLUDED IN FIGURES.
-Figure SI-6. Maximum exposure activity ratios (EARmaxAOP) for each adverse outcome pathway identified from evaluation of chemistry data at monitored Great Lakes tributaries, 2010-2013.
+Figure SI-6. Maximum exposure activity ratios (EARmaxAOP) for each adverse outcome pathway (AOP) identified from evaluation of chemistry data at monitored Great Lakes tributaries, 2010-2013.
 Figure SI-7. Boxplots of exposure activity ratios (EARmaxAOP) by adverse outcome pathway for chemical mixtures present in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.
-
-
