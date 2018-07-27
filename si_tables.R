@@ -66,7 +66,9 @@ write.csv(relevance, file = "tables/SI6.csv", row.names = FALSE, na = "")
 # chemicalSummary <- chemicalSummary %>%
 #   left_join(select(AOP_crosswalk, endPoint = `Component Endpoint Name` , `AOP ID`= `AOP #`), by=c("endPoint"))
 chemicalSummary <- chemicalSummary %>%
-  left_join(select(AOP_info, endPoint = `Endpoint(s)` , AOP , AOP_Class = X__1), by=c("endPoint"))
+  left_join(select(AOP_crosswalk, 
+                   endPoint=`Component Endpoint Name`, AOP = `AOP #`), by="endPoint") %>%
+  left_join(select(AOP_info, AOP , AOP_Class = X__1), by=c("AOP"))
 
 chemicalSummary$AOP[is.na(chemicalSummary$AOP)] <- "None"
 chemicalSummary$AOP_Class[is.na(chemicalSummary$AOP_Class)] <- "Not defined"
