@@ -85,7 +85,7 @@ plot_heat_chemicals_man <- function(chemical_summary,
     # # # fake axis layer, aligned below y = 0
     geom_text(data = color_df, 
               aes(color = color, label = chnm, y=chnm), x = 0.2,
-              size = 3, # match font size to theme
+              size = 2.5, # match font size to theme
               hjust = 1, vjust = 0.3) +
     # # # # specify the font colours for fake axis
     scale_colour_manual(values = c("black", "red"), guide = F) +
@@ -143,8 +143,8 @@ heat_map_w_cap <- heat_map +
                           ") at monitored Great Lakes tributaries, 2010-2013. Chemicals in red ",
                           "indicate those that were present at a minimum of 10 sites and had" ~
                           italic("max")~group("[", EAR["[" * j * "]"] , "]") ~
-                          ">"~ 10^-3 ~" at a minimum of 5 sites (j = samples).     "))) +
-  theme(plot.caption = element_text(hjust = 0.45))
+                          ">"~ 10^-3 ~" at a minimum of 5 sites (j = samples).        "))) +
+  theme(plot.caption = element_text(hjust = 0.85))
 
 ggsave(heat_map_w_cap, filename = "plots/SI4_heat_map.pdf", height = 9, width = 11)
 
