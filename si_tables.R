@@ -96,18 +96,50 @@ chem_sum_wide <- chem_sum_wide %>%
   distinct() %>%
   arrange(AOP_Class, AOP)
 
-write.csv(chem_sum_wide, file = "tables/SI7_counts.csv", row.names = FALSE, na = "")
+write.csv(chem_sum_wide, file = "tables/SI8_counts.csv", row.names = FALSE, na = "")
 
 
 # New SI 6:
 #
 # Site | AOP ID | AOP name | EndPoint | Chemical | max EAR | mean EAR
 
+rm(list=ls())
+source(file = "data_setup.R")
+AOP_crosswalk <- fread("AOP_crosswalk.csv")
+
+AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
+
+relevance <- fread("AOP_relevance.csv") %>%
+  select(-`Endpoint(s)`) %>%
+  distinct
+
+ear_thresh <- 0.001
+siteThres <- 10
+
+chemicalSummary <- chemicalSummary %>%
+  left_join(select(AOP_info, endPoint = `Endpoint(s)` , AOP , AOP_Class = X__1), by=c("endPoint"))
+
+chemicalSummary$AOP[is.na(chemicalSummary$AOP)] <- "None"
+chemicalSummary$AOP_Class[is.na(chemicalSummary$AOP_Class)] <- "Not defined"
+chemicalSummary$AOP <- factor(chemicalSummary$AOP)
+
+end_cols <- c("Not defined","Not environmentally relevant")
+chemicalSummary$AOP_Class <- factor(chemicalSummary$AOP_Class, levels = c(unique(chemicalSummary$AOP_Class)[!(unique(chemicalSummary$AOP_Class) %in% end_cols)], end_cols))
+
+chemicalSummary_mixtures <- chemicalSummary %>%
+  # left_join(select(AOP_crosswalk, AOP=`AOP #`, AOP_Name = `AOP Title`), by="AOP") %>%
+  left_join(select(tox_list$chem_site, shortName=`Short Name`, Lake=site_grouping),by="shortName") %>%
+  group_by(AOP, AOP_Class, shortName, Lake, date, chnm) %>%
+  summarize(sumEAR = sum(EAR, na.rm = TRUE),
+            endpoint_count = length(unique(endPoint))) %>%
+  group_by(AOP, AOP_Class, shortName, Lake) %>%
+  summarize(maxEAR = max(sumEAR, na.rm = TRUE),
+            maxNumberEAR = max(endpoint_count),
+            chemicals = list(unique(as.character(chnm[sumEAR > ear_thresh]))))
+
+fwrite(chemicalSummary_mixtures, file ="tables/SI7.csv")
 
 
-# rm(chemicalSummary)
-# source(file = "data_setup.R")
-# 
 # si_6 <- chemicalSummary %>%
 #   left_join(select(AOP_crosswalk, 
 #                    endPoint=Component.Endpoint.Name, 
