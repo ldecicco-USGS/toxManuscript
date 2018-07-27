@@ -4,6 +4,12 @@ library(readxl)
 
 source(file = "data_setup.R")
 
+AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
+
+relevance <- fread("AOP_relevance.csv") %>%
+  select(-`Endpoint(s)`) %>%
+  distinct
+
 ear_thresh <- 0.001
 siteThres <- 10
 
@@ -16,19 +22,22 @@ siteThres <- 10
 # 
 # End Point|End point long name|Assay Source| AOP ID | Relavence
 
-endPointInfo <- clean_endPoint_info(endPointInfo)
+endPointInfo <- clean_endPoint_info(end_point_info)
 
 si_3_endpoints <- select(endPointInfo, 
                          `ToxCast Endpoint`=assay_component_endpoint_name, 
                          `Assay Source`=assay_source_long_name) %>%
   distinct() 
 
+si_3_endpoints <- si_3_endpoints %>%
+  left_join(select(AOP_info, `Endpoint(s)`, AOP, Relevant), by=c("ToxCast Endpoint"="Endpoint(s)"))
+
 dir.create("tables", showWarnings = FALSE)
 write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
 
 # SI 4:
 
-#look for code already in sup, remove redundent stuff
+# si_table_counts.R
 
 # SI 5:
 #
