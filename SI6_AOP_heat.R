@@ -50,28 +50,34 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
   graphData$AOP <- factor(graphData$AOP)
   graphData$Class <- factor(graphData$Class, levels = c(class_order,"AOP not defined","Not environmentally relevant"))
   
-  fill_text <- ifelse(mean_logic, "Mean EAR", "Max EAR")
+  fill_text <- ifelse(mean_logic, "mean", "max")
+  fill_text <- bquote(italic(.(fill_text))~group("[", EAR["[" * j * "]"] , "]"))
   
   heat <- ggplot(data = graphData) +
-    geom_tile(aes(x = `Short Name`, y=AOP, fill=meanEAR)) +
+    geom_tile(aes(x = `Short Name`, y=AOP, fill=meanEAR, color="")) +
     theme_bw() +
     theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) +
     ylab("AOP ID") +
     xlab("") +
     labs(fill=fill_text) +
-    scale_fill_gradient( guide = "legend",
-                         trans = 'log',
+    scale_color_manual(values=NA) +
+    scale_fill_gradient( trans = 'log',
                          low = "white", high = "steelblue",
                          breaks=c(0.00001,0.0001,0.001,0.01,0.1,1,5),
-                         na.value = 'transparent',labels=toxEval:::fancyNumbers2) +
+                         na.value = 'khaki',labels=toxEval:::fancyNumbers2) +
     facet_grid(Class ~ site_grouping, scales="free", space="free") +
+    labs(caption = bquote(atop(bold("Figure SI-6:") ~ "Maximum exposure activity ratios (" ~ .(fill_text) ~") for each adverse outcome pathway (AOP) identified", 
+                               "from evaluation of chemistry data at monitored Great Lakes tributaries, 2010-2013.                          "))) +
     theme(strip.text.y = element_text(angle=0, hjust=0), 
           strip.background = element_rect(fill="transparent", colour = NA),
           # axis.text.y = element_text(face=ifelse(levels(graphData$category) %in% c("Total"),"bold","italic")),
           panel.spacing = unit(0.05, "lines"),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          plot.background = element_rect(fill = "transparent",colour = NA))
+          plot.background = element_rect(fill = "transparent",colour = NA),
+          plot.caption = element_text(hjust = 0)) +
+    guides(color=guide_legend("Non-detects", override.aes=list(colour="khaki", fill="khaki"), order = 2),
+           fill = guide_colorbar(order=1))
   
   return(heat)
   
@@ -80,4 +86,4 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
 aop_heat <- plot_heat_AOPs(chemicalSummary, AOP_info, tox_list$chem_site, 
                sum_logic = FALSE, mean_logic = FALSE)
 
-ggsave(aop_heat, file="plots/SI6_AOP_heat.png", height = 9, width = 11)
+ggsave(aop_heat, file="plots/SI6_AOP_heat.pdf", height = 9, width = 11)
