@@ -121,7 +121,6 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
   
   if(!single_site){
     
-    
     graphData <- graphData %>%
       left_join(chem_site[, c("SiteID", "site_grouping", "Short Name")],
                 by=c("site"="SiteID"))

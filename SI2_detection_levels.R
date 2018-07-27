@@ -196,8 +196,8 @@ plot_DL <- plot_chemical_boxplots_mod(chemicalSummary,
 
 plot_DL_w_cap <- plot_DL +
   labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios (EAR) using ToxCast endpoints and the detection level of",
-                             "chemicals monitored in Great Lakes tributaries, 2010-2013.                                                     "))) +
-  theme(plot.caption = element_text(hjust = 0))
+                             "chemicals monitored in Great Lakes tributaries, 2010-2013.                                                              "))) +
+  theme(plot.caption = element_text(hjust = -0.35))
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 ggsave(plot_DL_w_cap, filename = "plots/SI2_detection_levels.pdf", width = 9, height = 11)
