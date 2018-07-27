@@ -34,10 +34,9 @@ chemPlot <- ggplot(tableData)+
         legend.background = element_rect(color = "black", size = 0.5, linetype = "solid")) 
 
 chemPlot_w_cap <- chemPlot  +
-  labs(caption = bquote(atop(bold("Figure SI-3")~"Number of sites with at least one sample that resulted in an exposure activity ratio                ",
-                          "(" ~ italic("max")~group("[", EAR["[" * j * "]"] , "]") ~ 
-                          ") > " ~ 10^-3 ~ 
-                          "for chemicals measured in water samples at Great Lakes tributaries, 2010-2013."))) +
+  labs(caption = bquote(atop(bold("Figure SI-3:")~"Number of sites with at least one sample that resulted in an exposure activity ratio"~"(" * italic("max")~group("[", EAR["[" * j * "]"] , "]") * ")",
+                        ">" ~  10^-3 ~ 
+                        "for chemicals measured in water samples at Great Lakes tributaries, 2010-2013 ("*italic("j = samples")*").        "))) +
   theme(plot.caption = element_text(hjust = 0, size = 6)) 
 
 

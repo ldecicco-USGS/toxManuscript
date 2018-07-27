@@ -138,12 +138,12 @@ heat_map <- plot_heat_chemicals_man(chemicalSummary, tox_list$chem_site, priorit
                                     mean_logic = FALSE, sum_logic = TRUE)
 
 heat_map_w_cap <- heat_map +
-  labs(caption = bquote(atop(bold("Figure SI-4:") ~ "Maximum exposure acivity ratios (" ~ 
-                               italic("max")~group("[", EAR["[" * j * "]"] , "]")  ~
+  labs(caption = bquote(atop(bold("Figure SI-4:") ~ "Maximum exposure acivity ratios (" * 
+                               italic("max")~group("[", EAR["[" * j * "]"] , "]")  *
                           ") at monitored Great Lakes tributaries, 2010-2013. Chemicals in red ",
                           "indicate those that were present at a minimum of 10 sites and had" ~
                           italic("max")~group("[", EAR["[" * j * "]"] , "]") ~
-                          ">"~ 10^-3 ~" at a minimum of 5 sites (j = samples).        "))) +
+                          ">"~ 10^-3 ~" at a minimum of 5 sites ("*italic("j = samples")*").        "))) +
   theme(plot.caption = element_text(hjust = 0.85))
 
 ggsave(heat_map_w_cap, filename = "plots/SI4_heat_map.pdf", height = 9, width = 11)
