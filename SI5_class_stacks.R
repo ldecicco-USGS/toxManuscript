@@ -23,6 +23,8 @@ for(class in unique(chemicalSummary$Class)){
   }
   
   y_label <- toxEval:::fancyLabels("Chemical", FALSE, TRUE, FALSE, sep = TRUE)
+  y_label[["y_label"]] <- bquote("max" ~  group("(", sum(" " ~ EAR["[" * i * "]"]), ")")["[" * j * "]"]) 
+  y_label[["caption"]] <- gsub(", k = sites","",y_label[["caption"]])
   
   fancyTitle <- bquote(atop(bold("Figure SI-5"~.(LETTERS[i])~":") ~
 "Maximum exposure-activity ratio values by site for chemical class" ~ .(cleaned_class) ~ " in Great Lakes tributaries, 2010-2013. (" ~
