@@ -66,6 +66,7 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
                             chem_site,
                             category = "Biological",
                             mean_logic = FALSE,
+                            caption = NA,
                             sum_logic = TRUE,
                             manual_remove = NULL,
                             include_legend = TRUE, 
@@ -120,7 +121,6 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
   
   if(!single_site){
     
-    y_label <- toxEval:::fancyLabels(category, mean_logic, sum_logic, single_site, sep = TRUE)
     
     graphData <- graphData %>%
       left_join(chem_site[, c("SiteID", "site_grouping", "Short Name")],
@@ -154,8 +154,9 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
       geom_text(data = label_samples,hjust=1,
                 aes(x=x,y=y,label=label),
                 size=ifelse(is.na(font_size),2,0.25*font_size),inherit.aes = FALSE) +
-      labs(caption = y_label[["caption"]]) +
-      coord_cartesian(clip="off")
+      labs(caption = caption) +
+      coord_cartesian(clip="off") +
+      theme(plot.caption = element_text(hjust = 0))
     
   } else {
     

@@ -14,9 +14,3 @@ source("fig_4_aop_priority.R", print.eval=TRUE)
 rm(list=ls())
 
 
-filenms <- c("fig1_no_clip.png", "fig2_site_count.png","fig3_endpoint_boxplots.png","Fig4_aop_cow.png")
-file_path <- "./plots"
-
-source("merge.png.files.R")
-merge.png.pdf(pdfFile = "plots/figs.pdf",pngFiles = filenms,file_path,deletePngFiles = FALSE)
-
