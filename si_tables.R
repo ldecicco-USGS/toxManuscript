@@ -1,8 +1,11 @@
 library(dplyr)
 library(tidyr)
 library(readxl)
+library(data.table)
 
 source(file = "data_setup.R")
+
+AOP_crosswalk <- fread("AOP_crosswalk.csv")
 
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 
@@ -42,8 +45,6 @@ write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
 # SI 5:
 #
 # 
-library(data.table)
-AOP_crosswalk <- fread("AOP_crosswalk.csv")
 write.csv(AOP_crosswalk, file = "tables/SI5.csv", row.names = FALSE, na = "")
 
 
@@ -55,42 +56,55 @@ relevance <- fread("AOP_relevance.csv") %>%
   distinct
 write.csv(relevance, file = "tables/SI6.csv", row.names = FALSE, na = "")
 
+
+## SI: 7:
+
 # chemicalSummary <- chemicalSummary %>%
-#   left_join(select(endPointInfo, 
-#                    endPoint=assay_component_endpoint_name,
-#                    subFamily = intended_target_family_sub), by="endPoint") %>%
-#   left_join(AOP, by="endPoint")
-# 
-# nSite_table <- chemicalSummary %>%
-#   rename(Family = Bio_category) %>%
-#   group_by(endPoint, chnm, subFamily, Family, ID, site, date) %>%
-#   summarise(sumEAR = sum(EAR, na.rm = TRUE)) %>%
-#   group_by(endPoint, chnm, subFamily, Family, ID, site) %>%
-#   summarise(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
-#   group_by(endPoint, chnm, subFamily, Family, ID) %>%
-#   filter(n_distinct(site) > siteThres) %>%
-#   summarize(hits = sum(maxEAR > ear_thresh)) %>%
-#   filter(hits>0)
-# 
-# nSite_table_wide <- nSite_table %>%
-#   spread(chnm, hits) %>%
-#   arrange(Family, subFamily, ID, endPoint) %>%
-#   select(Family, subFamily, ID, endPoint, everything()) %>%
-#   ungroup()
-# 
-# tableData2 <- select(nSite_table_wide, -endPoint, -Family, -subFamily, -ID)
-# nSite_table_wide$nChems <- apply(tableData2, MARGIN = 1, function(x) sum(x>0, na.rm = TRUE))
-# 
-# nSite_table_wide <- nSite_table_wide[,c("Family", "subFamily","ID",
-#                           "endPoint", "nChems",
-#                           rev(levels(chemicalSummary$chnm))[rev(levels(chemicalSummary$chnm)) %in% names(nSite_table_wide)])]  
-# 
-# dir.create("tables", showWarnings = FALSE)
-# write.csv(nSite_table_wide, file = "tables/SI5.csv", row.names = FALSE, na = "")
+#   left_join(select(AOP_crosswalk, endPoint = `Component Endpoint Name` , `AOP ID`= `AOP #`), by=c("endPoint"))
+chemicalSummary <- chemicalSummary %>%
+  left_join(select(AOP_info, endPoint = `Endpoint(s)` , AOP , AOP_Class = X__1), by=c("endPoint"))
+
+chemicalSummary$AOP[is.na(chemicalSummary$AOP)] <- "None"
+chemicalSummary$AOP_Class[is.na(chemicalSummary$AOP_Class)] <- "Not defined"
+chemicalSummary$AOP <- factor(chemicalSummary$AOP)
+
+end_cols <- c("Not defined","Not environmentally relevant")
+chemicalSummary$AOP_Class <- factor(chemicalSummary$AOP_Class, levels = c(unique(chemicalSummary$AOP_Class)[!(unique(chemicalSummary$AOP_Class) %in% end_cols)], end_cols))
+
+
+chem_sum_table <- chemicalSummary %>%
+  group_by(endPoint, AOP, AOP_Class, chnm,  site, date) %>%
+  summarise(sumEAR = sum(EAR, na.rm = TRUE)) %>%
+  group_by(endPoint, AOP, AOP_Class, chnm,  site) %>%
+  summarise(maxEAR = max(sumEAR, na.rm = TRUE)) %>%
+  group_by(endPoint, AOP, AOP_Class, chnm) %>%
+  summarize(hits = sum(maxEAR > ear_thresh)) %>%
+  filter(hits>0) %>%
+  ungroup()
+
+chem_sum_wide <- chem_sum_table %>%
+  spread(chnm, hits)
+  
+
+tableData2 <- select(chem_sum_wide, -endPoint, -AOP, -AOP_Class)
+chem_sum_wide$nChems <- apply(tableData2, MARGIN = 1, function(x) sum(x>0, na.rm = TRUE))
+
+chem_sum_wide <- chem_sum_wide[,c("AOP", "AOP_Class", "endPoint", "nChems",
+                          rev(levels(chemicalSummary$chnm))[rev(levels(chemicalSummary$chnm)) %in% names(chem_sum_wide)])]
+
+chem_sum_wide <- chem_sum_wide %>%
+  distinct() %>%
+  arrange(AOP_Class, AOP)
+
+write.csv(chem_sum_wide, file = "tables/SI7_counts.csv", row.names = FALSE, na = "")
+
 
 # New SI 6:
 #
 # Site | AOP ID | AOP name | EndPoint | Chemical | max EAR | mean EAR
+
+
+
 # rm(chemicalSummary)
 # source(file = "data_setup.R")
 # 
