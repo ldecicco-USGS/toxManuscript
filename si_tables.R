@@ -33,7 +33,11 @@ si_3_endpoints <- select(endPointInfo,
   distinct() 
 
 si_3_endpoints <- si_3_endpoints %>%
-  left_join(select(AOP_info, `Endpoint(s)`, AOP, Relevant), by=c("ToxCast Endpoint"="Endpoint(s)"))
+  left_join(select(AOP_crosswalk, 
+                   endPoint=`Component Endpoint Name`, AOP = `AOP #`), by=c("ToxCast Endpoint"="endPoint"))
+
+si_3_endpoints <- si_3_endpoints %>%
+  left_join(select(AOP_info, AOP, Relevant), by="AOP")
 
 dir.create("tables", showWarnings = FALSE)
 write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
@@ -135,7 +139,8 @@ chemicalSummary_mixtures <- chemicalSummary %>%
   group_by(AOP, AOP_Class, shortName, Lake) %>%
   summarize(maxEAR = max(sumEAR, na.rm = TRUE),
             maxNumberEAR = max(endpoint_count),
-            chemicals = list(unique(as.character(chnm[sumEAR > ear_thresh]))))
+            chemicals = list(unique(as.character(chnm[sumEAR > ear_thresh])))) %>%
+  arrange(AOP_Class, AOP)
 
 fwrite(chemicalSummary_mixtures, file ="tables/SI7.csv")
 
