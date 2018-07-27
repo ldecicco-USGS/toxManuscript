@@ -85,10 +85,10 @@ mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
-      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" ~
-                           .(y_label[["y_label"]])  ~
+      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
+                           .(y_label[["y_label"]])  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                    "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013." ~ italic(.(y_label$caption)))),outer=TRUE)
+                    "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
 
 dev.off()
 
@@ -128,10 +128,10 @@ mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
-      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" ~
-                           .(y_label[["y_label"]])  ~
+      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
+                           .(y_label[["y_label"]])  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013." ~ italic(.(y_label$caption)))),outer=TRUE)
+                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
 
 dev.off()
 
@@ -171,9 +171,9 @@ mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
-      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" ~
-                           .(y_label[["y_label"]])  ~
+      text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
+                           .(y_label[["y_label"]])  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013." ~ italic(.(y_label$caption)))),outer=TRUE)
+                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
 
 dev.off()
