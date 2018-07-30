@@ -20,9 +20,9 @@ for(i in files[c(-1)]){
 
 }
 
-setwd("D:/LADData/RCode/toxEval_Archive/Scripts for Paper")
-
-saveRDS(x, file="all_tox.rds")
+# setwd("D:/LADData/RCode/toxEval_Archive/Scripts for Paper")
+# 
+# saveRDS(x, file="all_tox.rds")
 
 file_name <- "D:/LADData/RCode/toxEval_Archive/Scripts for Paper/OWC_data_fromSup.xlsx"
 full_path <- file.path(file_name)
@@ -62,4 +62,4 @@ totals_final <- totals_final[c(names(totals_final)[1:4],
                                "min_ACC")]
 
 
-write.csv(totals, file = "tables/SI4.csv", row.names = FALSE, na = "-")
+write.csv(totals_final, file = "D:/LADData/RCode/toxEval_Archive/Scripts for Paper/tables/SI4.csv", row.names = FALSE, na = "-")
