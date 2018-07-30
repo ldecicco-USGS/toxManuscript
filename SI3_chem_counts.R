@@ -33,7 +33,12 @@ chemPlot <- ggplot(tableData)+
         legend.position = c(0.85, 0.85),
         legend.background = element_rect(color = "black", size = 0.5, linetype = "solid")) 
 
-chemPlot
+chemPlot_w_cap <- chemPlot  +
+  labs(caption = bquote(atop(bold("Figure SI-3:")~"Number of sites with at least one sample that resulted in an exposure activity ratio"~"(" * italic("max")~group("[", EAR["[" * j * "]"] , "]") * ")",
+                        ">" ~  10^-3 ~ 
+                        "for chemicals measured in water samples at Great Lakes tributaries, 2010-2013 ("*italic("j = samples")*").        "))) +
+  theme(plot.caption = element_text(hjust = 0, size = 6)) 
+
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-ggsave(chemPlot, filename = "plots/SI3_chem_counts.png", width = 5, height = 5)
+ggsave(chemPlot_w_cap, filename = "plots/SI3_chem_counts.pdf", width = 5, height = 5)

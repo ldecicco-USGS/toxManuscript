@@ -135,13 +135,13 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
   }
   
   #Saving for later!!!!
-  # if(packageVersion("ggplot2") >= '2.2.1.9000'){
-  #   toxPlot_All <- toxPlot_All +
-  #     coord_flip(clip = "off")
-  # } else {
-  toxPlot_All <- toxPlot_All +
-    coord_flip()      
-  # }
+  if(packageVersion("ggplot2") >= '2.2.1.9000'){
+    toxPlot_All <- toxPlot_All +
+      coord_flip(clip = "off")
+  } else {
+    toxPlot_All <- toxPlot_All +
+      coord_flip()      
+  }
   
   plot_info <- ggplot_build(toxPlot_All)
   layout_stuff <- plot_info$layout
@@ -194,17 +194,14 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
 plot_DL <- plot_chemical_boxplots_mod(chemicalSummary, 
                              font_size = 7, title = " ")
 
-dir.create(file.path("plots"), showWarnings = FALSE)
-
-gb <- ggplot2::ggplot_build(plot_DL)
-gt <- ggplot2::ggplot_gtable(gb)
-
-gt$layout$clip[gt$layout$name=="panel"] <- "off"
+plot_DL_w_cap <- plot_DL +
+  labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios (EAR) using ToxCast endpoints and the detection level of",
+                             "chemicals monitored in Great Lakes tributaries, 2010-2013.                                                              "))) +
+  theme(plot.caption = element_text(hjust = -0.35))
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-png("plots/SI2_detection_levels.png", width = 1000, height = 1000, res = 142)
-grid::grid.draw(gt)
-dev.off()
+ggsave(plot_DL_w_cap, filename = "plots/SI2_detection_levels.pdf", width = 9, height = 11)
+
 
 
 # Determine a few things for the text in the manuscript
