@@ -32,12 +32,12 @@ si_3_endpoints <- select(endPointInfo,
                          `Assay Source`=assay_source_long_name) %>%
   distinct() 
 
-si_3_endpoints <- si_3_endpoints %>%
-  left_join(select(AOP_crosswalk, 
-                   endPoint=`Component Endpoint Name`, AOP = `AOP #`), by=c("ToxCast Endpoint"="endPoint"))
-
-si_3_endpoints <- si_3_endpoints %>%
-  left_join(select(AOP_info, AOP, Relevant), by="AOP")
+# si_3_endpoints <- si_3_endpoints %>%
+#   left_join(select(AOP_crosswalk, 
+#                    endPoint=`Component Endpoint Name`, AOP = `AOP #`), by=c("ToxCast Endpoint"="endPoint"))
+# 
+# si_3_endpoints <- si_3_endpoints %>%
+#   left_join(select(AOP_info, AOP, Relevant), by="AOP")
 
 dir.create("tables", showWarnings = FALSE)
 write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
