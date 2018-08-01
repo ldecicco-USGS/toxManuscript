@@ -61,7 +61,7 @@ relevance <- fread("AOP_relevance.csv") %>%
 
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 
-x <- full_join(relevance, select(AOP_info,AOP, desc = X__1, `Tox Cast Endpoints` = `Endpoint(s)`))
+x <- full_join(relevance, select(AOP_info,AOP, `Abbreviated AOP description` = X__1, `Tox Cast Endpoints` = `Endpoint(s)`), by="AOP")
 
 write.csv(x, file = "tables/SI6.csv", row.names = FALSE, na = "")
 
