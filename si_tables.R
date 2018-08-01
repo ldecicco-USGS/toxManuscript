@@ -57,7 +57,12 @@ write.csv(AOP_crosswalk, file = "tables/SI5.csv", row.names = FALSE, na = "")
 # 
 relevance <- fread("AOP_relevance.csv") %>%
   select(-`Endpoint(s)`) %>%
-  distinct
+  distinct()
+
+AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
+
+x <- left_join(relevance, select(AOP_info,AOP, desc = X__1))
+
 write.csv(relevance, file = "tables/SI6.csv", row.names = FALSE, na = "")
 
 

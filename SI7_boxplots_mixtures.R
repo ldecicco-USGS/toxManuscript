@@ -53,8 +53,10 @@ y_label$caption <- "i = chemicals in an AOP, j = samples, k = sites"
 i <- 2
 filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
 pdf(filenm)
+
 sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
+
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
@@ -82,6 +84,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
@@ -125,6 +128,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
@@ -168,6 +172,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,

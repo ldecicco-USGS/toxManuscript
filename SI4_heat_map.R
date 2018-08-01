@@ -39,7 +39,7 @@ plot_heat_chemicals_man <- function(chemical_summary,
   single_site <- length(unique(chemical_summary$site)) == 1
   
   fill_text <- ifelse(mean_logic, "mean", "max")
-  fill_text <- bquote(italic(.(fill_text))~group("[", EAR["[" * j * "]"] , "]"))
+  fill_text <- bquote(italic(.(fill_text))*group("[", EAR["[" * j * "]"] , "]"))
   
   graphData <- graphData %>%
     left_join(chem_site[, c("SiteID", "site_grouping", "Short Name")],
@@ -139,7 +139,7 @@ heat_map <- plot_heat_chemicals_man(chemicalSummary, tox_list$chem_site, priorit
 
 heat_map_w_cap <- heat_map +
   labs(caption = bquote(atop(bold("Figure SI-4:") ~ "Maximum exposure acivity ratios (" * 
-                               italic("max")~group("[", EAR["[" * j * "]"] , "]")  *
+                               italic("max")*group("[", EAR["[" * j * "]"] , "]")  *
                           ") at monitored Great Lakes tributaries, 2010-2013. Chemicals in red ",
                           "indicate those that were present at a minimum of 10 sites and had" ~
                           italic("max")~group("[", EAR["[" * j * "]"] , "]") ~
