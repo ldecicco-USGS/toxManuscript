@@ -59,11 +59,51 @@ relevance <- fread("AOP_relevance.csv") %>%
   select(-`Endpoint(s)`) %>%
   distinct()
 
+AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP <- AOP_crosswalk %>%
+  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
+  distinct()
+
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 
-x <- full_join(relevance, select(AOP_info,AOP, `Abbreviated AOP description` = X__1, `Tox Cast Endpoints` = `Endpoint(s)`), by="AOP")
+source(file = "data_setup.R")
 
-write.csv(x, file = "tables/SI6.csv", row.names = FALSE, na = "")
+ear_thresh <- 0.001
+siteThres <- 10
+# ep_percent_thres <- 0.5
+
+endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,date) %>%
+  summarize(EARsum = sum(EAR)) %>%
+  group_by(site,endPoint) %>%
+  summarize(EARmax = max(EARsum)) %>%
+  filter(EARmax >= ear_thresh) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites)) %>%
+  filter(numSites >= siteThres)
+
+priority_endpoints <- endpoints_sites_hits$endPoint
+
+x <- full_join(relevance, select(AOP, AOP=ID, `Tox Cast Endpoints` = endPoint), by="AOP")
+x <- left_join(x, select(AOP_info, `Abbreviated AOP description` = X__1, AOP), by="AOP")
+
+x <- x[,c("AOP","Relevant","Rationale","Abbreviated AOP description","Tox Cast Endpoints")]
+
+x <- arrange(x,AOP)
+
+x <- filter(x, `Tox Cast Endpoints` %in% priority_endpoints)
+x <- distinct(x)
+
+y <- x %>%
+  group_by(AOP, Relevant, Rationale, `Abbreviated AOP description`) %>%
+  summarise(`Tox Cast Endpoints` = list(`Tox Cast Endpoints`))
+
+y <- filter(y, !is.na(Relevant))
+
+fwrite(y, file = "tables/SI6.csv", na = "")
+
+# write.csv(x, file = "tables/SI6.csv", row.names = FALSE, na = "")
 
 
 ## SI: 7:
