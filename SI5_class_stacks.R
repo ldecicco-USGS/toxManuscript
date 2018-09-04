@@ -23,7 +23,7 @@ for(class in unique(chemicalSummary$Class)){
   }
   
   y_label <- toxEval:::fancyLabels("Chemical", FALSE, TRUE, FALSE, sep = TRUE)
-  y_label[["y_label"]] <- bquote("max" ~  group("(", sum(" " ~ EAR["[" * i * "]"]), ")")["[" * j * "]"]) 
+  y_label[["y_label"]] <- bquote(italic(max) *  group("(", sum(" "*EAR["[" * i * "]"]), ")")["[" * j * "]"]) 
   y_label[["caption"]] <- gsub(", k = sites","",y_label[["caption"]])
   
   fancyTitle <- bquote(atop(bold("Figure SI-5"*.(LETTERS[i])*":") ~

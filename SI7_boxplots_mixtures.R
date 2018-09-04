@@ -53,13 +53,15 @@ y_label$caption <- "i = chemicals in an AOP, j = samples, k = sites"
 i <- 2
 filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
 pdf(filenm)
+
 sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
+
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
-  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$casn %in% CASnums),"chnm"])
+  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
     filter(maxEAR > EAR_thresh) %>%
@@ -71,17 +73,19 @@ for(j in 1:dim(sub_Num_sites)[1]){
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
   yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
-          log="y",main=paste(chnms),
+          log="y",
           las=2,
           ylim=c(1e-5,10),
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  mtext(paste(nMixSites,"Sites"),side=3,line=-1,cex=0.7)
+  title(paste(chnms, collapse = "\n"), line=-1.5, cex.main = title_text_cex)
+  mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+# mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
@@ -102,7 +106,7 @@ par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
-  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$casn %in% CASnums),"chnm"])
+  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
     filter(maxEAR > EAR_thresh) %>%
@@ -114,17 +118,19 @@ for(j in 1:dim(sub_Num_sites)[1]){
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
   yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
-          log="y",main=paste(chnms),
+          log="y",
           las=2,
           ylim=c(1e-5,10),
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  mtext(paste(nMixSites,"Sites"),side=3,line=-1,cex=0.7)
+  title(paste(chnms, collapse = "\n"), line=-2.5, cex.main = title_text_cex)
+  mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+# mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
@@ -145,7 +151,7 @@ par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
-  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$casn %in% CASnums),"chnm"])
+  chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
     filter(maxEAR > EAR_thresh) %>%
@@ -157,17 +163,19 @@ for(j in 1:dim(sub_Num_sites)[1]){
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
   yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
-          log="y",main=paste(chnms),
+          log="y",
           las=2,
           ylim=c(1e-5,10),
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  mtext(paste(nMixSites,"Sites"),side=3,line=-1,cex=0.7)
+  title(paste(chnms, collapse = "\n"), line=-3, cex.main = title_text_cex)
+  mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
+# mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
