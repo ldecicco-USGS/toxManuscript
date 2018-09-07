@@ -5,7 +5,13 @@ combo_plot_matches <- function(gd_1, gd_2,
                                gd_3=NULL,thres_3=NA,
                                grid = FALSE){
   
-
+  gd_1_priority <- get_priority_chms(gd_1, 0.001)
+  gd_2_priority <- get_priority_chms(gd_2, 0.1)
+  
+  gd_1$priority <- FALSE
+  gd_2$priority <- FALSE
+  gd_1$priority[gd_1$chnm %in% gd_1_priority] <- TRUE
+  gd_2$priority[gd_2$chnm %in% gd_2_priority] <- TRUE
   
   if(all(is.null(gd_3))){
     orderChem_1_2 <- bind_rows(gd_1,
@@ -38,9 +44,6 @@ combo_plot_matches <- function(gd_1, gd_2,
   graphData_1_2 <- bind_rows(gd_1, gd_2, gd_3)
   graphData_1_2$Class <- factor(graphData_1_2$Class, levels = class_order$Class)
   graphData_1_2$chnm <- factor(graphData_1_2$chnm, levels = orderChem_1_2$chnm)
-  
-
-
   
   if(drop){
     if(grid){
@@ -121,11 +124,11 @@ combo_plot_matches <- function(gd_1, gd_2,
                 "#FFA500","#F4426e", "#800000", "#808000")
   
   pretty_logs_new <- toxEval:::prettyLogs(graphData_1_2$meanEAR)
-  
+ 
   toxPlot_1_2 <- ggplot(data=graphData_1_2) +
     scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
-    geom_boxplot(aes(x=chnm, y=meanEAR, fill=Class),
-                 lwd=0.1,outlier.size=1) +
+    geom_boxplot(aes(x=chnm, y=meanEAR, fill=Class, color=priority),
+                 outlier.size=1) +
     theme_bw() +
     coord_flip() 
   
@@ -155,7 +158,9 @@ combo_plot_matches <- function(gd_1, gd_2,
           legend.text = element_text(size=8),
           legend.key.height = unit(1,"line"),
           axis.ticks.y = element_blank()) +
-    scale_fill_manual(values = cbValues, drop=FALSE)
+    scale_fill_manual(values = cbValues, drop=FALSE) +
+    scale_color_manual(values = c("black","red"), 
+                       na.value = "black", guide = "none")
   
   if(!drop){
     toxPlot_1_2 <- toxPlot_1_2 +
@@ -269,3 +274,24 @@ combo_plot_matches <- function(gd_1, gd_2,
   
 }
 
+get_priority_chms <- function(gd, thresh){
+  priority_chems_a <- gd %>%
+    filter(meanEAR > 0) %>%
+    group_by(chnm) %>%
+    summarise(count = length(unique(site))) %>%
+    filter(count >= 10) %>%
+    mutate(chnm = as.character(chnm)) %>%
+    pull(chnm)
+  
+  priority_chems_b <- gd %>%
+    filter(chnm %in% priority_chems_a) %>%
+    filter(meanEAR > thresh) %>%
+    group_by(chnm) %>%
+    summarize(count = length(unique(site))) %>%
+    filter(count >= 5) %>%
+    mutate(chnm = as.character(chnm)) %>%
+    pull(chnm)
+  
+  return(priority_chems_b)
+  
+}
