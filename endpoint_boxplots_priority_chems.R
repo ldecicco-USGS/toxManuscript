@@ -24,7 +24,7 @@ chemNames[grep("DEET",chemNames)] <- "DEET"
 chemNames[grep("Nonylphenol",chemNames)] <- "4-Nonylphenol, branched"
 
 filenm <- "EP_boxplots_priority_chems.pdf"
-pdf(filenm)
+pdf(filenm, width = 8.5, height = 14)
 for(i in 1:length(chemNames)){
   ######################################
   chem_name <- chemNames[i]
