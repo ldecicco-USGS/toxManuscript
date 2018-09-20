@@ -144,7 +144,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   toxPlot_1_2 <- toxPlot_1_2 +
     theme(axis.text = element_text( color = "black"),
-          axis.text.y = element_text(size=7),
+          axis.text.y = element_text(size=9, vjust=.35),
           axis.title=element_blank(),
           panel.background = element_blank(),
           plot.background = element_rect(fill = "transparent",colour = NA),

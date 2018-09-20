@@ -1,6 +1,6 @@
 # SI 4
 library(readr)
-dataDir <- "D:/LADData/RCode/toxEval_Archive/INVITRODB_V2_LEVEL5"
+dataDir <- "D:/LADData/toxCast_Data/INVITRODB_V2_LEVEL5"
 setwd(dataDir)
 files <- list.files()
 
@@ -24,7 +24,7 @@ for(i in files[c(-1)]){
 # 
 # saveRDS(x, file="all_tox.rds")
 
-file_name <- "D:/LADData/RCode/toxEval_Archive/Scripts for Paper/OWC_data_fromSup.xlsx"
+file_name <- "D:/LADData/toxManuscript/OWC_data_fromSup.xlsx"
 full_path <- file.path(file_name)
 tox_list <- create_toxEval(full_path)
 ACClong <- get_ACC(tox_list$chem_info$CAS)
