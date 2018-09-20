@@ -36,7 +36,7 @@ chemicalSummary <- get_chemical_summary(tox_list, ACClong, filtered_ep)
 total_counts <- filter(x, casn %in% tox_list$chem_info$CAS)
 
 totals <- total_counts %>%
-  filter(!is.na(modl_acc)) %>%
+  # filter(!is.na(modl_acc)) %>%
   group_by(casn) %>%
   summarize(Total = n(),
             min_ACC = min(modl_acc, na.rm = TRUE),
@@ -61,5 +61,5 @@ totals_final <- totals_final[c(names(totals_final)[1:4],
                                names(totals_final)[6:8],
                                "min_ACC")]
 
-
-write.csv(totals_final, file = "D:/LADData/RCode/toxEval_Archive/Scripts for Paper/tables/SI4.csv", row.names = FALSE, na = "-")
+dir.create("D:/LADData/toxManuscript/tables", showWarnings = FALSE)
+write.csv(totals_final, file = "D:/LADData/toxManuscript/tables/SI4_2.csv", row.names = FALSE, na = "-")
