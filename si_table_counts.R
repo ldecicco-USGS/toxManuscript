@@ -41,7 +41,7 @@ total_counts <- filter(x, casn %in% tox_list$chem_info$CAS)
 totals <- total_counts %>%
   # filter(!is.na(modl_acc)) %>%
   group_by(casn) %>%
-  summarize(Total = n(),
+  summarize(Total = length(unique(aenm)),
             min_ACC = min(modl_acc, na.rm = TRUE),
             Active = sum(hitc == 1),
             Considered = sum(hitc == 1 &
