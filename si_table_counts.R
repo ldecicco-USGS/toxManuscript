@@ -64,5 +64,8 @@ totals_final <- totals_final[c(names(totals_final)[1:4],
                                names(totals_final)[6:8],
                                "min_ACC")]
 
+totals_final$Filtered[is.na(totals_final$Filtered) & !is.na(totals_final$Total)] <- 0
+totals_final$min_ACC[totals_final$Filtered == 0] <- NA
+
 dir.create("D:/LADData/toxManuscript/tables", showWarnings = FALSE)
 write.csv(totals_final, file = "D:/LADData/toxManuscript/tables/SI4_2.csv", row.names = FALSE, na = "-")
