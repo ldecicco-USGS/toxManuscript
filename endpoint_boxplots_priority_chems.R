@@ -1,3 +1,7 @@
+#Plot endpoint boxplots for each of the priority chems from the manuscript
+#One chemical per page of boxplots. 
+#Used for analysis and formulation of the text in the discussion.
+
 library(toxEval)
 #NOTE: Add path to path_to_file!!!
 #path_to_file <- 'C:/Users/srcorsi/Documents/R/win-library/3.4/toxEval/extdata/OWC_data_fromSup.xlsx' 
