@@ -1,3 +1,7 @@
+#Plot endpoint boxplots for each of the priority chems from the manuscript
+#One chemical per page of boxplots. 
+#Used for analysis and formulation of the text in the discussion.
+
 library(toxEval)
 #NOTE: Add path to path_to_file!!!
 #path_to_file <- 'C:/Users/srcorsi/Documents/R/win-library/3.4/toxEval/extdata/OWC_data_fromSup.xlsx' 
@@ -17,14 +21,14 @@ filtered_ep <- filter_groups(cleaned_ep,
 chemical_summary <- get_chemical_summary(tox_list, ACC, filtered_ep)
 
 
-CASnums <- c("134-62-3","80-05-7","58-08-2","1912-24-9","51218-45-2","50-32-8","78-51-3","126-73-8","84852-15-3")
+CASnums <- c("134-62-3","80-05-7","58-08-2","1912-24-9","51218-45-2","50-32-8","78-51-3","126-73-8","84852-15-3","119-61-9")
 chemNames <- c(chem_info[which(chem_info$CAS %in% CASnums),2],"Fluoranthene")
-chemNames[grep("Benzo",chemNames)] <- "Benzo(a)pyrene"
+chemNames[grep("pyrene",chemNames)] <- "Benzo(a)pyrene"
 chemNames[grep("DEET",chemNames)] <- "DEET"
 chemNames[grep("Nonylphenol",chemNames)] <- "4-Nonylphenol, branched"
 
 filenm <- "EP_boxplots_priority_chems.pdf"
-pdf(filenm, width = 8.5, height = 14)
+pdf(filenm, width = 8.5, height = 11)
 for(i in 1:length(chemNames)){
   ######################################
   chem_name <- chemNames[i]
