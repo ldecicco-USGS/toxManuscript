@@ -88,7 +88,7 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
   
   countNonZero$hits[countNonZero$hits == "0"] <- ""
   
-  label <- "# End Points"
+  label <- "# Assays"
   toxPlot_All <- ggplot(data=graphData) 
   
   if(!all(is.na(pallette))){
