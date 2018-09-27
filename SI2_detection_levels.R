@@ -71,7 +71,7 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
   
   single_site <- length(unique(chemicalSummary$site)) == 1
   
-  y_label <- "EAR per ToxCast Endpoint"
+  y_label <- "EAR per ToxCast Assay"
     
   graphData <- toxEval:::graph_chem_data(chemical_summary = chemicalSummary, 
                                manual_remove=manual_remove,
