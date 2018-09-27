@@ -36,13 +36,12 @@ cleaned_ep <- clean_endPoint_info(end_point_info)
 filtered_ep <- filter_groups(cleaned_ep)
 chemicalSummary <- get_chemical_summary(tox_list, ACClong, filtered_ep)
 
-total_counts <- filter(x, casn %in% tox_list$chem_info$CAS)
+total_counts <- filter(x, 
+                       casn %in% tox_list$chem_info$CAS)
 
 totals <- total_counts %>%
-  # filter(!is.na(modl_acc)) %>%
   group_by(casn) %>%
   summarize(Total = length(unique(aenm)),
-            min_ACC = min(modl_acc, na.rm = TRUE),
             Active = sum(hitc == 1),
             Considered = sum(hitc == 1 &
                              aenm %in% filtered_ep$endPoint ))
@@ -53,19 +52,26 @@ flag_totals <- chemicalSummary %>%
   group_by(CAS) %>%
   summarize(Filtered = n())
 
+min_ACC <- select(total_counts, CAS=casn, aenm, modl_acc) %>%
+  filter(aenm %in% unique(chemicalSummary$endPoint)) %>%
+  group_by(CAS) %>%
+  summarize(min_ACC = min(modl_acc, na.rm = TRUE))
+
 totals_final <- select(tox_list$chem_info, `OWC Class` = Class, `Compound Name` = `Chemical Name`, CAS) %>%
   left_join(totals, by=c("CAS"="casn")) %>%
   left_join(flag_totals, by="CAS") %>%
   left_join(select(tox_chemicals, CAS=Substance_CASRN, mlwt = Structure_MolWt), by="CAS") %>%
+  left_join(min_ACC, by="CAS") %>%
   mutate(min_ACC = mlwt * (10^(min_ACC))) %>%
   arrange(`OWC Class`, desc(`Compound Name`)) 
 
-totals_final <- totals_final[c(names(totals_final)[1:4],
-                               names(totals_final)[6:8],
-                               "min_ACC")]
+totals_final <- totals_final[c(names(totals_final)[1:7],"min_ACC")]
 
 totals_final$Filtered[is.na(totals_final$Filtered) & !is.na(totals_final$Total)] <- 0
 totals_final$min_ACC[totals_final$Filtered == 0] <- NA
 
+totals_final$min_ACC <- formatC(totals_final$min_ACC, digits = 2, format = "f")
+totals_final$min_ACC[totals_final$min_ACC == " NA"] <- NA
+
 dir.create("D:/LADData/toxManuscript/tables", showWarnings = FALSE)
-write.csv(totals_final, file = "D:/LADData/toxManuscript/tables/SI4_2.csv", row.names = FALSE, na = "-")
+write.csv(totals_final, file = "D:/LADData/toxManuscript/tables/SI4.csv", row.names = FALSE, na = "-")
