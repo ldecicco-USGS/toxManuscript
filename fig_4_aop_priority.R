@@ -139,7 +139,7 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
   scale_x_discrete(position="top") +
-  ylab("ToxCast Endpoint Name") +
+  ylab("ToxCast Assay Name") +
   labs(fill="Mean EAR") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),#element_text(size=7),
