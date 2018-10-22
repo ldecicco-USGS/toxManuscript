@@ -18,10 +18,10 @@ source(file = "combo_graph_function.R")
 # guide_side is the title of the side-by-side labels
 # or...the column headers
 graphData_tox <- graph_chem_data(chemicalSummary)
-graphData_tox$guide_side <- "ToxCast\nMaximum EAR per Site"
+graphData_tox$guide_side <- "atop(ToxCast,Maximum~EAR[Chem]~per~Site)"
 
 graphData_wq <- graph_chem_data(chemicalSummary_wqp, sum_logic = FALSE)
-graphData_wq$guide_side <- "Traditional\nMaximum Toxicity Quotient per Site"
+graphData_wq$guide_side <- "atop(Traditional,Maximum~Toxicity~Quotient~per~Site)"
 
 levels(chemicalSummary_eeq$chnm)[levels(chemicalSummary_eeq$chnm)=="4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)"] <- "4-Nonylphenol monoethoxylate" 
 levels(chemicalSummary_eeq$chnm)[levels(chemicalSummary_eeq$chnm)=="4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)"] <- "4-Nonylphenol diethoxylate" 
@@ -29,7 +29,7 @@ levels(chemicalSummary_eeq$chnm)[levels(chemicalSummary_eeq$chnm)=="4-tert-Octyl
 levels(chemicalSummary_eeq$chnm)[levels(chemicalSummary_eeq$chnm)=="4-tert-Octylphenol monoethoxylate (OP1EO)"] <- "4-tert-Octylphenol monoethoxylate" 
 
 graphData_eeq <- graph_chem_data(chemicalSummary_eeq, sum_logic = FALSE)
-graphData_eeq$guide_side <- "Traditional\nMaximum Toxicity Quotient per Site"
+graphData_eeq$guide_side <- "atop(Traditional,Maximum~Toxicity~Quotient~per~Site)"
 
 # guide_up is the top-and-bottom labels. We're currently not showing those:
 

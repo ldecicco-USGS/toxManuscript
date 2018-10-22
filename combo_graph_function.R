@@ -134,7 +134,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   if(grid){
     toxPlot_1_2 <- toxPlot_1_2 +
-      facet_grid(guide_up ~ guide_side, scales = "free", space = "free")+
+      facet_grid(guide_up ~ guide_side, scales = "free", space = "free", labeller = label_parsed)+
       theme(strip.text.y = element_blank())
     
   } else {
