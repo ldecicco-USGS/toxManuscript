@@ -44,7 +44,7 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
   theme_bw() +
   facet_grid(. ~ site_grouping, scales="free", space="free") +
   xlab("") +
-  ylab("Number of Chemicals\n with EARmax > 0.001") +
+  ylab("Number of Chemicals") +
   theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) +
   theme(strip.text.y = element_text(angle=0, hjust=0, size=7), 
         strip.text.x = element_text(size = 8),
