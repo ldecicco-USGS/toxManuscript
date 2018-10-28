@@ -112,13 +112,7 @@ chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 
-y_label <- bquote("max" ~ 
-                    group("[", 
-                          group("(",
-                                sum(" max("  ~ EAR["[" *i* "]"] ~ ")"),
-                                ")")["[" *j* "]"],
-                          "]")
-                  ["[" *k* "]"])
+y_label <- expression(EAR[SiteAOP])
 
 boxplot_top <- ggplot(data = boxData) +
   geom_boxplot(aes(x=ID, y=maxMaxEAR, fill = Relevant), outlier.size = 0.5) +
@@ -129,21 +123,31 @@ boxplot_top <- ggplot(data = boxData) +
         panel.grid.minor.y = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
-        legend.position = "none") +
-  scale_fill_manual(values=c("#E69F00", "#009E73", "#F0E442","#999999")) +
+        axis.text = element_text(size = 15),
+        legend.position = "none",
+        legend.text = element_text(size = 17),
+        legend.title = element_text(size = 17, hjust = 0),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")) +
+  scale_fill_manual(values=c("#E69F00", "#009E73", "white","#999999")) +
   scale_y_log10(y_label,
                 labels=toxEval:::fancyNumbers,
-                breaks=pretty_logs_new)
+                breaks=pretty_logs_new)+
+  guides(fill = guide_legend(title.position="top", title.hjust = 0.5))
 
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
   scale_x_discrete(position="top") +
-  ylab("ToxCast Endpoint Name") +
+  ylab("ToxCast Assay Name") +
   labs(fill="Mean EAR") +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),#element_text(size=7),
-        legend.position = "none") +
+        legend.position = "none",
+        legend.text = element_text(size = 17),
+        legend.title = element_text(size = 17),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black")) +
   scale_y_discrete(drop=TRUE) +
   scale_fill_gradient( guide = "legend",
                        trans = 'log',limits = c(1e-4,1),
@@ -154,8 +158,10 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   theme(panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
         axis.ticks = element_blank(),
+        axis.text = element_text(size = 12),
         panel.border = element_blank(),
-        plot.background = element_rect(fill = "transparent",colour = NA))
+        plot.background = element_rect(fill = "transparent",colour = NA)) +
+  guides(fill = guide_legend(title.position="top", title.hjust = 0.5))
 
 
 # How many AOPs are included, and how many are yes and maybe for relevance
@@ -176,9 +182,10 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
 site_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="# Sites", label = as.character(sitehits)),
-            vjust = 0.5, size = 3) +
+            vjust = 0.5, size = 4) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 15),
         axis.title = element_blank(),
         axis.ticks = element_blank(),
         panel.grid.major = element_blank(),
@@ -188,12 +195,12 @@ site_graph <- ggplot() +
 aop_label_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="AOP ID", label = as.character(ID)),
-            vjust = 0.5, size = 3, angle = 0) +
+            vjust = 0.5, size = 5, angle = 90) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(face = "bold"),
+        axis.text.y = element_text(size = 15),
         axis.ticks = element_blank(),
         panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
@@ -208,8 +215,8 @@ plot_grid(site_graph, boxplot_top,
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
           align = "v", nrow = 5, 
-          rel_heights = c(1/20, 8/20, 1/20, 8/20,1/10),
-          labels = c("A","","","B",""))
+          rel_heights = c(1/20, 7/20, 2/20, 9/20,1/10),
+          labels = c("A","","B","",""))
 dev.off()
 
 

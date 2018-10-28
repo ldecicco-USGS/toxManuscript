@@ -135,10 +135,12 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
   graphData$endPoint <- factor(graphData$endPoint, levels = orderedLevelsEP)
   
   stackedPlot <- ggplot(graphData)+
-    scale_y_log10(y_label,labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
+    scale_y_log10(expression(EAR[mixture]),labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
     theme_minimal() +
-    xlab("ToxCast Endpoint Name") +
-    theme(axis.text.y = element_text(vjust = .25,hjust=1)) 
+    xlab("ToxCast Assay Name") +
+    theme(axis.text.y = element_text(vjust = .25,hjust=1)) +
+    theme(legend.title = element_blank()) +
+    geom_boxplot(aes(x=endPoint, y=meanEAR, fill = has_AOP)) 
   
   if(!is.na(hit_threshold)){
     stackedPlot <- stackedPlot +
@@ -147,14 +149,8 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
   
   if(!all(is.na(pallette))){
     stackedPlot <- stackedPlot +
-      geom_boxplot(aes(x=endPoint, y=meanEAR, fill = has_AOP)) +
-      scale_fill_manual(values = pallette) +
-      theme(legend.position = "none")
-  } else {
-    stackedPlot <- stackedPlot +
-      geom_boxplot(aes(x=endPoint, y=meanEAR, fill = has_AOP)) +
-      theme(legend.title = element_blank())
-  }
+      scale_fill_manual(values = pallette) 
+  } 
     
   plot_layout <- ggplot_build(stackedPlot)$layout    
   

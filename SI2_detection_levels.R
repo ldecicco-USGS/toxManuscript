@@ -71,7 +71,7 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
   
   single_site <- length(unique(chemicalSummary$site)) == 1
   
-  y_label <- "EAR per ToxCast Endpoint"
+  y_label <- expression(EAR[Chem]~per~ToxCast~Assay)
     
   graphData <- toxEval:::graph_chem_data(chemical_summary = chemicalSummary, 
                                manual_remove=manual_remove,
@@ -88,7 +88,7 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
   
   countNonZero$hits[countNonZero$hits == "0"] <- ""
   
-  label <- "# End Points"
+  label <- "# Assays"
   toxPlot_All <- ggplot(data=graphData) 
   
   if(!all(is.na(pallette))){
@@ -195,7 +195,7 @@ plot_DL <- plot_chemical_boxplots_mod(chemicalSummary,
                              font_size = 7, title = " ")
 
 plot_DL_w_cap <- plot_DL +
-  labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios (EAR) using ToxCast endpoints and the detection level of",
+  labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios" ~ (EAR[Chem]) ~ "using ToxCast endpoints and the detection level of",
                              "chemicals monitored in Great Lakes tributaries, 2010-2013.                                                              "))) +
   theme(plot.caption = element_text(hjust = -0.35))
 

@@ -86,20 +86,21 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
 priority_endpoints <- endpoints_sites_hits$endPoint
 
 x <- full_join(relevance, select(AOP, AOP=ID, `Tox Cast Endpoints` = endPoint), by="AOP")
-x <- left_join(x, select(AOP_info, `Abbreviated AOP description` = X__1, AOP), by="AOP")
+x <- full_join(x, select(AOP_info, `Abbreviated AOP description` = X__1, AOP), by="AOP")
 
 x <- x[,c("AOP","Relevant","Rationale","Abbreviated AOP description","Tox Cast Endpoints")]
 
 x <- arrange(x,AOP)
 
-x <- filter(x, `Tox Cast Endpoints` %in% priority_endpoints)
+# x <- filter(x, `Tox Cast Endpoints` %in% priority_endpoints)
 x <- distinct(x)
 
 y <- x %>%
   group_by(AOP, Relevant, Rationale, `Abbreviated AOP description`) %>%
-  summarise(`Tox Cast Endpoints` = list(`Tox Cast Endpoints`))
+  summarise(`Tox Cast Endpoints` = list(`Tox Cast Endpoints`[`Tox Cast Endpoints` %in% priority_endpoints])) %>%
+  filter(!is.na(Relevant))
 
-y <- filter(y, !is.na(Relevant))
+y$`Tox Cast Endpoints`[sapply(y$`Tox Cast Endpoints`, length) == 0] <- ""
 
 fwrite(y, file = "tables/SI6.csv", na = "")
 
