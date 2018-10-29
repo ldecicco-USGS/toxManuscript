@@ -144,10 +144,10 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
                         aes(x=`Short Name`, y=meanEAR, fill = category)) +
       theme_minimal() +
       xlab("") +
-      ylab(y_label[["y_label"]]) +
+      ylab(expression(EAR[SiteChem])) +
       facet_grid(. ~ site_grouping, scales="free", space="free") +
       theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))+
-      geom_text(data = counts, 
+      geom_text(data = counts, angle=90,
                 aes(label = count, x=`Short Name`,y = placement), 
                 size=ifelse(is.na(font_size),3,0.30*font_size),inherit.aes = FALSE) +
       geom_text(data = label_samples,hjust=1,
@@ -159,7 +159,7 @@ plot_tox_stacks_manuscript <- function(chemicalSummary,
     
   } else {
     
-    y_label <- "EARs per Individual Sample"
+    y_label <- expression(EAR[SiteChem])
     
     graphData <- chemicalSummary %>%
       select(-site) 
