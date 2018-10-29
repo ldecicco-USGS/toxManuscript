@@ -43,7 +43,8 @@ chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_i
 
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority, 
                                               category = "Chemical", 
-                                              font_size = 7,title = " ")
+                                              font_size = 7,title = " ",
+                                              pallette = c("steelblue", "white"))
 
 gb <- ggplot2::ggplot_build(endpointPlot)
 gt <- ggplot2::ggplot_gtable(gb)
