@@ -6,8 +6,9 @@ library(data.table)
 source("data_setup.R")
 source(file = "data_setup.R")
 source(file = "MakeTitles.R")
+source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
 
-#This script requires running fig4_Data_summaries_for_manuscript.R and saving the
+#This script requires running Table_SI7_fig4_Data_summaries_for_manuscript.R and saving the
 #data frame "Num_sites_by_mixture.csv" before running these plots.
 
 EAR_thresh <- 0.001
@@ -47,8 +48,8 @@ outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
 title_text_cex <- 0.7
 
-y_label <- toxEval:::fancyLabels("Biological", FALSE, TRUE, FALSE, TRUE)
-y_label$caption <- "i = chemicals in an AOP, j = samples, k = sites"
+y_label <- bquote(italic("max") ~ EAR[SiteAOP])
+
 ###################################
 i <- 2
 filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
@@ -58,6 +59,7 @@ sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
+
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
@@ -72,6 +74,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
   yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
           las=2,
@@ -86,13 +89,13 @@ for(j in 1:dim(sub_Num_sites)[1]){
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 # mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
-mtext(bquote(.(y_label[["y_label"]])),
+mtext(bquote(.(y_label)),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
       text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
-                           .(y_label[["y_label"]])  *
+                           .(y_label)  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                    "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
+                    "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
 
 dev.off()
 
@@ -135,9 +138,9 @@ mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
       text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
-                           .(y_label[["y_label"]])  *
+                           .(y_label)  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
+                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
 
 dev.off()
 
@@ -180,8 +183,8 @@ mtext(bquote(.(y_label[["y_label"]])),
       side = 2,line=3,outer=TRUE, cex = 0.75)
 mtext(side = 1, cex = 0.5,adj = 0,line = 2,
       text = bquote(atop(bold("Figure SI-7"~.(LETTERS[i-1])~":") ~ "Boxplots of exposure activity ratios (" *
-                           .(y_label[["y_label"]])  *
+                           .(y_label)  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
-                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013 (" * italic(.(y_label$caption)) * ").")),outer=TRUE)
+                         "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
 
 dev.off()
