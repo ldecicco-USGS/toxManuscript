@@ -39,7 +39,7 @@ plot_heat_chemicals_man <- function(chemical_summary,
   single_site <- length(unique(chemical_summary$site)) == 1
   
   fill_text <- ifelse(mean_logic, "mean", "max")
-  fill_text <- bquote(italic(.(fill_text))* EAR[ChemSite])
+  fill_text <- bquote(EAR[ChemSite])
   
   graphData <- graphData %>%
     left_join(chem_site[, c("SiteID", "site_grouping", "Short Name")],
@@ -66,7 +66,7 @@ plot_heat_chemicals_man <- function(chemical_summary,
     theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) +
     ylab("") +
     xlab("") +
-    labs(fill = fill_text, caption = bquote(italic("j = samples"))) +
+    labs(fill = fill_text) +
     scale_fill_gradient( na.value = 'khaki',
                          trans = 'log', low = "white", high = "steelblue",
                          breaks=breaks,
@@ -139,10 +139,10 @@ heat_map <- plot_heat_chemicals_man(chemicalSummary, tox_list$chem_site, priorit
 
 heat_map_w_cap <- heat_map +
   labs(caption = bquote(atop(bold("Figure SI-4:") ~ "Maximum exposure acivity ratios (" * 
-                               italic("max")~(EAR[ChemSite]) *
+                               EAR[ChemSite] *
                           ") at monitored Great Lakes tributaries, 2010-2013. Chemicals in red ",
                           "indicate those that were present at a minimum of 10 sites and had" ~
-                          italic("max")~(EAR[ChemSite]) ~
+                          EAR[ChemSite] ~
                           ">"~ 10^-3 ~" at a minimum of 5 sites.        "))) +
   theme(plot.caption = element_text(hjust = 0.85))
 

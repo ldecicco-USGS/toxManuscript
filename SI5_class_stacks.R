@@ -23,7 +23,7 @@ for(class in unique(chemicalSummary$Class)){
   }
   
   fancyTitle <- bquote(atop(bold("Figure SI-5"*.(LETTERS[i])*":") ~
-"Maximum exposure-activity ratio values by site for chemical class" ~ .(cleaned_class) ~ "in Great Lakes tributaries, 2010-2013."))
+"Exposure-activity ratio values by site for chemical class" ~ .(cleaned_class) ~ "in Great Lakes tributaries, 2010-2013."))
   
   splot <- plot_tox_stacks_manuscript(sub_class, 
                                chem_site, 

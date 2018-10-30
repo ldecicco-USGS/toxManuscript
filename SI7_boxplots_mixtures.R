@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyr)
 library(data.table)
 #########################################################################################
-source("data_setup.R")
+
 source(file = "data_setup.R")
 source(file = "MakeTitles.R")
 source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
@@ -48,8 +48,8 @@ outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
 title_text_cex <- 0.7
 
-y_label <- bquote(italic("max") ~ EAR[SiteAOP])
-
+y_label <- bquote(EAR[SiteAOP])
+ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
 filenm <- "plots/SI7_mixtureBoxplots_A.pdf"

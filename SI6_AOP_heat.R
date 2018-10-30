@@ -51,7 +51,7 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
   graphData$Class <- factor(graphData$Class, levels = c(class_order,"AOP not defined","Not environmentally relevant"))
   
   fill_text <- ifelse(mean_logic, "mean", "max")
-  fill_text <- bquote(italic(.(fill_text))~EAR[SiteAOP])
+  fill_text <- bquote(EAR[SiteAOP])
   
   heat <- ggplot(data = graphData) +
     geom_tile(aes(x = `Short Name`, y=AOP, fill=meanEAR, color="")) +
@@ -66,7 +66,7 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
                          breaks=c(0.00001,0.0001,0.001,0.01,0.1,1,5),
                          na.value = 'khaki',labels=toxEval:::fancyNumbers2) +
     facet_grid(Class ~ site_grouping, scales="free", space="free") +
-    labs(caption = bquote(atop(bold("Figure SI-6:") ~ "Maximum exposure activity ratios (" * .(fill_text) *") for each adverse outcome pathway (AOP) identified", 
+    labs(caption = bquote(atop(bold("Figure SI-6:") ~ "Exposure activity ratios (" * .(fill_text) *") for each adverse outcome pathway (AOP) identified", 
                                "from evaluation of chemistry data at monitored Great Lakes tributaries, 2010-2013.                          "))) +
     theme(strip.text.y = element_text(angle=0, hjust=0), 
           strip.background = element_rect(fill="transparent", colour = NA),
