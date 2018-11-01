@@ -61,7 +61,7 @@ sub_Num_sites <- Num_sites_by_mixture %>%
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
@@ -107,7 +107,7 @@ sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
@@ -152,7 +152,7 @@ sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"; ")[[1]]
+  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
   nMixSites <- sub_Num_sites[j,"numSites"]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   

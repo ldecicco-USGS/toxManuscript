@@ -133,7 +133,7 @@ Chem_vectors_by_site <- chemicalSummary %>%
   
   filter(EAR > EAR_thresh_individual_chem) %>%
   group_by(site,date) %>%
-  summarize(chemVector = paste(sort(unique(CAS)),collapse = "; "))
+  summarize(chemVector = paste(sort(unique(CAS)),collapse = "|"))
 
 allSTAIDs1 <- character()
 for(i in 1:length(AOP_priority_CAS)) {
@@ -143,7 +143,7 @@ for(i in 1:length(AOP_priority_CAS)) {
   Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
   Num_sites_by_vector$chemVector <- chem
   Num_sites_by_vector$nChems <- 1
-  Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "; ")
+  Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
   allSTAIDs1 <- unique(c(allSTAIDs1,STAIDs))
   if(i==1) Num_sites_by_mixture <- Num_sites_by_vector
   else Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
@@ -152,14 +152,14 @@ for(i in 1:length(AOP_priority_CAS)) {
   for(j in i:length(AOP_priority_CAS)){
     chem2 <- AOP_priority_CAS[j]
     if(chem2 != chem){
-      chems2 <- paste0(sort(AOP_priority_CAS[c(i,j)]),collapse="; ")
+      chems2 <- paste0(sort(AOP_priority_CAS[c(i,j)]),collapse="|")
       sites_by_vector <- filter(sites_by_vector,grepl(chem2,chemVector)) %>%
         filter(site %in% allSTAIDs1)
       STAIDs <- unique(sites_by_vector$site)
       Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
       Num_sites_by_vector$chemVector <- chems2
       Num_sites_by_vector$nChems <- 2
-      Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "; ")
+      Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
       allSTAIDs2 <- unique(c(allSTAIDs2,STAIDs))
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
     }
@@ -168,14 +168,14 @@ for(i in 1:length(AOP_priority_CAS)) {
     for(k in i:length(AOP_priority_CAS)){
       chem3 <- AOP_priority_CAS[k]
       if(all(!duplicated(AOP_priority_CAS[c(i,j,k)]))){
-        chems3 <- paste0(sort(AOP_priority_CAS[c(i,j,k)]),collapse="; ")
+        chems3 <- paste0(sort(AOP_priority_CAS[c(i,j,k)]),collapse="|")
         sites_by_vector <- filter(sites_by_vector,grepl(chem3,chemVector)) %>%
           filter(site %in% allSTAIDs2)
         STAIDs <- unique(sites_by_vector$site)
         Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
         Num_sites_by_vector$chemVector <- chems3
         Num_sites_by_vector$nChems <- 3
-        Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "; ")
+        Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
         allSTAIDs3 <- unique(c(allSTAIDs3,STAIDs))
         Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
       }
@@ -183,14 +183,14 @@ for(i in 1:length(AOP_priority_CAS)) {
       for(l in i:length(AOP_priority_CAS)){
         chem4 <- AOP_priority_CAS[l]
         if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l)]))){
-          chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="; ")
+          chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="|")
           sites_by_vector <- filter(sites_by_vector,grepl(chem4,chemVector)) %>%
             filter(site %in% allSTAIDs3)
           STAIDs <- unique(sites_by_vector$site)
           Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
           Num_sites_by_vector$chemVector <- chems4
           Num_sites_by_vector$nChems <- 4
-          Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "; ")
+          Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
           allSTAIDs4 <- unique(c(allSTAIDs4,STAIDs))
           Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
         }
@@ -214,7 +214,7 @@ names(siteList) <- tox_list[["chem_site"]]$SiteID
 siteColumn <- character()
 for(i in 1:dim(Num_sites_by_mixture)[1]){
   siteColumn <- c(siteColumn,
-                  paste(siteList[strsplit(Num_sites_by_mixture$STAIDs[i],"; ")[[1]]],collapse="; "))
+                  paste(siteList[strsplit(Num_sites_by_mixture$STAIDs[i],"; ")[[1]]],collapse="|"))
 }
 Num_sites_by_mixture$siteVector <- siteColumn
 
@@ -225,7 +225,7 @@ names(chemList) <- tox_list[["chem_info"]]$CAS
 chemColumn <- character()
 for(i in 1:dim(Num_sites_by_mixture)[1]){
   chemColumn <- c(chemColumn,
-                  paste(chemList[strsplit(Num_sites_by_mixture$chemVector[i],"; ")[[1]]],collapse="; "))
+                  paste(chemList[strsplit(Num_sites_by_mixture$chemVector[i],"; ")[[1]]],collapse="|"))
 }
 Num_sites_by_mixture$chnmVector <- chemColumn
 
