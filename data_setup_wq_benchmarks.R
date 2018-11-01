@@ -21,6 +21,7 @@ x$chnm[is.na(x$chnm)] <- x$orig_name[is.na(x$chnm)]
 tox_list_wq_benchmarks$benchmarks <- x
 
 chemicalSummary_bench <- get_chemical_summary(tox_list_wq_benchmarks)
+levels(chemicalSummary_bench$chnm)[levels(chemicalSummary_bench$chnm) == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 
 #Trim some names:
 levels(chemicalSummary_bench$Class)[levels(chemicalSummary_bench$Class) == "Antimicrobial Disinfectants"] <- "Antimicrobial"

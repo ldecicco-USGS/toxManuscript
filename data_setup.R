@@ -37,6 +37,8 @@ tox_list$chem_site$site_grouping <- factor(tox_list$chem_site$site_grouping,
                                            levels=lakes_ordered)
 chemicalSummary <- get_chemical_summary(tox_list, ACClong, filtered_ep)
 
+levels(chemicalSummary$chnm)[levels(chemicalSummary$chnm) == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
+
 #Trim some names:
 levels(chemicalSummary$Class)[levels(chemicalSummary$Class) == "Antimicrobial Disinfectants"] <- "Antimicrobial"
 levels(chemicalSummary$Class)[levels(chemicalSummary$Class) == "Detergent Metabolites"] <- "Detergent"
