@@ -40,23 +40,23 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
   geom_bar(aes(y=nChem),
            stat = "identity",
            fill = "steelblue") +
-  geom_text(aes(y=-1, label =  count), size = 2.5) +
+  geom_text(aes(y=-1, label =  count), size = 2.5, angle = 90) +
   theme_bw() +
   facet_grid(. ~ site_grouping, scales="free", space="free") +
   xlab("") +
   ylab("Number of Chemicals") +
-  theme(axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1)) +
   theme(strip.text.y = element_text(angle=0, hjust=0, size=7), 
         strip.text.x = element_text(size = 8),
         strip.background = element_rect(fill="transparent", colour = NA),
         axis.text = element_text(size=8),
-        panel.spacing = unit(0.05, "lines"),
+        axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1),
+        panel.spacing = unit(0.15, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         plot.background = element_rect(fill = "transparent",colour = NA)) +
-  geom_text(data = label_samples,vjust=0.75,hjust=1.1,
+  geom_text(data = label_samples,vjust=0.5,hjust=1.1,
             aes(x=x,y=y,label=label),
-            size=3,inherit.aes = FALSE) +
+            size=2,inherit.aes = FALSE) +
   coord_cartesian(clip="off")
 
 countPlot

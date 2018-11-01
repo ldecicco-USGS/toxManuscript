@@ -123,6 +123,7 @@ boxplot_top <- ggplot(data = boxData) +
         panel.grid.minor.y = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 20),
         axis.text = element_text(size = 15),
         legend.position = "none",
         legend.text = element_text(size = 17),
@@ -142,7 +143,8 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   ylab("ToxCast Assay Name") +
   labs(fill="Mean EAR") +
   theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),#element_text(size=7),
+        axis.text.x = element_blank(),
+        axis.title.y = element_text(size = 20),
         legend.position = "none",
         legend.text = element_text(size = 17),
         legend.title = element_text(size = 17),
