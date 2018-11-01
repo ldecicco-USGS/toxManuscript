@@ -83,6 +83,7 @@ ep_joined %>%
   group_by(endPoint,site,date) %>%
   summarize(maxProportion = max(EARproportion)) # EARSiteMix is up to 76% 
                                                 # greater than EARChem for the max chem contributor
+summary(max_chem_contributions_per_sample$maxProportion)
 
 # Compare the EARsiteAOP (summation by AOP) to the max EARChem
 max_chem_contributions_per_sample <-
@@ -202,3 +203,4 @@ ep_proportionGT.01 <-  filter(AOPs_site_hits2,EARSiteAOP > 0.001) %>%
 
 dim(ep_proportionGT.01)[1] #38 chemicals contribute
 table(ep_proportionGT.01$chnm)
+
