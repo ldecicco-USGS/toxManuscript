@@ -1,30 +1,18 @@
+library(toxEval)
 library(dplyr)
 library(tidyr)
 library(readxl)
 library(data.table)
 
-source(file = "data_setup.R")
-
-AOP_crosswalk <- fread("AOP_crosswalk.csv")
-
-AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
-
-relevance <- fread("AOP_relevance.csv") %>%
-  select(-`Endpoint(s)`) %>%
-  distinct
-
-ear_thresh <- 0.001
-siteThres <- 10
-
+#########################################
 ## SI 1&2
 
 # si_1 <- readxl::read_excel("M:/QW Monitoring Team/GLRI toxics/ToxCast/JAs/ToxEval 1/Manuscript/Supplemental.xlsx",sheet = "SI-1 Watershed Characteristics")
 # si_2 <- readxl::read_excel("M:/QW Monitoring Team/GLRI toxics/ToxCast/JAs/ToxEval 1/Manuscript/Supplemental.xlsx",sheet = "SI-2 Chemical Classes")
 
+#########################################
 # SI 3:
 # 
-# End Point|End point long name|Assay Source| AOP ID | Relavence
-
 endPointInfo <- clean_endPoint_info(end_point_info)
 
 si_3_endpoints <- select(endPointInfo, 
@@ -41,25 +29,28 @@ si_3_endpoints <- select(endPointInfo,
 
 dir.create("tables", showWarnings = FALSE)
 write.csv(si_3_endpoints, file = "tables/SI3.csv", row.names = FALSE, na = "")
-
+rm(list=ls())
+#########################################
 # SI 4:
 
 # si_table_counts.R
 
+#########################################
 # SI 5:
 #
-# 
+AOP_crosswalk <- fread("AOP_crosswalk.csv")
+
 write.csv(AOP_crosswalk, file = "tables/SI5.csv", row.names = FALSE, na = "")
-
-
+rm(list=ls())
+#########################################
 # SI 6:
 #
-# 
 relevance <- fread("AOP_relevance.csv") %>%
   select(-`Endpoint(s)`) %>%
-  distinct()
+  distinct
 
 AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
@@ -70,7 +61,6 @@ source(file = "data_setup.R")
 
 ear_thresh <- 0.001
 siteThres <- 10
-# ep_percent_thres <- 0.5
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -90,10 +80,9 @@ x <- full_join(x, select(AOP_info, `Abbreviated AOP description` = X__1, AOP), b
 
 x <- x[,c("AOP","Relevant","Rationale","Abbreviated AOP description","Tox Cast Endpoints")]
 
-x <- arrange(x,AOP)
-
-# x <- filter(x, `Tox Cast Endpoints` %in% priority_endpoints)
-x <- distinct(x)
+x <- x %>%
+  arrange(AOP) %>%
+  distinct()
 
 y <- x %>%
   group_by(AOP, Relevant, Rationale, `Abbreviated AOP description`) %>%
@@ -103,14 +92,16 @@ y <- x %>%
 y$`Tox Cast Endpoints`[sapply(y$`Tox Cast Endpoints`, length) == 0] <- ""
 
 fwrite(y, file = "tables/SI6.csv", na = "")
+rm(list=ls())
 
-# write.csv(x, file = "tables/SI6.csv", row.names = FALSE, na = "")
+#########################################
+## SI: 8:
+source(file = "data_setup.R")
+AOP_crosswalk <- fread("AOP_crosswalk.csv")
+AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
+ear_thresh <- 0.001
+siteThres <- 10
 
-
-## SI: 7:
-
-# chemicalSummary <- chemicalSummary %>%
-#   left_join(select(AOP_crosswalk, endPoint = `Component Endpoint Name` , `AOP ID`= `AOP #`), by=c("endPoint"))
 chemicalSummary <- chemicalSummary %>%
   left_join(select(AOP_crosswalk, 
                    endPoint=`Component Endpoint Name`, AOP = `AOP #`), by="endPoint") %>%
@@ -122,7 +113,6 @@ chemicalSummary$AOP <- factor(chemicalSummary$AOP)
 
 end_cols <- c("Not defined","Not environmentally relevant")
 chemicalSummary$AOP_Class <- factor(chemicalSummary$AOP_Class, levels = c(unique(chemicalSummary$AOP_Class)[!(unique(chemicalSummary$AOP_Class) %in% end_cols)], end_cols))
-
 
 chem_sum_table <- chemicalSummary %>%
   group_by(endPoint, AOP, AOP_Class, chnm,  site, date) %>%
@@ -136,7 +126,6 @@ chem_sum_table <- chemicalSummary %>%
 
 chem_sum_wide <- chem_sum_table %>%
   spread(chnm, hits)
-  
 
 tableData2 <- select(chem_sum_wide, -endPoint, -AOP, -AOP_Class)
 chem_sum_wide$nChems <- apply(tableData2, MARGIN = 1, function(x) sum(x>0, na.rm = TRUE))
@@ -156,6 +145,7 @@ write.csv(chem_sum_wide, file = "tables/SI8_counts.csv", row.names = FALSE, na =
 # Site | AOP ID | AOP name | EndPoint | Chemical | max EAR | mean EAR
 
 rm(list=ls())
+
 source(file = "data_setup.R")
 AOP_crosswalk <- fread("AOP_crosswalk.csv")
 
@@ -191,26 +181,4 @@ chemicalSummary_mixtures <- chemicalSummary %>%
   arrange(AOP_Class, AOP)
 
 fwrite(chemicalSummary_mixtures, file ="tables/SI7.csv")
-
-
-# si_6 <- chemicalSummary %>%
-#   left_join(select(AOP_crosswalk, 
-#                    endPoint=Component.Endpoint.Name, 
-#                    ID=AOP..,
-#                    AOP_name = AOP.Title), by="endPoint") %>%
-#   left_join(select(tox_list$chem_site, site=SiteID, `Short Name`),by="site") %>%
-#   group_by(ID, AOP_name, `Short Name`, date, chnm, endPoint) %>%
-#   summarize(sumEAR = sum(EAR, na.rm = TRUE)) %>%
-#   group_by(ID, AOP_name, `Short Name`, chnm, endPoint) %>%
-#   summarise(meanEAR = mean(sumEAR, na.rm = TRUE),
-#             maxEAR = max(sumEAR, na.rm = TRUE)) %>%
-#   ungroup() %>%
-#   filter(meanEAR > ear_thresh) %>%
-#   rename(site=`Short Name`)
-# 
-# write.csv(si_6, file = "tables/SI6.csv", row.names = FALSE, na = "")
-# 
-# 
-# # SI 6:
-# #
-# # 
+rm(list=ls())
