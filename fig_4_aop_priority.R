@@ -15,7 +15,7 @@ ear_thresh <- 0.001
 siteThres <- 10
 # ep_percent_thres <- 0.5
 
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()

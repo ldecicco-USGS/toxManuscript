@@ -30,7 +30,7 @@ priority_endpoints <- endpoints_sites_hits$endPoint
 
 chemicalSummaryPriority <- filter(chemicalSummary, endPoint %in% priority_endpoints)
 
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
