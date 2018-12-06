@@ -56,6 +56,10 @@ ep_chemGT001$chnm <- as.character(ep_chemGT001$chnm)
 unique(ep_chemGT001$chnm)
 table(ep_chemGT001$chnm) #23 chemicals
 
+#How many individual samples have EAR > 0.001
+unique_samples <- paste(ep_chemGT001$site,ep_chemGT001$date)
+length(unique(unique_samples)) #551 samples with EAR > 0.001
+
 #############################################################
 #How many chemicals are present for instances when EARSiteMix > 0.001
 ep_endpointGT001 <- filter(ep_joined, EARSiteChem > 0.001) %>%
@@ -73,7 +77,7 @@ ep_proportionGT.01 <-  filter(ep_joined, EARSiteChem > 0.001) %>%
   group_by(chnm) %>%
   summarize(num_sites = length(unique(site)))
 
-dim(ep_proportionGT.01)[1] #38 chemicals contribute
+dim(ep_proportionGT.01)[1] #30 chemicals contribute at least 5%
 table(ep_proportionGT.01$chnm)
 
 
