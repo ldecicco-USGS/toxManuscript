@@ -65,7 +65,7 @@ boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
 boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 
 relevance <- relevance %>%
-  filter(ID %in% priority_AOPs$ID) 
+  filter(ID %in% priority_AOPs$ID)
 
 boxData <- boxData %>%
   left_join(select(relevance, ID, Relevant), by="ID") %>%
@@ -95,8 +95,8 @@ chem_sum_AOP <- boxData_max %>%
             meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   ungroup() %>%
-  # filter(!is.na(ID)) %>%
-  mutate(#ID = as.factor(ID),
+  filter(!is.na(ID)) %>%
+  mutate(ID = as.factor(ID),
          endPoint = as.factor(endPoint_used)) 
 
 nSites <- boxData %>%
@@ -185,7 +185,8 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
 
 site_graph <- ggplot() +
   geom_text(data = nSites,
-            aes(x = ID, y="# Sites", label = as.character(sitehits)),
+            aes(x = ID, y="# Sites", 
+                label = as.character(sitehits)),
             vjust = 0.5, size = 4) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
