@@ -25,7 +25,7 @@ source(file = "MakeTitles.R")
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
 
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
@@ -235,4 +235,4 @@ write.csv(Num_sites_by_mixture,file="SI_table7 Num_sites_by_mixture_temp.csv",ro
 TableSI7 <- Num_sites_by_mixture[,c("nChems","numSites","chemVector","chnmVector","siteVector","STAIDs")]
 names(TableSI7) <- c("Number of Chemicals","Number of sites", "CAS#","Chemical Names","Site Short Names","USGS Station IDs")
 
-write.csv(TableSI7,file="Tables/SI_table7_Num_sites_by_mixture.csv",row.names = FALSE)
+write.csv(TableSI7,file="tables/SI_table7_Num_sites_by_mixture.csv",row.names = FALSE)
