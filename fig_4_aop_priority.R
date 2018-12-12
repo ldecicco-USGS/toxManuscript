@@ -87,14 +87,16 @@ boxData$Relevant <- factor(boxData$Relevant, levels = c("Yes","No","Maybe"))
 #   pull(endPoint_used)
 
 chem_sum_AOP <- boxData_max %>%
+  ungroup() %>%
+  mutate(ID = factor(ID, levels = levels(boxData$ID))) %>%
   filter(endPoint_used %in% priority_endpoints) %>%
   group_by(ID, endPoint_used) %>%
   summarize(maxEAR = max(maxEAR, na.rm = TRUE),
             meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   ungroup() %>%
-  filter(!is.na(ID)) %>%
-  mutate(ID = as.factor(ID),
+  # filter(!is.na(ID)) %>%
+  mutate(#ID = as.factor(ID),
          endPoint = as.factor(endPoint_used)) 
 
 nSites <- boxData %>%
@@ -139,7 +141,7 @@ boxplot_top <- ggplot(data = boxData) +
 aop_ep <- ggplot(data = chem_sum_AOP) +
   geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
   theme_bw() +
-  scale_x_discrete(position="top") +
+  scale_x_discrete(position="top", drop = FALSE) +
   ylab("ToxCast Assay Name") +
   labs(fill="Mean EAR") +
   theme(axis.title.x = element_blank(),
@@ -150,7 +152,7 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
         legend.title = element_text(size = 17),
         legend.background = element_blank(),
         legend.box.background = element_rect(colour = "black")) +
-  scale_y_discrete(drop=TRUE) +
+  scale_y_discrete(drop=FALSE) +
   scale_fill_gradient( guide = "legend",
                        trans = 'log',limits = c(1e-4,1),
                        low = "white", high = "steelblue",
@@ -224,81 +226,81 @@ dev.off()
 
 ######################################################################################
 #Code for exploring data to be included in manuscript text
-relevantEARs <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
-range(relevantEARs$maxMaxEAR) # Get max EAR
-
-# Determine which chemicals for each AOP, range of EARs, and how many sites
-
-  #Start with chems identified from Fig1: present at 10 or more sites with EARmaxChem > 10-3 at 5 or more sites
-priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = TRUE)
-
-AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
-  left_join(relevance,by=("ID")) %>%
-  filter(maxEAR > 0) %>%
-  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE))%>%
-  group_by(ID,chnm,CAS) %>%
-  summarize(nSites = n_distinct(site),
-            maxEAR = max(maxEAR),
-            maxEndpoint = endPoint[which.max(maxEAR)]) %>%
-  filter(maxEAR > 0.001) %>%
-  arrange(ID,nSites)
-
-unique(AOPs_by_priority_chem$chnm)
-priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
-
-
-# Are AOPs 26, 52, and 53 significantly diff than other relevant AOPs?
-relevantData <- boxData %>% 
-#  filter(maxMaxEAR > 0) %>%
-  filter(!Relevant == "No")
-  
-large <- pull(relevantData[relevantData$ID %in% c(29,52,53),],maxMaxEAR)
-small <- pull(relevantData[!relevantData$ID %in% c(29,52,53),],maxMaxEAR)
-plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
-points(x=percent_rank(small),small,col="orange")
-
-boxplot(large, log="y")
-wilcox.test(large,small)
-t.test(log(large+10e-9),log(small+10^-9))
-t.test(large,small)
-
-large <- pull(relevantData[relevantData$ID %in% c(29),],maxMaxEAR)
-small <- pull(relevantData[relevantData$ID %in% c(63),],maxMaxEAR)
-plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
-points(x=percent_rank(small),small,col="orange")
-
-wilcox.test(large,small)
-t.test(large,small)
-
-AOPsInData <- as.character(unique(relevantData$ID))
-relevant_AOP_in_data_info <-relevance %>%
-  filter(ID %in% AOPsInData) %>%
-  group_by(ID,Relevant,Rationale) %>%
-  summarize(endpoints = paste(endPoint,collapse="; ")) %>%
-  inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
-  group_by(ID,Relevant,Rationale,endpoints) #%>%
-    
-    AOP_crosswalk$Component.Endpoint.Name <- as.factor(AOP_crosswalk$Component.Endpoint.Name )
-  relevant_AOP_in_data_info <-relevance %>%
-    filter(ID %in% AOPsInData) %>%
-    group_by(ID,Relevant,Rationale) %>%
-    summarize(endpoints = paste(endPoint,collapse="; ")) %>%
-    inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
-    mutate(Component.Endpoint.Name =as.factor(Component.Endpoint.Name)) %>%
-    group_by(ID,Relevant,Rationale,endpoints) %>%
-    summarize(endpointID_crosswalk = paste(Assay.Endpoint.ID,collapse = ";"),
- #             endpoints_cwalk = paste(unique(Component.Endpoint.Name),collpse = "; "))
-            AOP.Title = paste(unique(AOP.Title),collapse = "; "),
-            KE. = paste(unique(KE.),collapse = "; "),
-            Key.Event.Name = paste(unique(Key.Event.Name),collapse = "; "),
-            KeyEvent.Type = paste(unique(KeyEvent.Type),collapse = "; "))
-            
-  write.csv(relevant_AOP_in_data_info,file="relevant_AOPs_in_study.csv",row.names = FALSE)
-
-length(unique(relevant_AOP_in_data_info$ID))
-
-relevantAOPInfo <- relevance[relevance$ID %in% as.character(unique(relevantData$ID)),] %>%
-  inner_join(AOP_crosswalk,by=c("ID"="AOP.."))
+# relevantEARs <- filter(boxData, grepl("yes|maybe",Relevant,ignore.case = TRUE)) 
+# range(relevantEARs$maxMaxEAR) # Get max EAR
+# 
+# # Determine which chemicals for each AOP, range of EARs, and how many sites
+# 
+#   #Start with chems identified from Fig1: present at 10 or more sites with EARmaxChem > 10-3 at 5 or more sites
+# priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = TRUE)
+# 
+# AOPs_by_priority_chem <- filter(boxData_max,CAS %in% priority_chems$CAS) %>%
+#   left_join(relevance,by=("ID")) %>%
+#   filter(maxEAR > 0) %>%
+#   filter(grepl("yes|maybe",Relevant,ignore.case = TRUE))%>%
+#   group_by(ID,chnm,CAS) %>%
+#   summarize(nSites = n_distinct(site),
+#             maxEAR = max(maxEAR),
+#             maxEndpoint = endPoint[which.max(maxEAR)]) %>%
+#   filter(maxEAR > 0.001) %>%
+#   arrange(ID,nSites)
+# 
+# unique(AOPs_by_priority_chem$chnm)
+# priority_chems[which(!priority_chems$CAS %in% AOPs_by_priority_chem$CAS),]
+# 
+# 
+# # Are AOPs 26, 52, and 53 significantly diff than other relevant AOPs?
+# relevantData <- boxData %>% 
+# #  filter(maxMaxEAR > 0) %>%
+#   filter(!Relevant == "No")
+#   
+# large <- pull(relevantData[relevantData$ID %in% c(29,52,53),],maxMaxEAR)
+# small <- pull(relevantData[!relevantData$ID %in% c(29,52,53),],maxMaxEAR)
+# plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
+# points(x=percent_rank(small),small,col="orange")
+# 
+# boxplot(large, log="y")
+# wilcox.test(large,small)
+# t.test(log(large+10e-9),log(small+10^-9))
+# t.test(large,small)
+# 
+# large <- pull(relevantData[relevantData$ID %in% c(29),],maxMaxEAR)
+# small <- pull(relevantData[relevantData$ID %in% c(63),],maxMaxEAR)
+# plot(x=percent_rank(large), large,pch=20,col="blue",log="y")
+# points(x=percent_rank(small),small,col="orange")
+# 
+# wilcox.test(large,small)
+# t.test(large,small)
+# 
+# AOPsInData <- as.character(unique(relevantData$ID))
+# relevant_AOP_in_data_info <-relevance %>%
+#   filter(ID %in% AOPsInData) %>%
+#   group_by(ID,Relevant,Rationale) %>%
+#   summarize(endpoints = paste(endPoint,collapse="; ")) %>%
+#   inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
+#   group_by(ID,Relevant,Rationale,endpoints) #%>%
+#     
+#     AOP_crosswalk$Component.Endpoint.Name <- as.factor(AOP_crosswalk$Component.Endpoint.Name )
+#   relevant_AOP_in_data_info <-relevance %>%
+#     filter(ID %in% AOPsInData) %>%
+#     group_by(ID,Relevant,Rationale) %>%
+#     summarize(endpoints = paste(endPoint,collapse="; ")) %>%
+#     inner_join(AOP_crosswalk,by=c("ID"="AOP..")) %>%
+#     mutate(Component.Endpoint.Name =as.factor(Component.Endpoint.Name)) %>%
+#     group_by(ID,Relevant,Rationale,endpoints) %>%
+#     summarize(endpointID_crosswalk = paste(Assay.Endpoint.ID,collapse = ";"),
+#  #             endpoints_cwalk = paste(unique(Component.Endpoint.Name),collpse = "; "))
+#             AOP.Title = paste(unique(AOP.Title),collapse = "; "),
+#             KE. = paste(unique(KE.),collapse = "; "),
+#             Key.Event.Name = paste(unique(Key.Event.Name),collapse = "; "),
+#             KeyEvent.Type = paste(unique(KeyEvent.Type),collapse = "; "))
+#             
+#   write.csv(relevant_AOP_in_data_info,file="relevant_AOPs_in_study.csv",row.names = FALSE)
+# 
+# length(unique(relevant_AOP_in_data_info$ID))
+# 
+# relevantAOPInfo <- relevance[relevance$ID %in% as.character(unique(relevantData$ID)),] %>%
+#   inner_join(AOP_crosswalk,by=c("ID"="AOP.."))
 
 
 
