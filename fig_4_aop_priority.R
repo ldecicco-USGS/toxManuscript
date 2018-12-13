@@ -27,6 +27,8 @@ relevance <- relevance %>%
   rename(ID=AOP,
          endPoint = Endpoint.s.) 
 
+eps_with_ids <- unique(AOP$endPoint)
+
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
   summarize(EARsum = sum(EAR)) %>%
@@ -36,9 +38,10 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint) %>%
   summarize(numSites = n_distinct(site)) %>%
   arrange(desc(numSites)) %>%
-  filter(numSites >= siteThres)
+  filter(numSites >= siteThres) %>%
+  mutate(hasAOP = endPoint %in% eps_with_ids)
 
-priority_endpoints <- endpoints_sites_hits$endPoint
+priority_endpoints <- endpoints_sites_hits$endPoint[endpoints_sites_hits$hasAOP]
 
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
@@ -61,56 +64,46 @@ priority_AOPs <- boxData %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
-boxData <- filter(boxData, ID %in% priority_AOPs$ID)
+# boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
+# boxData <- filter(boxData, ID %in% priority_AOPs$ID)
 
 relevance <- relevance %>%
   filter(ID %in% priority_AOPs$ID)
 
 boxData <- boxData %>%
   left_join(select(relevance, ID, Relevant), by="ID") %>%
-  mutate(ID = factor(ID)) 
+  mutate(ID = factor(ID)) %>%
+  filter(ID %in% priority_AOPs$ID)
 
 boxData$Relevant <- factor(boxData$Relevant, levels = c("Yes","No","Maybe"))
 
-# fractions <- boxData_tots %>%
-#   left_join(boxData_max, by=c("ID","site","date")) %>%
-#   right_join(boxData, by=c("ID","site","date"="date_picked")) %>%
-#   group_by(ID, site, date, chnm, endPoint_used) %>%
-#   summarize(fraction = maxEAR/total) %>%
-#   ungroup()
-# 
-# endpoints_that_contribute <- fractions %>%
-#   filter(fraction > ep_percent_thres) %>%
-#   select(endPoint_used) %>%
-#   distinct() %>%
-#   pull(endPoint_used)
 
 chem_sum_AOP <- boxData_max %>%
   ungroup() %>%
-  mutate(ID = factor(ID, levels = levels(boxData$ID))) %>%
-  filter(endPoint_used %in% priority_endpoints) %>%
+  filter(ID %in% priority_AOPs$ID) %>%
   group_by(ID, endPoint_used) %>%
   summarize(maxEAR = max(maxEAR, na.rm = TRUE),
             meanEAR = mean(maxEAR, na.rm = TRUE),
             medianEAR = median(maxEAR, na.rm = TRUE)) %>%
   ungroup() %>%
   filter(!is.na(ID)) %>%
-  mutate(ID = as.factor(ID),
-         endPoint = as.factor(endPoint_used)) 
+  mutate(ID = as.factor(ID)) %>%
+  filter(endPoint_used %in% priority_endpoints) %>%
+  rename(endPoint = endPoint_used)
 
 nSites <- boxData %>%
+  filter(ID %in% priority_AOPs$ID) %>%
   select(ID, maxMaxEAR,site) %>%
   distinct() %>%
   group_by(ID) %>%
-  summarize(sitehits = sum(maxMaxEAR > ear_thresh)) %>%
-  ungroup() %>%
-  filter(!is.na(ID),
-         ID %in% priority_AOPs$ID) %>%
-  mutate(ID = as.factor(ID))
+  summarize(sitehits = sum(maxMaxEAR > ear_thresh)) 
+  # ungroup() %>%
+  # filter(!is.na(ID),
+  #        ID %in% priority_AOPs$ID) %>%
+  # mutate(ID = as.factor(ID))
 
-chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
-chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
+# chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
+# chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 
@@ -199,8 +192,9 @@ site_graph <- ggplot() +
 
 aop_label_graph <- ggplot() +
   geom_text(data = nSites,
-            aes(x = ID, y="AOP ID", label = as.character(ID)),
-            vjust = 0.5, size = 5, angle = 90) +
+            aes(x = ID, y="AOP ID", 
+                label = as.character(ID)),
+            vjust = 0.5, size = 4, angle = 90) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
