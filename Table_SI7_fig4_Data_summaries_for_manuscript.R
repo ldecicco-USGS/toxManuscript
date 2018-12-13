@@ -10,6 +10,7 @@ library(grid)
 ####################################
 source(file = "data_setup.R")
 source(file = "MakeTitles.R")
+source(file = "combo_graph_function.R")
 
 # Choosing priority chemicals
 # ---------------------------
@@ -58,6 +59,7 @@ boxData_pct <- boxData_max %>%
 pct_check <- boxData_pct %>%
   group_by(ID,sample) %>%
   summarise(pct_sum = sum(EAR_percent))
+
 range(pct_check$pct_sum) # All good. pct_sum = 1.0
 
 #Look at percent range for benzophenone:
@@ -65,6 +67,7 @@ range(filter(boxData_pct, chnm == "Benzophenone")$EAR_percent) #result: max =1.4
 
 siteThresh <- 5
 pct_thresh <- 0.01
+
 filtered_chems <- boxData_pct %>%
   filter(EAR_percent > pct_thresh) %>%
   group_by(chnm,CAS) %>%
@@ -111,12 +114,18 @@ boxplot(EAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
 # 10. Determine how many sites that 2-, 3-, and 4-chemical combinations occur at.
 # 11. Examine EARsumAOPs for resulting data
 
-
-priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
-AOP_priority_CAS[!AOP_priority_CAS %in% priority_chems$CAS]
-priority_chems[!priority_chems$CAS %in% AOP_priority_CAS,"chnm"]
-
+# Using the same code as in fig. 1:
 EAR_thresh <- 0.001
+
+gd <- graph_chem_data(chemicalSummary)
+priority_chems2 <- get_priority_chms(gd, EAR_thresh)
+priority_cas <- tox_chemicals %>%
+  filter(Substance_Name %in% priority_chems2) %>%
+  pull(Substance_CASRN)
+  
+# priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
+AOP_priority_CAS[!AOP_priority_CAS %in% priority_cas]
+# priority_chems[!priority_cas %in% AOP_priority_CAS,"chnm"]
 
 chemSummaryAOP <- boxData_max %>%
   group_by(ID, site, date) %>%
@@ -124,13 +133,12 @@ chemSummaryAOP <- boxData_max %>%
   filter(EARsum > EAR_thresh) %>%
   mutate(sample = paste(site,date))
 
-
 EAR_thresh_individual_chem <- 0.000001
+
 Chem_vectors_by_site <- chemicalSummary %>%
   mutate(sample = paste(site,date)) %>%
   filter(sample %in% chemSummaryAOP$sample)%>%
   filter(CAS %in% AOP_priority_CAS) %>% 
-  
   filter(EAR > EAR_thresh_individual_chem) %>%
   group_by(site,date) %>%
   summarize(chemVector = paste(sort(unique(CAS)),collapse = "|"))
@@ -214,7 +222,7 @@ names(siteList) <- tox_list[["chem_site"]]$SiteID
 siteColumn <- character()
 for(i in 1:dim(Num_sites_by_mixture)[1]){
   siteColumn <- c(siteColumn,
-                  paste(siteList[strsplit(Num_sites_by_mixture$STAIDs[i],"; ")[[1]]],collapse="|"))
+                  paste(siteList[strsplit(Num_sites_by_mixture$STAIDs[i],"\\|")[[1]]],collapse="|"))
 }
 Num_sites_by_mixture$siteVector <- siteColumn
 
@@ -225,7 +233,7 @@ names(chemList) <- tox_list[["chem_info"]]$CAS
 chemColumn <- character()
 for(i in 1:dim(Num_sites_by_mixture)[1]){
   chemColumn <- c(chemColumn,
-                  paste(chemList[strsplit(Num_sites_by_mixture$chemVector[i],"; ")[[1]]],collapse="|"))
+                  paste(chemList[strsplit(Num_sites_by_mixture$chemVector[i],"\\|")[[1]]],collapse="|"))
 }
 Num_sites_by_mixture$chnmVector <- chemColumn
 

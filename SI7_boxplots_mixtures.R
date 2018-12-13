@@ -4,8 +4,6 @@ library(tidyr)
 library(data.table)
 #########################################################################################
 
-source(file = "data_setup.R")
-source(file = "MakeTitles.R")
 source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
 
 #This script requires running Table_SI7_fig4_Data_summaries_for_manuscript.R and saving the
@@ -13,23 +11,6 @@ source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
 
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
-
-AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
-AOP <- AOP_crosswalk %>%
-  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
-  distinct()
-
-relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
-relevance$Relevant <- MakeTitles(relevance$Relevant)
-
-relevance <- relevance %>%
-  select(ID=AOP,Relevant,Rationale)
-
-
-AOP_relevance <- left_join(AOP,relevance,by="ID")
-
-
-Num_sites_by_mixture <- read.csv(file="SI_table7 Num_sites_by_mixture_temp.csv",stringsAsFactors = FALSE)
 
 chemSummData_max <- chemicalSummary %>%
   filter(EAR > 0) %>%
@@ -61,8 +42,8 @@ sub_Num_sites <- Num_sites_by_mixture %>%
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
-  nMixSites <- sub_Num_sites[j,"numSites"]
+  CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
+  nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
@@ -107,8 +88,8 @@ sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
-  nMixSites <- sub_Num_sites[j,"numSites"]
+  CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
+  nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
@@ -152,8 +133,8 @@ sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
-  CASnums <- strsplit(sub_Num_sites[j,"chemVector"],"|")[[1]]
-  nMixSites <- sub_Num_sites[j,"numSites"]
+  CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
+  nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%

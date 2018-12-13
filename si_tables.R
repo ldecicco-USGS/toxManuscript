@@ -38,7 +38,7 @@ rm(list=ls())
 #########################################
 # SI 5:
 #
-AOP_crosswalk <- fread("AOP_crosswalk.csv")
+AOP_crosswalk <- fread("AOP_crosswalk_Dec_2018.csv")
 
 write.csv(AOP_crosswalk, file = "tables/SI5.csv", row.names = FALSE, na = "")
 rm(list=ls())
@@ -49,7 +49,7 @@ relevance <- fread("AOP_relevance.csv") %>%
   select(-`Endpoint(s)`) %>%
   distinct
 
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
@@ -97,7 +97,7 @@ rm(list=ls())
 #########################################
 ## SI: 8:
 source(file = "data_setup.R")
-AOP_crosswalk <- fread("AOP_crosswalk.csv")
+AOP_crosswalk <- fread("AOP_crosswalk_Dec_2018.csv")
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 ear_thresh <- 0.001
 siteThres <- 10
