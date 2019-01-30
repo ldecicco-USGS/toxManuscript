@@ -23,6 +23,8 @@ source("fig4_Data_summaries_for_manuscript.R")
 source("SI7_boxplots_mixtures.R", print.eval=TRUE)
 
 #working_dir <- getwd()
+library(staplr)
+
 output_file <- "SI_figs.pdf"
 plots_dir <- file.path(working_dir,"plots")
 #setwd(plots_dir)
