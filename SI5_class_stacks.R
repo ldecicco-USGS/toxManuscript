@@ -22,14 +22,14 @@ for(class in unique(chemicalSummary$Class)){
     cleaned_class <- "PAHs"
   }
   
-  fancyTitle <- bquote(atop(bold("Figure SI-5"*.(LETTERS[i])*":") ~
+  fancyTitle <- bquote(atop(bold("Figure SI-5 "*.(LETTERS[i])*":") ~
 "Exposure-activity ratio values by site for chemical class" ~ .(cleaned_class) ~ "in Great Lakes tributaries, 2010-2013."))
   
   splot <- plot_tox_stacks_manuscript(sub_class, 
                                chem_site, 
                                category = "Chemical",
                                caption = fancyTitle)
-  ggsave(splot, filename = paste0("plots/SI-5-",i,".pdf"), width = 11, height = 5)
+  ggsave(splot, filename = paste0("plots/SI5",letters[i],".pdf"), width = 11, height = 5)
   i <- i+1
 }
 
