@@ -23,7 +23,7 @@ chemSummData_max <- chemicalSummary %>%
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(2,3),c(1,3))
+plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(1,3))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
