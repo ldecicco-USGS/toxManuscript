@@ -22,3 +22,9 @@ rm(list=ls())
 source("fig4_Data_summaries_for_manuscript.R")
 source("SI7_boxplots_mixtures.R", print.eval=TRUE)
 
+#working_dir <- getwd()
+output_file <- "SI_figs.pdf"
+plots_dir <- file.path(working_dir,"plots")
+#setwd(plots_dir)
+staple_pdf(input_directory = plots_dir, input_files = NULL, output_file)
+#setwd(working_dir)
