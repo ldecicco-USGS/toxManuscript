@@ -19,7 +19,7 @@ source("SI6_AOP_heat.R", print.eval=TRUE)
 rm(list=ls())
 
 # Fig SI 7:
-source("fig4_Data_summaries_for_manuscript.R")
+source("Table_SI7_fig4_Data_summaries_for_manuscript.R")
 source("SI7_boxplots_mixtures.R", print.eval=TRUE)
 
 #working_dir <- getwd()

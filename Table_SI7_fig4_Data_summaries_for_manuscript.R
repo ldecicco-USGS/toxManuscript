@@ -117,15 +117,15 @@ boxplot(EAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
 # Using the same code as in fig. 1:
 EAR_thresh <- 0.001
 
-gd <- graph_chem_data(chemicalSummary)
-priority_chems2 <- get_priority_chms(gd, EAR_thresh)
-priority_cas <- tox_chemicals %>%
-  filter(Substance_Name %in% priority_chems2) %>%
-  pull(Substance_CASRN)
-  
-# priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
-AOP_priority_CAS[!AOP_priority_CAS %in% priority_cas]
-# priority_chems[!priority_cas %in% AOP_priority_CAS,"chnm"]
+# gd <- graph_chem_data(chemicalSummary)
+# priority_chems2 <- get_priority_chms(gd, EAR_thresh)
+# priority_cas <- tox_chemicals %>%
+#   filter(Substance_Name %in% priority_chems2) %>%
+#   pull(Substance_CASRN)
+#   
+# # priority_chems <- read.csv("priority_chems.csv",stringsAsFactors = FALSE) #chems resulting from fig 1 analysis
+# AOP_priority_CAS[!AOP_priority_CAS %in% priority_cas]
+# # priority_chems[!priority_cas %in% AOP_priority_CAS,"chnm"]
 
 chemSummaryAOP <- boxData_max %>%
   group_by(ID, site, date) %>%
@@ -153,8 +153,8 @@ for(i in 1:length(AOP_priority_CAS)) {
   Num_sites_by_vector$nChems <- 1
   Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
   allSTAIDs1 <- unique(c(allSTAIDs1,STAIDs))
-  if(i==1) Num_sites_by_mixture <- Num_sites_by_vector
-  else Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+  if(i==1) {Num_sites_by_mixture <- Num_sites_by_vector
+  } else Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
   
   allSTAIDs2 <- character()
   for(j in i:length(AOP_priority_CAS)){
@@ -171,9 +171,10 @@ for(i in 1:length(AOP_priority_CAS)) {
       allSTAIDs2 <- unique(c(allSTAIDs2,STAIDs))
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
     }
+  
     
     allSTAIDs3 <- character()
-    for(k in i:length(AOP_priority_CAS)){
+    for(k in j:length(AOP_priority_CAS)){
       chem3 <- AOP_priority_CAS[k]
       if(all(!duplicated(AOP_priority_CAS[c(i,j,k)]))){
         chems3 <- paste0(sort(AOP_priority_CAS[c(i,j,k)]),collapse="|")
@@ -188,7 +189,7 @@ for(i in 1:length(AOP_priority_CAS)) {
         Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
       }
       allSTAIDs4 <- character()
-      for(l in i:length(AOP_priority_CAS)){
+      for(l in k:length(AOP_priority_CAS)){
         chem4 <- AOP_priority_CAS[l]
         if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l)]))){
           chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="|")
