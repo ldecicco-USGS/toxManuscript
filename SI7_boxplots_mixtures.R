@@ -27,7 +27,7 @@ plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(1,3))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
-title_text_cex <- 0.7
+title_text_cex <- 0.6
 
 y_label <- bquote(EAR[SiteAOP])
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
@@ -63,7 +63,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  title(paste(chnms, collapse = "\n"), line=-1.5, cex.main = title_text_cex)
+  title(paste(chnms, collapse = "\n"), line=-1.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
@@ -108,7 +108,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  title(paste(chnms, collapse = "\n"), line=-2.5, cex.main = title_text_cex)
+  title(paste(chnms, collapse = "\n"), line=-2.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
@@ -153,7 +153,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
           cex.axis=axis_text_cex,
           cex.main=title_text_cex,
           yaxt=yaxt)
-  title(paste(chnms, collapse = "\n"), line=-3, cex.main = title_text_cex)
+  title(paste(chnms, collapse = "\n"), line=-3, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
   
