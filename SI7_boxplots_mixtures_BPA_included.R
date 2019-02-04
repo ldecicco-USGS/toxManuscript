@@ -23,17 +23,17 @@ chemSummData_max <- chemicalSummary %>%
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(1,3))
+plot_dimensions <- list(c(0,0),c(2,2),c(3,2),c(1,2))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
-title_text_cex <- 0.6
+title_text_cex <- 0.7
 
 y_label <- bquote(EAR[SiteAOP])
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
-filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
+filenm <- "plots/BPA_mixtures/SI7_mixtureBoxplots_2_chems_BPA.pdf"
 pdf(filenm)
 
 sub_Num_sites <- Num_sites_by_mixture %>%
@@ -41,8 +41,11 @@ sub_Num_sites <- Num_sites_by_mixture %>%
 
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 
+k <- 0
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
+  if("80-05-7" %in% CASnums) {
+    k <- k+1
   nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
@@ -54,7 +57,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
     summarize(EARsum = sum(maxEAR))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-  yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  yaxt <- ifelse(k %in%  c(1,3),"s","n")
   
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
@@ -66,14 +69,6 @@ for(j in 1:dim(sub_Num_sites)[1]){
   title(paste(chnms, collapse = "\n"), line=-1.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
-  AOP_EAR_median_mixture <- subChemSummary %>%
-    group_by(ID)%>%
-    summarize(EAR_median = median(EARsum),
-              EAR_max = max(EARsum)) %>%
-    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
-    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
-  if(j==1){AOP_EAR_medians <- AOP_EAR_median_mixture
-  }else{AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   }
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
@@ -90,14 +85,17 @@ dev.off()
 
 ###################################
 i <- 3
-filenm <- "plots/SI7_mixtureBoxplots_B.pdf"
+filenm <- "plots/BPA_mixtures/SI7_mixtureBoxplots_3_chems_BPA.pdf"
 pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
+k <- 0
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
-  nMixSites <- sub_Num_sites$numSites[j]
+  if("80-05-7" %in% CASnums) {
+    k <- k + 1
+    nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
@@ -108,7 +106,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
     summarize(EARsum = sum(maxEAR))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-  yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  yaxt <- ifelse(k %in%  c(1,3,5),"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
           las=2,
@@ -118,14 +116,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
           yaxt=yaxt)
   title(paste(chnms, collapse = "\n"), line=-2.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
-  
-  AOP_EAR_median_mixture <- subChemSummary %>%
-    group_by(ID)%>%
-    summarize(EAR_median = median(EARsum),
-              EAR_max = max(EARsum)) %>%
-    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
-    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
-  AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
+  }
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
@@ -142,14 +133,15 @@ dev.off()
 
 ################################
 i <- 4
-filenm <- "plots/SI7_mixtureBoxplots_C.pdf"
+filenm <- "plots/BPA_mixtures/SI7_mixtureBoxplots_4_chems_BPA.pdf"
 pdf(filenm, height = 4)
 sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
-  nMixSites <- sub_Num_sites$numSites[j]
+  if("80-05-7" %in% CASnums) {
+    nMixSites <- sub_Num_sites$numSites[j]
   chnms <- unique(as.data.frame(ToxCast_ACC)[which(ToxCast_ACC$CAS %in% CASnums),"chnm"])
   
   subChemSummary <- chemSummData_max %>%
@@ -160,7 +152,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
     summarize(EARsum = sum(maxEAR))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-  yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  yaxt <- ifelse(j %in% 1,"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
           las=2,
@@ -171,13 +163,6 @@ for(j in 1:dim(sub_Num_sites)[1]){
   title(paste(chnms, collapse = "\n"), line=-3, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
-  AOP_EAR_median_mixture <- subChemSummary %>%
-    group_by(ID)%>%
-    summarize(EAR_median = median(EARsum),
-              EAR_max = max(EARsum)) %>%
-    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
-    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
-  AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
@@ -190,6 +175,5 @@ mtext(side = 1, cex = 0.5,adj = 0,line = 2,
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
                          "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
 
+}
 dev.off()
-
-write.csv(AOP_EAR_medians, "AOP_EAR_medians.csv",row.names = FALSE)
