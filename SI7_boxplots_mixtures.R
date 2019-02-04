@@ -66,7 +66,15 @@ for(j in 1:dim(sub_Num_sites)[1]){
   title(paste(chnms, collapse = "\n"), line=-1.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
-  
+  AOP_EAR_median_mixture <- subChemSummary %>%
+    group_by(ID)%>%
+    summarize(EAR_median = median(EARsum),
+              EAR_max = max(EARsum)) %>%
+    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
+    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
+  if(j==1){AOP_EAR_medians <- AOP_EAR_median_mixture
+  }else{AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
+  }
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 # mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
@@ -111,6 +119,13 @@ for(j in 1:dim(sub_Num_sites)[1]){
   title(paste(chnms, collapse = "\n"), line=-2.5, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
+  AOP_EAR_median_mixture <- subChemSummary %>%
+    group_by(ID)%>%
+    summarize(EAR_median = median(EARsum),
+              EAR_max = max(EARsum)) %>%
+    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
+    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
+  AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
@@ -156,6 +171,13 @@ for(j in 1:dim(sub_Num_sites)[1]){
   title(paste(chnms, collapse = "\n"), line=-3, cex.main = title_text_cex,adj=0.03)
   mtext(paste(nMixSites,"Sites"),side=3,line=0,cex=0.7)
   
+  AOP_EAR_median_mixture <- subChemSummary %>%
+    group_by(ID)%>%
+    summarize(EAR_median = median(EARsum),
+              EAR_max = max(EARsum)) %>%
+    mutate(CAS_mixture = sub_Num_sites$chemVector[j]) %>%
+    mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
+  AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   
 }
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
@@ -169,3 +191,5 @@ mtext(side = 1, cex = 0.5,adj = 0,line = 2,
                          "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
 
 dev.off()
+
+write.csv(AOP_EAR_medians, "AOP_EAR_medians.csv",row.names = FALSE)
