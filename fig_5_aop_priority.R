@@ -209,7 +209,7 @@ legend_box <- get_legend(boxplot_top +
                          theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-png("plots/Fig4_aop_cow.png", width = 1800, height = 1200, res = 142)
+png("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),

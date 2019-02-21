@@ -64,6 +64,6 @@ countPlot
 
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-png("plots/fig2_site_count.png", width = 1000, height = 800, res = 142)
+png("plots/fig3_site_count.png", width = 1000, height = 800, res = 142)
 print(countPlot)
 dev.off()

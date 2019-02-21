@@ -72,7 +72,7 @@ toxPlot_wq <- toxPlot_wq +
 # ggsave(toxPlot_wq, filename = "plots/fig1.png", width = 12, height = 12)
 
 dir.create("plots", showWarnings = FALSE)
-png("plots/fig1_no_clip.png", width = 1200, height = 1200, res = 142)
+png("plots/fig2_no_clip.png", width = 1200, height = 1200, res = 142)
 gb <- ggplot2::ggplot_build(toxPlot_wq)
 gt <- ggplot2::ggplot_gtable(gb)
 

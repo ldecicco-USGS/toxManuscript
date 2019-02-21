@@ -52,7 +52,7 @@ gt <- ggplot2::ggplot_gtable(gb)
 gt$layout$clip[gt$layout$name=="panel"] <- "off"
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-png("plots/fig3_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
+png("plots/fig4_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
 grid::grid.draw(gt)
 dev.off()
 
