@@ -17,7 +17,7 @@ ear_thresh <- 0.001
 siteThres <- 10
 # ep_percent_thres <- 0.5
 
-AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 AOP <- AOP_crosswalk %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
@@ -106,7 +106,7 @@ max_chem_contributions_per_sample <-
 # 3. Add AOPs by endpoint
 # 4. Count unique AOPs
 # Results: 44 unique endPoints
-# Results: 48 unique AOPs
+# Results: 50 unique AOPs
 
 endpoint_site_count_chemical <- endpoints_sites_hits %>%
   filter(EARChem>0.001) %>%
@@ -119,6 +119,13 @@ AOP_site_count_chemical <- left_join(endpoint_site_count_chemical,AOP,by = c("en
 length(unique(AOP_site_count_chemical$endPoint))
 length(unique(AOP_site_count_chemical$ID))
 
+# #without site filter
+# chemSumEARGTThresh <- chemicalSummary %>%
+#   filter(EAR >= 0.001)
+# 
+# unique(chemSumEARGTThresh$endPoint) #144 assays
+# unique(chemSumEARGTThresh$chnm) #23 chemicals
+
 
 # Chemical mixtures
 # 1. Filter to EAR > 10^-3 for EARSiteMix
@@ -126,7 +133,7 @@ length(unique(AOP_site_count_chemical$ID))
 # 3. Add AOPs by endpoint
 # 4. Count unique AOPs
 # Results: 46 unique endPoints
-# Results: 48 unique AOPs
+# Results: 50 unique AOPs
 
 endpoint_site_count_mixture <- endpoints_sites_hits2 %>%
   filter(EARSiteChem > 0.001) %>%
@@ -139,7 +146,23 @@ AOP_site_count_mixture <- left_join(endpoint_site_count_mixture,AOP,by = c("endP
 length(unique(AOP_site_count_mixture$endPoint))
 length(unique(AOP_site_count_mixture$ID))
 
-
+# #Without site filter
+# chemSumEARAssayGTThresh <- chemicalSummary %>%
+#   group_by(site,date,endPoint) %>%
+#   summarize(
+#     EARsum = sum(EAR),
+#     chems = paste(unique(chnm),collapse="SPLITME")) %>%
+#   filter(EARsum >= 0.001)
+# chemSumEARAssayGTThresh <- as.data.frame(chemSumEARAssayGTThresh)
+# 
+# mixtureChems <- character()
+# for(i in 1:dim(chemSumEARAssayGTThresh)[1]){
+#   IndAssayChems <- strsplit(chemSumEARAssayGTThresh[i,"chems"],split = "SPLITME")
+#   mixtureChems <- unique(c(mixtureChems,IndAssayChems[[1]]))
+# }
+#                          
+# mixtureChems #47 chemicals
+# unique(chemSumEARAssayGTThresh$endPoint) #146 Assays
 
 ## AOPs EAR comparisons to individual chemicals##
 # Determine max EAR per chemical per AOP per sample
@@ -160,7 +183,7 @@ AOPs_sites_hits <- AOPs_sites_hits_max_chm_by_endpoint %>%
 AOPs_site_hits2 <- left_join(AOPs_sites_hits_max_chm_by_endpoint,AOPs_sites_hits) %>%
   filter(EARSiteAOP > 0.001)
 
-test <-              #49 unique AOPS is consistent with previous counts
+test <-              #51 unique AOPS is consistent with previous counts
 AOPs_site_hits2 %>%
   group_by(ID) %>%
   summarize(NumSites = length(unique(site))) %>%
@@ -188,6 +211,13 @@ AOPs_site_hits2 %>%
 
 AOPs_chem_comparison$EARProportion <- AOPs_chem_comparison$EARChemMax/AOPs_chem_comparison$EARSiteAOP
 
+EARSiteAOPincrease <- (AOPs_chem_comparison$EARSiteAOP - AOPs_chem_comparison$EARChemMax)/AOPs_chem_comparison$EARSiteAOP
+
+summary(EARSiteAOPincrease)
+summary(AOPs_chem_comparison$EARProportion)
+
+summary(ep_joined$EARproportion) # 
+
 summary(AOPs_chem_comparison$EARChemMax)
 summary(AOPs_chem_comparison$EARSiteAOP)
 summary(AOPs_chem_comparison$EARProportion)  
@@ -207,4 +237,49 @@ ep_proportionGT.01 <-  filter(AOPs_site_hits2,EARSiteAOP > 0.001) %>%
 
 dim(ep_proportionGT.01)[1] #38 chemicals contribute
 table(ep_proportionGT.01$chnm)
+
+
+
+# What is the contribution of individual chemicals to EARSiteMix (summed by endpoint)
+
+# Determine max EAR per chemical per endpoint per sample
+endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,chnm,CAS,date) %>%
+  summarize(EARChem = max(EAR))
+
+# Determine summation of EARs per site per endpoint per sample
+endpoints_sites_hits2 <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,date) %>%
+  summarize(EARSiteChem = sum(EAR))
+
+# Compute percent contribution to EARs by endpoint for each chemical
+ep_joined <- left_join(endpoints_sites_hits,endpoints_sites_hits2)
+ep_joined$EARproportion <- ep_joined$EARChem/ep_joined$EARSiteChem
+range(ep_joined$EARproportion)
+summary(ep_joined$EARproportion)
+
+# What is the contribution of individual chemicals to EARAOPMix (summed by AOP)
+
+chemicalSummary_AOP <- left_join(chemicalSummary,AOP,by = c("endPoint","endPoint"))
+
+# Determine max EAR per chemical per endpoint per sample
+AOP_sites_hits <- filter(chemicalSummary_AOP,EAR > 0) %>%
+  group_by(ID,site,chnm,CAS,date) %>%
+  summarize(EARChem = max(EAR))
+
+# Determine summation of EARs per site per endpoint per sample
+AOP_sites_hits2 <- filter(chemicalSummary_AOP,EAR > 0) %>%
+  group_by(ID,site,date) %>%
+  summarize(EARAOPChem = sum(EAR))
+
+# Compute percent contribution to EARs by endpoint for each chemical
+AOP_joined <- left_join(AOP_sites_hits,AOP_sites_hits2)
+AOP_joined$EARproportion <- AOP_joined$EARChem/AOP_joined$EARAOPChem
+range(AOP_joined$EARproportion)
+summary(AOP_joined$EARproportion)
+
+unique(AOP_sites_hits[which(AOP_sites_hits$EARChem > 0.001),"chnm"])
+
+EARproportionGTpctThresh <- filter(AOP_joined,EARproportion>0.05)
+unique(EARproportionGTpctThresh[which(EARproportionGTpctThresh$EARAOPChem > 0.001),"chnm"])
 

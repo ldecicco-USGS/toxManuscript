@@ -73,7 +73,7 @@ sitesChemsPerEndoint <- left_join(endpoints_unique_chems,endpoints_unique_sites)
 # unique(endpoints_sites_hits$endPoint) #48 endpoints for threshold = 0.001 and siteThreshold = 10
 # 
 # # merge the priority endpoints with the endpoint crosswalk for transmittal to EPA for relevance evaluation
-# AOP_crosswalk <- read.csv("AOP_crosswalk.csv", stringsAsFactors = FALSE)
+# AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
 # AOP_OWC <-  left_join(AOP_crosswalk,endpoints_sites_hits,by=c("Component.Endpoint.Name"="endPoint")) %>%
 #   filter(!is.na(numSites))
 # unique(AOP_OWC$Assay.Endpoint.ID)
@@ -92,3 +92,21 @@ endpoints_per_AOP <- left_join(AOP,chemicalSummary,by="endPoint") %>%
   group_by(ID) %>%
   summarize(numEndpoints = n_distinct(endPoint))
 range(endpoints_per_AOP$numEndpoints)
+
+#########################################
+#How many sites with undefined endpoints
+chemicalSummary_AOP <- left_join(chemicalSummary,AOP,by = c("endPoint","endPoint"))
+
+# Determine max EAR per chemical per endpoint per sample
+AOP_sites_hits <- filter(chemicalSummary_AOP,EAR > 0) %>%
+  group_by(ID,site,chnm,CAS,date) %>%
+  summarize(EARChem = max(EAR))
+
+# Determine summation of EARs per site per endpoint per sample
+AOP_sites_hits2 <- filter(chemicalSummary_AOP,EAR > 0) %>%
+  group_by(ID,site,date) %>%
+  summarize(EARAOPChem = sum(EAR))
+
+no_AOPs <- AOP_sites_hits2 %>%
+  filter(is.na(ID)) 
+unique(no_AOPs$site) #49 sites
