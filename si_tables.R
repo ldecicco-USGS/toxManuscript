@@ -95,7 +95,7 @@ fwrite(y, file = "tables/SI6.csv", na = "")
 rm(list=ls())
 
 #########################################
-## SI: 8:
+## SI: 9:
 source(file = "data_setup.R")
 AOP_crosswalk <- fread("AOP_crosswalk_Dec_2018.csv")
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
@@ -137,11 +137,12 @@ chem_sum_wide <- chem_sum_wide %>%
   distinct() %>%
   arrange(AOP_Class, AOP)
 
-write.csv(chem_sum_wide, file = "tables/SI8_counts.csv", row.names = FALSE, na = "")
+write.csv(chem_sum_wide, file = "tables/SI9_counts.csv", row.names = FALSE, na = "")
 rm(list=ls())
 
 #########################################
-# New SI 7:
+# New SI 8:
+source(file = "Table_SI8_fig4_Data_summaries_for_manuscript.R")
 #
 # source(file = "data_setup.R")
 # AOP_crosswalk <- fread("AOP_crosswalk.csv")
@@ -176,5 +177,5 @@ rm(list=ls())
 #             chemicals = list(unique(as.character(chnm[sumEAR > ear_thresh])))) %>%
 #   arrange(AOP_Class, AOP)
 # 
-# fwrite(chemicalSummary_mixtures, file ="tables/SI7.csv")
+# fwrite(chemicalSummary_mixtures, file ="tables/SI8.csv")
 # rm(list=ls())
