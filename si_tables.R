@@ -13,11 +13,23 @@ library(data.table)
 #########################################
 # SI 3:
 # 
+file_name <- "OWC_data_fromSup.xlsx"
+full_path <- file.path(file_name)
+
+tox_list <- create_toxEval(full_path)
+ACClong <- get_ACC(tox_list$chem_info$CAS)
+ACClong <- remove_flags(ACClong)
+
+cleaned_ep <- clean_endPoint_info(end_point_info)
+filtered_ep <- filter_groups(cleaned_ep)
+
 endPointInfo <- clean_endPoint_info(end_point_info)
 
-si_3_endpoints <- select(endPointInfo, 
-                         `ToxCast Endpoint`=assay_component_endpoint_name, 
-                         `Assay Source`=assay_source_long_name) %>%
+si_3_endpoints <- select(filtered_ep, 
+                         `ToxCast Endpoint` = endPoint) %>%
+  left_join(select(endPointInfo, 
+                   `ToxCast Endpoint`=assay_component_endpoint_name, 
+                   `Assay Source`=assay_source_long_name),by = "ToxCast Endpoint") %>%
   distinct() 
 
 # si_3_endpoints <- si_3_endpoints %>%
