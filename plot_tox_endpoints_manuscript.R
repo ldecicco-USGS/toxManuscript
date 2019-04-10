@@ -135,7 +135,7 @@ plot_tox_endpoints_manuscript <- function(chemicalSummary,
   graphData$endPoint <- factor(graphData$endPoint, levels = orderedLevelsEP)
   
   stackedPlot <- ggplot(graphData)+
-    scale_y_log10(expression(EAR[mixture]),labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
+    scale_y_log10(expression(EAR[SiteMixture]),labels=toxEval:::fancyNumbers,breaks=pretty_logs_new) +
     theme_minimal() +
     xlab("ToxCast Assay Name") +
     theme(axis.text.y = element_text(vjust = .25,hjust=1)) +
