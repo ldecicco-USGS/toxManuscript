@@ -23,13 +23,25 @@ chemSummData_max <- chemicalSummary %>%
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(1,3))
+plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(2,3))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
 title_text_cex <- 0.6
 
 y_label <- bquote(EAR[SiteAOP])
+
+# Add chemical names into ToxCast_ACC df
+library(toxEval)
+ToxCast_ACC <- ToxCast_ACC 
+tox_chemicals <- tox_chemicals
+
+ToxCast_ACC <- dplyr::left_join(ToxCast_ACC,
+                                dplyr::select(tox_chemicals,
+                                              CAS = Substance_CASRN,
+                                              chnm = Substance_Name),
+                                by="CAS")
+
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
@@ -143,7 +155,7 @@ dev.off()
 ################################
 i <- 4
 filenm <- "plots/SI7_mixtureBoxplots_C.pdf"
-pdf(filenm, height = 4)
+pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
   filter(nChems == i,numSites>=4)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)

@@ -155,7 +155,7 @@ for(i in 1:length(AOP_priority_CAS)) {
   allSTAIDs1 <- unique(c(allSTAIDs1,STAIDs))
   if(i==1) {Num_sites_by_mixture <- Num_sites_by_vector
   } else Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-  
+
   allSTAIDs2 <- character()
   for(j in i:length(AOP_priority_CAS)){
     chem2 <- AOP_priority_CAS[j]
@@ -171,8 +171,8 @@ for(i in 1:length(AOP_priority_CAS)) {
       allSTAIDs2 <- unique(c(allSTAIDs2,STAIDs))
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
     }
-  
-    
+
+
     allSTAIDs3 <- character()
     for(k in j:length(AOP_priority_CAS)){
       chem3 <- AOP_priority_CAS[k]
@@ -188,24 +188,40 @@ for(i in 1:length(AOP_priority_CAS)) {
         allSTAIDs3 <- unique(c(allSTAIDs3,STAIDs))
         Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
       }
-      allSTAIDs4 <- character()
-      for(l in k:length(AOP_priority_CAS)){
-        chem4 <- AOP_priority_CAS[l]
-        if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l)]))){
-          chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="|")
-          sites_by_vector <- filter(sites_by_vector,grepl(chem4,chemVector)) %>%
-            filter(site %in% allSTAIDs3)
-          STAIDs <- unique(sites_by_vector$site)
-          Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
-          Num_sites_by_vector$chemVector <- chems4
-          Num_sites_by_vector$nChems <- 4
-          Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
-          allSTAIDs4 <- unique(c(allSTAIDs4,STAIDs))
-          Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-        }
-      }
-    }
-  }
+  #     # allSTAIDs4 <- character()
+  #     # for(l in k:length(AOP_priority_CAS)){
+  #     #   chem4 <- AOP_priority_CAS[l]
+  #     #   if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l)]))){
+  #     #     chems4 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l)]),collapse="|")
+  #     #     sites_by_vector <- filter(sites_by_vector,grepl(chem4,chemVector)) %>%
+  #     #       filter(site %in% allSTAIDs3)
+  #     #     STAIDs <- unique(sites_by_vector$site)
+  #     #     Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
+  #     #     Num_sites_by_vector$chemVector <- chems4
+  #     #     Num_sites_by_vector$nChems <- 4
+  #     #     Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
+  #     #     allSTAIDs4 <- unique(c(allSTAIDs4,STAIDs))
+  #     #     Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+  #     #   }
+  #     #   allSTAIDs5 <- character()
+  #     #   for(m in l:length(AOP_priority_CAS)){
+  #     #     chem5 <- AOP_priority_CAS[m]
+  #     #     if(all(!duplicated(AOP_priority_CAS[c(i,j,k,l,m)]))){
+  #     #       chems5 <- paste0(sort(AOP_priority_CAS[c(i,j,k,l,m)]),collapse="|")
+  #     #       sites_by_vector <- filter(sites_by_vector,grepl(chem5,chemVector)) %>%
+  #     #         filter(site %in% allSTAIDs4)
+  #     #       STAIDs <- unique(sites_by_vector$site)
+  #     #       Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
+  #     #       Num_sites_by_vector$chemVector <- chems5
+  #     #       Num_sites_by_vector$nChems <- 5
+  #     #       Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
+  #     #       allSTAIDs5 <- unique(c(allSTAIDs5,STAIDs))
+  #     #       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+  #     #     }
+  #     #   }
+  #     # }
+     }
+   }
 }
 
 
