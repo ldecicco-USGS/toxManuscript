@@ -13,11 +13,23 @@ library(data.table)
 #########################################
 # SI 3:
 # 
+file_name <- "OWC_data_fromSup.xlsx"
+full_path <- file.path(file_name)
+
+tox_list <- create_toxEval(full_path)
+ACClong <- get_ACC(tox_list$chem_info$CAS)
+ACClong <- remove_flags(ACClong)
+
+cleaned_ep <- clean_endPoint_info(end_point_info)
+filtered_ep <- filter_groups(cleaned_ep)
+
 endPointInfo <- clean_endPoint_info(end_point_info)
 
-si_3_endpoints <- select(endPointInfo, 
-                         `ToxCast Endpoint`=assay_component_endpoint_name, 
-                         `Assay Source`=assay_source_long_name) %>%
+si_3_endpoints <- select(filtered_ep, 
+                         `ToxCast Endpoint` = endPoint) %>%
+  left_join(select(endPointInfo, 
+                   `ToxCast Endpoint`=assay_component_endpoint_name, 
+                   `Assay Source`=assay_source_long_name),by = "ToxCast Endpoint") %>%
   distinct() 
 
 # si_3_endpoints <- si_3_endpoints %>%
@@ -76,7 +88,7 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
 priority_endpoints <- endpoints_sites_hits$endPoint
 
 x <- full_join(relevance, select(AOP, AOP=ID, `Tox Cast Endpoints` = endPoint), by="AOP")
-x <- full_join(x, select(AOP_info, `Abbreviated AOP description` = X__1, AOP), by="AOP")
+x <- full_join(x, select(AOP_info, `Abbreviated AOP description` = `...5`, AOP), by="AOP")
 
 x <- x[,c("AOP","Relevant","Rationale","Abbreviated AOP description","Tox Cast Endpoints")]
 
@@ -95,7 +107,7 @@ fwrite(y, file = "tables/SI6.csv", na = "")
 rm(list=ls())
 
 #########################################
-## SI: 8:
+## SI: 9:
 source(file = "data_setup.R")
 AOP_crosswalk <- fread("AOP_crosswalk_Dec_2018.csv")
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
@@ -137,11 +149,12 @@ chem_sum_wide <- chem_sum_wide %>%
   distinct() %>%
   arrange(AOP_Class, AOP)
 
-write.csv(chem_sum_wide, file = "tables/SI8_counts.csv", row.names = FALSE, na = "")
+write.csv(chem_sum_wide, file = "tables/SI9_counts.csv", row.names = FALSE, na = "")
 rm(list=ls())
 
 #########################################
-# New SI 7:
+# New SI 8:
+source(file = "Table_SI8_fig4_Data_summaries_for_manuscript.R")
 #
 # source(file = "data_setup.R")
 # AOP_crosswalk <- fread("AOP_crosswalk.csv")
@@ -176,5 +189,5 @@ rm(list=ls())
 #             chemicals = list(unique(as.character(chnm[sumEAR > ear_thresh])))) %>%
 #   arrange(AOP_Class, AOP)
 # 
-# fwrite(chemicalSummary_mixtures, file ="tables/SI7.csv")
+# fwrite(chemicalSummary_mixtures, file ="tables/SI8.csv")
 # rm(list=ls())

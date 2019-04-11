@@ -18,7 +18,7 @@ source(file = "combo_graph_function.R")
 # guide_side is the title of the side-by-side labels
 # or...the column headers
 graphData_tox <- graph_chem_data(chemicalSummary)
-graphData_tox$guide_side <- "atop(ToxCast,Maximum~EAR[Chem]~per~Site)"
+graphData_tox$guide_side <- "atop(ToxCast,Maximum~EAR[SiteChem])"
 
 graphData_wq <- graph_chem_data(chemicalSummary_wqp, sum_logic = FALSE)
 graphData_wq$guide_side <- "atop(Traditional,Maximum~Toxicity~Quotient~per~Site)"
@@ -72,7 +72,7 @@ toxPlot_wq <- toxPlot_wq +
 # ggsave(toxPlot_wq, filename = "plots/fig1.png", width = 12, height = 12)
 
 dir.create("plots", showWarnings = FALSE)
-png("plots/fig1_no_clip.png", width = 1200, height = 1200, res = 142)
+png("plots/fig2_no_clip.png", width = 1200, height = 1200, res = 142)
 gb <- ggplot2::ggplot_build(toxPlot_wq)
 gt <- ggplot2::ggplot_gtable(gb)
 

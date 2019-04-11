@@ -1,16 +1,16 @@
 # Create all the figures....
 
-# Fig 1:
-source("fig1_combo_graph.R")
-rm(list=ls())
 # Fig 2:
-source("fig_2_site_counts.R")
+source("fig_2_combo_graph.R")
 rm(list=ls())
 # Fig 3:
-source("fig_3_endpoint_boxplots.R")
+source("fig_3_site_counts.R")
 rm(list=ls())
 # Fig 4:
-source("fig_4_aop_priority.R", print.eval=TRUE)
+source("fig_4_endpoint_boxplots.R")
+rm(list=ls())
+# Fig 5:
+source("fig_5_aop_priority.R", print.eval=TRUE)
 rm(list=ls())
 
 
