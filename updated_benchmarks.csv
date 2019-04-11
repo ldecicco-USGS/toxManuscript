@@ -1,458 +1,466 @@
-"CAS","Chemical","endPoint","Value","groupCol"
-"121-00-6","3-tert-Butyl-4-hydroxyanisole (BHA)","AqT_EPA_acute","NA","Acute"
-"136-85-6","5-Methyl-1H-benzotriazole","AqT_EPA_acute","NA","Acute"
-"80-05-7","Bisphenol A","AqT_EPA_acute","NA","Acute"
-"84-65-1","9,10-Anthraquinone","AqT_EPA_acute","NA","Acute"
-"5436-43-1","2,2',4,4'-Tetrabromodiphenylether (PBDE 47)","AqT_EPA_acute","NA","Acute"
-"126-73-8","Tributyl phosphate","AqT_EPA_acute","NA","Acute"
-"78-51-3","Tris(2-butoxyethyl) phosphate","AqT_EPA_acute","NA","Acute"
-"13674-87-8","Tris(dichloroisopropyl) phosphate","AqT_EPA_acute","NA","Acute"
-"120-12-7","Anthracene","AqT_EPA_acute","86.1","Acute"
-"50-32-8","Benzo(a)pyrene","AqT_EPA_acute","3.98","Acute"
-"206-44-0","Fluoranthene","AqT_EPA_acute","29.6","Acute"
-"91-20-3","Naphthalene","AqT_EPA_acute","803","Acute"
-"85-01-8","Phenanthrene","AqT_EPA_acute","79.7","Acute"
-"129-00-0","Pyrene","AqT_EPA_acute","42","Acute"
-"84-66-2","Diethyl phthalate","AqT_EPA_acute","NA","Acute"
-"115-86-6","Triphenyl phosphate","AqT_EPA_acute","NA","Acute"
-"115-96-8","Tris(2-chloroethyl) phosphate","AqT_EPA_acute","NA","Acute"
-"90-12-0","1-Methylnaphthalene","AqT_EPA_acute","NA","Acute"
-"581-42-0","2,6-Dimethylnaphthalene","AqT_EPA_acute","NA","Acute"
-"91-57-6","2-Methylnaphthalene","AqT_EPA_acute","NA","Acute"
-"98-82-8","Isopropylbenzene (cumene)","AqT_EPA_acute","2140","Acute"
-"78-59-1","Isophorone","AqT_EPA_acute","NA","Acute"
-"127-18-4","Tetrachloroethene (PERC)","AqT_EPA_acute","NA","Acute"
-"1912-24-9","Atrazine","AqT_EPA_acute","360","Acute"
-"314-40-9","Bromacil","AqT_EPA_acute","NA","Acute"
-"102-36-3","3,4-Dichlorophenyl isocyanate","AqT_EPA_acute","NA","Acute"
-"57837-19-1","Metalaxyl","AqT_EPA_acute","14000","Acute"
-"51218-45-2","Metolachlor","AqT_EPA_acute","NA","Acute"
-"87-86-5","Pentachlorophenol","AqT_EPA_acute","19","Acute"
-"1610-18-0","Prometon","AqT_EPA_acute","98","Acute"
-"63-25-2","Carbaryl","AqT_EPA_acute","0.85","Acute"
-"86-74-8","Carbazole","AqT_EPA_acute","NA","Acute"
-"2921-88-2","Chlorpyrifos","AqT_EPA_acute","0.05","Acute"
-"333-41-5","Diazinon","AqT_EPA_acute","0.17","Acute"
-"62-73-7","Dichlorvos","AqT_EPA_acute","3.5000000000000003E-2","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AqT_EPA_acute","NA","Acute"
-"106-44-5","p-Cresol","AqT_EPA_acute","NA","Acute"
-"3380-34-5","Triclosan","AqT_EPA_acute","NA","Acute"
-"2315-67-5","4-tert-Octylphenol monoethoxylate (OP1EO)","AqT_EPA_acute","NA","Acute"
-"599-64-4","4-Cumylphenol","AqT_EPA_acute","NA","Acute"
-"84852-15-3","4-Nonylphenol, branched","AqT_EPA_acute","28","Acute"
-"20427-84-3","4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)","AqT_EPA_acute","NA","Acute"
-"104-35-8","4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)","AqT_EPA_acute","NA","Acute"
-"1806-26-4","4-tert-Octylphenol","AqT_EPA_acute","NA","Acute"
-"2315-61-9","4-tert-Octylphenol diethoxylate (OP2EO)","AqT_EPA_acute","NA","Acute"
-"140-66-9","4-(1,1,3,3-Tetramethylbutyl)phenol","AqT_EPA_acute","NA","Acute"
-"83-34-1","3-Methyl-1H-indole (Skatol)","AqT_EPA_acute","NA","Acute"
-"21145-77-7","Acetyl hexamethyl tetrahydro naphthalene (AHTN)","AqT_EPA_acute","NA","Acute"
-"119-61-9","Benzophenone","AqT_EPA_acute","NA","Acute"
-"76-22-2","Camphor","AqT_EPA_acute","NA","Acute"
-"5989-27-5","d-Limonene","AqT_EPA_acute","NA","Acute"
-"1222-05-5","Hexahydrohexamethyl cyclopentabenzopyran (HHCB)","AqT_EPA_acute","NA","Acute"
-"120-72-9","Indole","AqT_EPA_acute","NA","Acute"
-"124-76-5","Isoborneol","AqT_EPA_acute","NA","Acute"
-"119-65-3","Isoquinoline","AqT_EPA_acute","NA","Acute"
-"58-08-2","Caffeine","AqT_EPA_acute","NA","Acute"
-"486-56-6","Cotinine","AqT_EPA_acute","NA","Acute"
-"89-78-1","Menthol","AqT_EPA_acute","NA","Acute"
-"360-68-9","3-beta-Coprostanol","AqT_EPA_acute","NA","Acute"
-"83-46-5","beta-Sitosterol","AqT_EPA_acute","NA","Acute"
-"19466-47-8","beta-Stigmastanol","AqT_EPA_acute","NA","Acute"
-"57-88-5","Cholesterol","AqT_EPA_acute","NA","Acute"
-"106-46-7","1,4-Dichlorobenzene","AqT_EPA_acute","NA","Acute"
-"119-36-8","Methyl salicylate","AqT_EPA_acute","NA","Acute"
-"75-25-2","Tribromomethane (bromoform)","AqT_EPA_acute","NA","Acute"
-"121-00-6","3-tert-Butyl-4-hydroxyanisole (BHA)","AqT_EPA_chronic","NA","Chronic"
-"136-85-6","5-Methyl-1H-benzotriazole","AqT_EPA_chronic","NA","Chronic"
-"80-05-7","Bisphenol A","AqT_EPA_chronic","NA","Chronic"
-"84-65-1","9,10-Anthraquinone","AqT_EPA_chronic","NA","Chronic"
-"5436-43-1","2,2',4,4'-Tetrabromodiphenylether (PBDE 47)","AqT_EPA_chronic","NA","Chronic"
-"126-73-8","Tributyl phosphate","AqT_EPA_chronic","NA","Chronic"
-"78-51-3","Tris(2-butoxyethyl) phosphate","AqT_EPA_chronic","NA","Chronic"
-"13674-87-8","Tris(dichloroisopropyl) phosphate","AqT_EPA_chronic","NA","Chronic"
-"120-12-7","Anthracene","AqT_EPA_chronic","20.7","Chronic"
-"50-32-8","Benzo(a)pyrene","AqT_EPA_chronic","1.4E-2","Chronic"
-"206-44-0","Fluoranthene","AqT_EPA_chronic","7.11","Chronic"
-"91-20-3","Naphthalene","AqT_EPA_chronic","24","Chronic"
-"85-01-8","Phenanthrene","AqT_EPA_chronic","6.3","Chronic"
-"129-00-0","Pyrene","AqT_EPA_chronic","10.1","Chronic"
-"84-66-2","Diethyl phthalate","AqT_EPA_chronic","220","Chronic"
-"115-86-6","Triphenyl phosphate","AqT_EPA_chronic","NA","Chronic"
-"115-96-8","Tris(2-chloroethyl) phosphate","AqT_EPA_chronic","NA","Chronic"
-"90-12-0","1-Methylnaphthalene","AqT_EPA_chronic","2.1","Chronic"
-"581-42-0","2,6-Dimethylnaphthalene","AqT_EPA_chronic","NA","Chronic"
-"91-57-6","2-Methylnaphthalene","AqT_EPA_chronic","4.7","Chronic"
-"98-82-8","Isopropylbenzene (cumene)","AqT_EPA_chronic","2.6","Chronic"
-"78-59-1","Isophorone","AqT_EPA_chronic","NA","Chronic"
-"127-18-4","Tetrachloroethene (PERC)","AqT_EPA_chronic","NA","Chronic"
-"1912-24-9","Atrazine","AqT_EPA_chronic","60","Chronic"
-"314-40-9","Bromacil","AqT_EPA_chronic","NA","Chronic"
-"102-36-3","3,4-Dichlorophenyl isocyanate","AqT_EPA_chronic","NA","Chronic"
-"57837-19-1","Metalaxyl","AqT_EPA_chronic","100","Chronic"
-"51218-45-2","Metolachlor","AqT_EPA_chronic","NA","Chronic"
-"87-86-5","Pentachlorophenol","AqT_EPA_chronic","13","Chronic"
-"1610-18-0","Prometon","AqT_EPA_chronic","NA","Chronic"
-"63-25-2","Carbaryl","AqT_EPA_chronic","0.5","Chronic"
-"86-74-8","Carbazole","AqT_EPA_chronic","NA","Chronic"
-"2921-88-2","Chlorpyrifos","AqT_EPA_chronic","0.04","Chronic"
-"333-41-5","Diazinon","AqT_EPA_chronic","4.2999999999999997E-2","Chronic"
-"62-73-7","Dichlorvos","AqT_EPA_chronic","5.7999999999999996E-3","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AqT_EPA_chronic","NA","Chronic"
-"106-44-5","p-Cresol","AqT_EPA_chronic","NA","Chronic"
-"3380-34-5","Triclosan","AqT_EPA_chronic","NA","Chronic"
-"2315-67-5","4-tert-Octylphenol monoethoxylate (OP1EO)","AqT_EPA_chronic","NA","Chronic"
-"599-64-4","4-Cumylphenol","AqT_EPA_chronic","NA","Chronic"
-"84852-15-3","4-Nonylphenol, branched","AqT_EPA_chronic","6.6","Chronic"
-"20427-84-3","4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)","AqT_EPA_chronic","NA","Chronic"
-"104-35-8","4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)","AqT_EPA_chronic","NA","Chronic"
-"1806-26-4","4-tert-Octylphenol","AqT_EPA_chronic","NA","Chronic"
-"2315-61-9","4-tert-Octylphenol diethoxylate (OP2EO)","AqT_EPA_chronic","NA","Chronic"
-"140-66-9","4-(1,1,3,3-Tetramethylbutyl)phenol","AqT_EPA_chronic","NA","Chronic"
-"83-34-1","3-Methyl-1H-indole (Skatol)","AqT_EPA_chronic","NA","Chronic"
-"21145-77-7","Acetyl hexamethyl tetrahydro naphthalene (AHTN)","AqT_EPA_chronic","NA","Chronic"
-"119-61-9","Benzophenone","AqT_EPA_chronic","NA","Chronic"
-"76-22-2","Camphor","AqT_EPA_chronic","NA","Chronic"
-"5989-27-5","d-Limonene","AqT_EPA_chronic","NA","Chronic"
-"1222-05-5","Hexahydrohexamethyl cyclopentabenzopyran (HHCB)","AqT_EPA_chronic","NA","Chronic"
-"120-72-9","Indole","AqT_EPA_chronic","NA","Chronic"
-"124-76-5","Isoborneol","AqT_EPA_chronic","NA","Chronic"
-"119-65-3","Isoquinoline","AqT_EPA_chronic","NA","Chronic"
-"58-08-2","Caffeine","AqT_EPA_chronic","NA","Chronic"
-"486-56-6","Cotinine","AqT_EPA_chronic","NA","Chronic"
-"89-78-1","Menthol","AqT_EPA_chronic","NA","Chronic"
-"360-68-9","3-beta-Coprostanol","AqT_EPA_chronic","NA","Chronic"
-"83-46-5","beta-Sitosterol","AqT_EPA_chronic","NA","Chronic"
-"19466-47-8","beta-Stigmastanol","AqT_EPA_chronic","NA","Chronic"
-"57-88-5","Cholesterol","AqT_EPA_chronic","NA","Chronic"
-"106-46-7","1,4-Dichlorobenzene","AqT_EPA_chronic","15","Chronic"
-"119-36-8","Methyl salicylate","AqT_EPA_chronic","NA","Chronic"
-"75-25-2","Tribromomethane (bromoform)","AqT_EPA_chronic","320","Chronic"
-"121-00-6","3-tert-Butyl-4-hydroxyanisole (BHA)","AqT_other_acute","NA","Acute"
-"136-85-6","5-Methyl-1H-benzotriazole","AqT_other_acute","NA","Acute"
-"80-05-7","Bisphenol A","AqT_other_acute","1518","Acute"
-"84-65-1","9,10-Anthraquinone","AqT_other_acute","NA","Acute"
-"5436-43-1","2,2',4,4'-Tetrabromodiphenylether (PBDE 47)","AqT_other_acute","NA","Acute"
-"126-73-8","Tributyl phosphate","AqT_other_acute","NA","Acute"
-"78-51-3","Tris(2-butoxyethyl) phosphate","AqT_other_acute","NA","Acute"
-"13674-87-8","Tris(dichloroisopropyl) phosphate","AqT_other_acute","NA","Acute"
-"120-12-7","Anthracene","AqT_other_acute","13","Acute"
-"50-32-8","Benzo(a)pyrene","AqT_other_acute","0.24","Acute"
-"206-44-0","Fluoranthene","AqT_other_acute","3980","Acute"
-"91-20-3","Naphthalene","AqT_other_acute","190","Acute"
-"85-01-8","Phenanthrene","AqT_other_acute","30","Acute"
-"129-00-0","Pyrene","AqT_other_acute","NA","Acute"
-"84-66-2","Diethyl phthalate","AqT_other_acute","1800","Acute"
-"115-86-6","Triphenyl phosphate","AqT_other_acute","NA","Acute"
-"115-96-8","Tris(2-chloroethyl) phosphate","AqT_other_acute","NA","Acute"
-"90-12-0","1-Methylnaphthalene","AqT_other_acute","37","Acute"
-"581-42-0","2,6-Dimethylnaphthalene","AqT_other_acute","NA","Acute"
-"91-57-6","2-Methylnaphthalene","AqT_other_acute","NA","Acute"
-"98-82-8","Isopropylbenzene (cumene)","AqT_other_acute","NA","Acute"
-"78-59-1","Isophorone","AqT_other_acute","117000","Acute"
-"127-18-4","Tetrachloroethene (PERC)","AqT_other_acute","830","Acute"
-"1912-24-9","Atrazine","AqT_other_acute","NA","Acute"
-"314-40-9","Bromacil","AqT_other_acute","NA","Acute"
-"102-36-3","3,4-Dichlorophenyl isocyanate","AqT_other_acute","NA","Acute"
-"57837-19-1","Metalaxyl","AqT_other_acute","NA","Acute"
-"51218-45-2","Metolachlor","AqT_other_acute","NA","Acute"
-"87-86-5","Pentachlorophenol","AqT_other_acute","NA","Acute"
-"1610-18-0","Prometon","AqT_other_acute","NA","Acute"
-"63-25-2","Carbaryl","AqT_other_acute","3.3","Acute"
-"86-74-8","Carbazole","AqT_other_acute","NA","Acute"
-"2921-88-2","Chlorpyrifos","AqT_other_acute","0.02","Acute"
-"333-41-5","Diazinon","AqT_other_acute","NA","Acute"
-"62-73-7","Dichlorvos","AqT_other_acute","NA","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AqT_other_acute","NA","Acute"
-"106-44-5","p-Cresol","AqT_other_acute","NA","Acute"
-"3380-34-5","Triclosan","AqT_other_acute","NA","Acute"
-"2315-67-5","4-tert-Octylphenol monoethoxylate (OP1EO)","AqT_other_acute","NA","Acute"
-"599-64-4","4-Cumylphenol","AqT_other_acute","NA","Acute"
-"84852-15-3","4-Nonylphenol, branched","AqT_other_acute","NA","Acute"
-"20427-84-3","4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)","AqT_other_acute","NA","Acute"
-"104-35-8","4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)","AqT_other_acute","NA","Acute"
-"1806-26-4","4-tert-Octylphenol","AqT_other_acute","NA","Acute"
-"2315-61-9","4-tert-Octylphenol diethoxylate (OP2EO)","AqT_other_acute","NA","Acute"
-"140-66-9","4-(1,1,3,3-Tetramethylbutyl)phenol","AqT_other_acute","NA","Acute"
-"83-34-1","3-Methyl-1H-indole (Skatol)","AqT_other_acute","NA","Acute"
-"21145-77-7","Acetyl hexamethyl tetrahydro naphthalene (AHTN)","AqT_other_acute","NA","Acute"
-"119-61-9","Benzophenone","AqT_other_acute","NA","Acute"
-"76-22-2","Camphor","AqT_other_acute","NA","Acute"
-"5989-27-5","d-Limonene","AqT_other_acute","NA","Acute"
-"1222-05-5","Hexahydrohexamethyl cyclopentabenzopyran (HHCB)","AqT_other_acute","NA","Acute"
-"120-72-9","Indole","AqT_other_acute","NA","Acute"
-"124-76-5","Isoborneol","AqT_other_acute","NA","Acute"
-"119-65-3","Isoquinoline","AqT_other_acute","NA","Acute"
-"58-08-2","Caffeine","AqT_other_acute","NA","Acute"
-"486-56-6","Cotinine","AqT_other_acute","NA","Acute"
-"89-78-1","Menthol","AqT_other_acute","NA","Acute"
-"360-68-9","3-beta-Coprostanol","AqT_other_acute","NA","Acute"
-"83-46-5","beta-Sitosterol","AqT_other_acute","NA","Acute"
-"19466-47-8","beta-Stigmastanol","AqT_other_acute","NA","Acute"
-"57-88-5","Cholesterol","AqT_other_acute","NA","Acute"
-"106-46-7","1,4-Dichlorobenzene","AqT_other_acute","180","Acute"
-"119-36-8","Methyl salicylate","AqT_other_acute","NA","Acute"
-"75-25-2","Tribromomethane (bromoform)","AqT_other_acute","2300","Acute"
-"121-00-6","3-tert-Butyl-4-hydroxyanisole (BHA)","AqT_other_chronic","NA","Chronic"
-"136-85-6","5-Methyl-1H-benzotriazole","AqT_other_chronic","NA","Chronic"
-"80-05-7","Bisphenol A","AqT_other_chronic","0.86","Chronic"
-"84-65-1","9,10-Anthraquinone","AqT_other_chronic","NA","Chronic"
-"5436-43-1","2,2',4,4'-Tetrabromodiphenylether (PBDE 47)","AqT_other_chronic","NA","Chronic"
-"126-73-8","Tributyl phosphate","AqT_other_chronic","NA","Chronic"
-"78-51-3","Tris(2-butoxyethyl) phosphate","AqT_other_chronic","NA","Chronic"
-"13674-87-8","Tris(dichloroisopropyl) phosphate","AqT_other_chronic","NA","Chronic"
-"120-12-7","Anthracene","AqT_other_chronic","1.2E-2","Chronic"
-"50-32-8","Benzo(a)pyrene","AqT_other_chronic","1.4999999999999999E-2","Chronic"
-"206-44-0","Fluoranthene","AqT_other_chronic","0.04","Chronic"
-"91-20-3","Naphthalene","AqT_other_chronic","1.1000000000000001","Chronic"
-"85-01-8","Phenanthrene","AqT_other_chronic","0.4","Chronic"
-"129-00-0","Pyrene","AqT_other_chronic","2.5000000000000001E-2","Chronic"
-"84-66-2","Diethyl phthalate","AqT_other_chronic","110","Chronic"
-"115-86-6","Triphenyl phosphate","AqT_other_chronic","NA","Chronic"
-"115-96-8","Tris(2-chloroethyl) phosphate","AqT_other_chronic","NA","Chronic"
-"90-12-0","1-Methylnaphthalene","AqT_other_chronic","2.1","Chronic"
-"581-42-0","2,6-Dimethylnaphthalene","AqT_other_chronic","NA","Chronic"
-"91-57-6","2-Methylnaphthalene","AqT_other_chronic","330","Chronic"
-"98-82-8","Isopropylbenzene (cumene)","AqT_other_chronic","NA","Chronic"
-"78-59-1","Isophorone","AqT_other_chronic","920","Chronic"
-"127-18-4","Tetrachloroethene (PERC)","AqT_other_chronic","45","Chronic"
-"1912-24-9","Atrazine","AqT_other_chronic","1.8","Chronic"
-"314-40-9","Bromacil","AqT_other_chronic","5","Chronic"
-"102-36-3","3,4-Dichlorophenyl isocyanate","AqT_other_chronic","NA","Chronic"
-"57837-19-1","Metalaxyl","AqT_other_chronic","NA","Chronic"
-"51218-45-2","Metolachlor","AqT_other_chronic","7.8","Chronic"
-"87-86-5","Pentachlorophenol","AqT_other_chronic","NA","Chronic"
-"1610-18-0","Prometon","AqT_other_chronic","NA","Chronic"
-"63-25-2","Carbaryl","AqT_other_chronic","0.2","Chronic"
-"86-74-8","Carbazole","AqT_other_chronic","NA","Chronic"
-"2921-88-2","Chlorpyrifos","AqT_other_chronic","2E-3","Chronic"
-"333-41-5","Diazinon","AqT_other_chronic","NA","Chronic"
-"62-73-7","Dichlorvos","AqT_other_chronic","NA","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AqT_other_chronic","NA","Chronic"
-"106-44-5","p-Cresol","AqT_other_chronic","NA","Chronic"
-"3380-34-5","Triclosan","AqT_other_chronic","NA","Chronic"
-"2315-67-5","4-tert-Octylphenol monoethoxylate (OP1EO)","AqT_other_chronic","NA","Chronic"
-"599-64-4","4-Cumylphenol","AqT_other_chronic","NA","Chronic"
-"84852-15-3","4-Nonylphenol, branched","AqT_other_chronic","1","Chronic"
-"20427-84-3","4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)","AqT_other_chronic","NA","Chronic"
-"104-35-8","4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)","AqT_other_chronic","NA","Chronic"
-"1806-26-4","4-tert-Octylphenol","AqT_other_chronic","NA","Chronic"
-"2315-61-9","4-tert-Octylphenol diethoxylate (OP2EO)","AqT_other_chronic","NA","Chronic"
-"140-66-9","4-(1,1,3,3-Tetramethylbutyl)phenol","AqT_other_chronic","NA","Chronic"
-"83-34-1","3-Methyl-1H-indole (Skatol)","AqT_other_chronic","NA","Chronic"
-"21145-77-7","Acetyl hexamethyl tetrahydro naphthalene (AHTN)","AqT_other_chronic","NA","Chronic"
-"119-61-9","Benzophenone","AqT_other_chronic","NA","Chronic"
-"76-22-2","Camphor","AqT_other_chronic","NA","Chronic"
-"5989-27-5","d-Limonene","AqT_other_chronic","NA","Chronic"
-"1222-05-5","Hexahydrohexamethyl cyclopentabenzopyran (HHCB)","AqT_other_chronic","NA","Chronic"
-"120-72-9","Indole","AqT_other_chronic","NA","Chronic"
-"124-76-5","Isoborneol","AqT_other_chronic","NA","Chronic"
-"119-65-3","Isoquinoline","AqT_other_chronic","NA","Chronic"
-"58-08-2","Caffeine","AqT_other_chronic","NA","Chronic"
-"486-56-6","Cotinine","AqT_other_chronic","NA","Chronic"
-"89-78-1","Menthol","AqT_other_chronic","NA","Chronic"
-"360-68-9","3-beta-Coprostanol","AqT_other_chronic","NA","Chronic"
-"83-46-5","beta-Sitosterol","AqT_other_chronic","NA","Chronic"
-"19466-47-8","beta-Stigmastanol","AqT_other_chronic","NA","Chronic"
-"57-88-5","Cholesterol","AqT_other_chronic","NA","Chronic"
-"106-46-7","1,4-Dichlorobenzene","AqT_other_chronic","9.4","Chronic"
-"119-36-8","Methyl salicylate","AqT_other_chronic","NA","Chronic"
-"75-25-2","Tribromomethane (bromoform)","AqT_other_chronic","320","Chronic"
-"121-00-6","3-tert-Butyl-4-hydroxyanisole (BHA)","EEQ","NA","EEQ"
-"136-85-6","5-Methyl-1H-benzotriazole","EEQ","NA","EEQ"
-"80-05-7","Bisphenol A","EEQ","62.5","EEQ"
-"84-65-1","9,10-Anthraquinone","EEQ","NA","EEQ"
-"5436-43-1","2,2',4,4'-Tetrabromodiphenylether (PBDE 47)","EEQ","NA","EEQ"
-"126-73-8","Tributyl phosphate","EEQ","NA","EEQ"
-"78-51-3","Tris(2-butoxyethyl) phosphate","EEQ","NA","EEQ"
-"13674-87-8","Tris(dichloroisopropyl) phosphate","EEQ","NA","EEQ"
-"120-12-7","Anthracene","EEQ","NA","EEQ"
-"50-32-8","Benzo(a)pyrene","EEQ","NA","EEQ"
-"206-44-0","Fluoranthene","EEQ","NA","EEQ"
-"91-20-3","Naphthalene","EEQ","NA","EEQ"
-"85-01-8","Phenanthrene","EEQ","NA","EEQ"
-"129-00-0","Pyrene","EEQ","NA","EEQ"
-"84-66-2","Diethyl phthalate","EEQ","NA","EEQ"
-"115-86-6","Triphenyl phosphate","EEQ","NA","EEQ"
-"115-96-8","Tris(2-chloroethyl) phosphate","EEQ","NA","EEQ"
-"90-12-0","1-Methylnaphthalene","EEQ","NA","EEQ"
-"581-42-0","2,6-Dimethylnaphthalene","EEQ","NA","EEQ"
-"91-57-6","2-Methylnaphthalene","EEQ","NA","EEQ"
-"98-82-8","Isopropylbenzene (cumene)","EEQ","NA","EEQ"
-"78-59-1","Isophorone","EEQ","NA","EEQ"
-"127-18-4","Tetrachloroethene (PERC)","EEQ","NA","EEQ"
-"1912-24-9","Atrazine","EEQ","NA","EEQ"
-"314-40-9","Bromacil","EEQ","NA","EEQ"
-"102-36-3","3,4-Dichlorophenyl isocyanate","EEQ","NA","EEQ"
-"57837-19-1","Metalaxyl","EEQ","NA","EEQ"
-"51218-45-2","Metolachlor","EEQ","NA","EEQ"
-"87-86-5","Pentachlorophenol","EEQ","NA","EEQ"
-"1610-18-0","Prometon","EEQ","NA","EEQ"
-"63-25-2","Carbaryl","EEQ","NA","EEQ"
-"86-74-8","Carbazole","EEQ","NA","EEQ"
-"2921-88-2","Chlorpyrifos","EEQ","NA","EEQ"
-"333-41-5","Diazinon","EEQ","NA","EEQ"
-"62-73-7","Dichlorvos","EEQ","NA","EEQ"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","EEQ","NA","EEQ"
-"106-44-5","p-Cresol","EEQ","NA","EEQ"
-"3380-34-5","Triclosan","EEQ","NA","EEQ"
-"2315-67-5","4-tert-Octylphenol monoethoxylate (OP1EO)","EEQ","27.7777777777778","EEQ"
-"599-64-4","4-Cumylphenol","EEQ","NA","EEQ"
-"84852-15-3","4-Nonylphenol, branched","EEQ","2.7777777777777799","EEQ"
-"20427-84-3","4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)","EEQ","10000","EEQ"
-"104-35-8","4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)","EEQ","10000","EEQ"
-"1806-26-4","4-tert-Octylphenol","EEQ","NA","EEQ"
-"2315-61-9","4-tert-Octylphenol diethoxylate (OP2EO)","EEQ","27.7777777777778","EEQ"
-"140-66-9","4-(1,1,3,3-Tetramethylbutyl)phenol","EEQ","20","EEQ"
-"83-34-1","3-Methyl-1H-indole (Skatol)","EEQ","NA","EEQ"
-"21145-77-7","Acetyl hexamethyl tetrahydro naphthalene (AHTN)","EEQ","NA","EEQ"
-"119-61-9","Benzophenone","EEQ","NA","EEQ"
-"76-22-2","Camphor","EEQ","NA","EEQ"
-"5989-27-5","d-Limonene","EEQ","NA","EEQ"
-"1222-05-5","Hexahydrohexamethyl cyclopentabenzopyran (HHCB)","EEQ","NA","EEQ"
-"120-72-9","Indole","EEQ","NA","EEQ"
-"124-76-5","Isoborneol","EEQ","NA","EEQ"
-"119-65-3","Isoquinoline","EEQ","NA","EEQ"
-"58-08-2","Caffeine","EEQ","NA","EEQ"
-"486-56-6","Cotinine","EEQ","NA","EEQ"
-"89-78-1","Menthol","EEQ","NA","EEQ"
-"360-68-9","3-beta-Coprostanol","EEQ","NA","EEQ"
-"83-46-5","beta-Sitosterol","EEQ","NA","EEQ"
-"19466-47-8","beta-Stigmastanol","EEQ","NA","EEQ"
-"57-88-5","Cholesterol","EEQ","NA","EEQ"
-"106-46-7","1,4-Dichlorobenzene","EEQ","100000","EEQ"
-"119-36-8","Methyl salicylate","EEQ","NA","EEQ"
-"75-25-2","Tribromomethane (bromoform)","EEQ","NA","EEQ"
-"1912-24-9","Atrazine","AcuteFish","2650","Acute"
-"314-40-9","Bromacil","AcuteFish","18000","Acute"
-"63-25-2","Carbaryl","AcuteFish","110","Acute"
-"2921-88-2","Chlorpyrifos","AcuteFish","0.9","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteFish","37500","Acute"
-"333-41-5","Diazinon","AcuteFish","45","Acute"
-"62-73-7","Dichlorvos","AcuteFish","91.5","Acute"
-"57837-19-1","Metalaxyl","AcuteFish","65000","Acute"
-"51218-45-2","Metolachlor","AcuteFish","1900","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteFish","47.5","Acute"
-"1610-18-0","Prometon","AcuteFish","6000","Acute"
-"1912-24-9","Atrazine","ChronicFish","5","Chronic"
-"314-40-9","Bromacil","ChronicFish","3000","Chronic"
-"63-25-2","Carbaryl","ChronicFish","6","Chronic"
-"2921-88-2","Chlorpyrifos","ChronicFish","0.56999999999999995","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","ChronicFish",NA,"Chronic"
-"333-41-5","Diazinon","ChronicFish","< 0.55","Chronic"
-"62-73-7","Dichlorvos","ChronicFish","5.2","Chronic"
-"57837-19-1","Metalaxyl","ChronicFish","9100","Chronic"
-"51218-45-2","Metolachlor","ChronicFish","30","Chronic"
-"87-86-5","Pentachlorophenol (PCP)","ChronicFish",NA,"Chronic"
-"1610-18-0","Prometon","ChronicFish","19700","Chronic"
-"1912-24-9","Atrazine","AcuteInvert","360","Acute"
-"314-40-9","Bromacil","AcuteInvert","60500","Acute"
-"63-25-2","Carbaryl","AcuteInvert","0.85","Acute"
-"2921-88-2","Chlorpyrifos","AcuteInvert","0.05","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteInvert","37500","Acute"
-"333-41-5","Diazinon","AcuteInvert","0.105","Acute"
-"62-73-7","Dichlorvos","AcuteInvert","3.5000000000000003E-2","Acute"
-"57837-19-1","Metalaxyl","AcuteInvert","14000","Acute"
-"51218-45-2","Metolachlor","AcuteInvert","550","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteInvert","25","Acute"
-"1610-18-0","Prometon","AcuteInvert","12850","Acute"
-"1912-24-9","Atrazine","ChronicInvert","60","Chronic"
-"314-40-9","Bromacil","ChronicInvert","8200","Chronic"
-"63-25-2","Carbaryl","ChronicInvert","0.5","Chronic"
-"2921-88-2","Chlorpyrifos","ChronicInvert","0.04","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","ChronicInvert",NA,"Chronic"
-"333-41-5","Diazinon","ChronicInvert","0.17","Chronic"
-"62-73-7","Dichlorvos","ChronicInvert","5.7999999999999996E-3","Chronic"
-"57837-19-1","Metalaxyl","ChronicInvert","100","Chronic"
-"51218-45-2","Metolachlor","ChronicInvert","1","Chronic"
-"87-86-5","Pentachlorophenol (PCP)","ChronicInvert",NA,"Chronic"
-"1610-18-0","Prometon","ChronicInvert","3450","Chronic"
-"1912-24-9","Atrazine","AcuteNonvascularPlants","< 1","Acute"
-"314-40-9","Bromacil","AcuteNonvascularPlants","6.8","Acute"
-"63-25-2","Carbaryl","AcuteNonvascularPlants","660","Acute"
-"2921-88-2","Chlorpyrifos","AcuteNonvascularPlants","140","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteNonvascularPlants",NA,"Acute"
-"333-41-5","Diazinon","AcuteNonvascularPlants","3700","Acute"
-"62-73-7","Dichlorvos","AcuteNonvascularPlants","14000","Acute"
-"57837-19-1","Metalaxyl","AcuteNonvascularPlants","140000","Acute"
-"51218-45-2","Metolachlor","AcuteNonvascularPlants","10","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteNonvascularPlants",NA,"Acute"
-"1610-18-0","Prometon","AcuteNonvascularPlants","98","Acute"
-"1912-24-9","Atrazine","AcuteVascularPlants","4.5999999999999996","Acute"
-"314-40-9","Bromacil","AcuteVascularPlants","45","Acute"
-"63-25-2","Carbaryl","AcuteVascularPlants","1500","Acute"
-"2921-88-2","Chlorpyrifos","AcuteVascularPlants",NA,"Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteVascularPlants",NA,"Acute"
-"333-41-5","Diazinon","AcuteVascularPlants",NA,"Acute"
-"62-73-7","Dichlorvos","AcuteVascularPlants",NA,"Acute"
-"57837-19-1","Metalaxyl","AcuteVascularPlants","92000","Acute"
-"51218-45-2","Metolachlor","AcuteVascularPlants","48","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteVascularPlants",NA,"Acute"
-"1610-18-0","Prometon","AcuteVascularPlants",NA,"Acute"
-"1912-24-9","Atrazine","AcuteFish","2650","Acute"
-"314-40-9","Bromacil","AcuteFish","18000","Acute"
-"63-25-2","Carbaryl","AcuteFish","110","Acute"
-"2921-88-2","Chlorpyrifos","AcuteFish","0.9","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteFish","37500","Acute"
-"333-41-5","Diazinon","AcuteFish","45","Acute"
-"62-73-7","Dichlorvos","AcuteFish","91.5","Acute"
-"57837-19-1","Metalaxyl","AcuteFish","65000","Acute"
-"51218-45-2","Metolachlor","AcuteFish","1900","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteFish","47.5","Acute"
-"1610-18-0","Prometon","AcuteFish","6000","Acute"
-"1912-24-9","Atrazine","ChronicFish","5","Chronic"
-"314-40-9","Bromacil","ChronicFish","3000","Chronic"
-"63-25-2","Carbaryl","ChronicFish","6","Chronic"
-"2921-88-2","Chlorpyrifos","ChronicFish","0.57","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","ChronicFish","","Chronic"
-"333-41-5","Diazinon","ChronicFish","< 0.55","Chronic"
-"62-73-7","Dichlorvos","ChronicFish","5.2","Chronic"
-"57837-19-1","Metalaxyl","ChronicFish","9100","Chronic"
-"51218-45-2","Metolachlor","ChronicFish","30","Chronic"
-"87-86-5","Pentachlorophenol (PCP)","ChronicFish","","Chronic"
-"1610-18-0","Prometon","ChronicFish","19700","Chronic"
-"1912-24-9","Atrazine","AcuteInvert","360","Acute"
-"314-40-9","Bromacil","AcuteInvert","60500","Acute"
-"63-25-2","Carbaryl","AcuteInvert","0.85","Acute"
-"2921-88-2","Chlorpyrifos","AcuteInvert","0.05","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteInvert","37500","Acute"
-"333-41-5","Diazinon","AcuteInvert","0.105","Acute"
-"62-73-7","Dichlorvos","AcuteInvert","0.035","Acute"
-"57837-19-1","Metalaxyl","AcuteInvert","14000","Acute"
-"51218-45-2","Metolachlor","AcuteInvert","550","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteInvert","25","Acute"
-"1610-18-0","Prometon","AcuteInvert","12850","Acute"
-"1912-24-9","Atrazine","ChronicInvert","60","Chronic"
-"314-40-9","Bromacil","ChronicInvert","8200","Chronic"
-"63-25-2","Carbaryl","ChronicInvert","0.5","Chronic"
-"2921-88-2","Chlorpyrifos","ChronicInvert","0.04","Chronic"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","ChronicInvert","","Chronic"
-"333-41-5","Diazinon","ChronicInvert","0.17","Chronic"
-"62-73-7","Dichlorvos","ChronicInvert","0.0058","Chronic"
-"57837-19-1","Metalaxyl","ChronicInvert","100","Chronic"
-"51218-45-2","Metolachlor","ChronicInvert","1","Chronic"
-"87-86-5","Pentachlorophenol (PCP)","ChronicInvert","","Chronic"
-"1610-18-0","Prometon","ChronicInvert","3450","Chronic"
-"1912-24-9","Atrazine","AcuteNonvascularPlants","< 1","Acute"
-"314-40-9","Bromacil","AcuteNonvascularPlants","6.8","Acute"
-"63-25-2","Carbaryl","AcuteNonvascularPlants","660","Acute"
-"2921-88-2","Chlorpyrifos","AcuteNonvascularPlants","140","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteNonvascularPlants","","Acute"
-"333-41-5","Diazinon","AcuteNonvascularPlants","3700","Acute"
-"62-73-7","Dichlorvos","AcuteNonvascularPlants","14000","Acute"
-"57837-19-1","Metalaxyl","AcuteNonvascularPlants","140000","Acute"
-"51218-45-2","Metolachlor","AcuteNonvascularPlants","10","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteNonvascularPlants","","Acute"
-"1610-18-0","Prometon","AcuteNonvascularPlants","98","Acute"
-"1912-24-9","Atrazine","AcuteVascularPlants","4.6","Acute"
-"314-40-9","Bromacil","AcuteVascularPlants","45","Acute"
-"63-25-2","Carbaryl","AcuteVascularPlants","1500","Acute"
-"2921-88-2","Chlorpyrifos","AcuteVascularPlants","","Acute"
-"134-62-3","N,N-diethyl-meta-toluamide (DEET)","AcuteVascularPlants","","Acute"
-"333-41-5","Diazinon","AcuteVascularPlants","","Acute"
-"62-73-7","Dichlorvos","AcuteVascularPlants","","Acute"
-"57837-19-1","Metalaxyl","AcuteVascularPlants","92000","Acute"
-"51218-45-2","Metolachlor","AcuteVascularPlants","48","Acute"
-"87-86-5","Pentachlorophenol (PCP)","AcuteVascularPlants","","Acute"
-"1610-18-0","Prometon","AcuteVascularPlants","","Acute"
+CAS,Chemical,endPoint,Value,groupCol
+121-00-6,3-tert-Butyl-4-hydroxyanisole (BHA),AqT_EPA_acute,NA,Acute
+136-85-6,5-Methyl-1H-benzotriazole,AqT_EPA_acute,NA,Acute
+80-05-7,Bisphenol A,AqT_EPA_acute,1518,Acute
+84-65-1,"9,10-Anthraquinone",AqT_EPA_acute,NA,Acute
+5436-43-1,"2,2',4,4'-Tetrabromodiphenylether (PBDE 47)",AqT_EPA_acute,NA,Acute
+126-73-8,Tributyl phosphate,AqT_EPA_acute,NA,Acute
+78-51-3,Tris(2-butoxyethyl) phosphate,AqT_EPA_acute,NA,Acute
+13674-87-8,Tris(dichloroisopropyl) phosphate,AqT_EPA_acute,NA,Acute
+120-12-7,Anthracene,AqT_EPA_acute,86.1,Acute
+50-32-8,Benzo(a)pyrene,AqT_EPA_acute,3.98,Acute
+206-44-0,Fluoranthene,AqT_EPA_acute,29.6,Acute
+91-20-3,Naphthalene,AqT_EPA_acute,803,Acute
+85-01-8,Phenanthrene,AqT_EPA_acute,79.7,Acute
+129-00-0,Pyrene,AqT_EPA_acute,42,Acute
+117-81-7,Bis(2-ethylhexyl) phthalate (DEHP),AqT_EPA_acute,NA,Acute
+84-66-2,Diethyl phthalate,AqT_EPA_acute,NA,Acute
+115-86-6,Triphenyl phosphate,AqT_EPA_acute,NA,Acute
+115-96-8,Tris(2-chloroethyl) phosphate,AqT_EPA_acute,NA,Acute
+90-12-0,1-Methylnaphthalene,AqT_EPA_acute,NA,Acute
+581-42-0,"2,6-Dimethylnaphthalene",AqT_EPA_acute,NA,Acute
+91-57-6,2-Methylnaphthalene,AqT_EPA_acute,NA,Acute
+98-82-8,Isopropylbenzene (cumene),AqT_EPA_acute,2140,Acute
+78-59-1,Isophorone,AqT_EPA_acute,NA,Acute
+127-18-4,Tetrachloroethene (PERC),AqT_EPA_acute,NA,Acute
+1912-24-9,Atrazine,AqT_EPA_acute,1,Acute
+314-40-9,Bromacil,AqT_EPA_acute,6.8,Acute
+102-36-3,"3,4-Dichlorophenyl isocyanate",AqT_EPA_acute,NA,Acute
+57837-19-1,Metalaxyl,AqT_EPA_acute,14000,Acute
+51218-45-2,Metolachlor,AqT_EPA_acute,8,Acute
+87-86-5,Pentachlorophenol,AqT_EPA_acute,19,Acute
+1610-18-0,Prometon,AqT_EPA_acute,98,Acute
+63-25-2,Carbaryl,AqT_EPA_acute,0.85,Acute
+86-74-8,Carbazole,AqT_EPA_acute,NA,Acute
+2921-88-2,Chlorpyrifos,AqT_EPA_acute,0.05,Acute
+333-41-5,Diazinon,AqT_EPA_acute,0.105,Acute
+62-73-7,Dichlorvos,AqT_EPA_acute,3.50E-02,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AqT_EPA_acute,37500,Acute
+106-44-5,p-Cresol,AqT_EPA_acute,NA,Acute
+108-95-2,Phenol,AqT_EPA_acute,3600,Acute
+3380-34-5,Triclosan,AqT_EPA_acute,NA,Acute
+2315-67-5,4-tert-Octylphenol monoethoxylate (OP1EO),AqT_EPA_acute,NA,Acute
+599-64-4,4-Cumylphenol,AqT_EPA_acute,NA,Acute
+84852-15-3,"4-Nonylphenol, branched",AqT_EPA_acute,28,Acute
+20427-84-3,4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO),AqT_EPA_acute,NA,Acute
+104-35-8,"4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)",AqT_EPA_acute,NA,Acute
+1806-26-4,4-tert-Octylphenol,AqT_EPA_acute,NA,Acute
+2315-61-9,4-tert-Octylphenol diethoxylate (OP2EO),AqT_EPA_acute,NA,Acute
+140-66-9,"4-(1,1,3,3-Tetramethylbutyl)phenol",AqT_EPA_acute,NA,Acute
+83-34-1,3-Methyl-1H-indole (Skatol),AqT_EPA_acute,NA,Acute
+21145-77-7,Acetyl hexamethyl tetrahydro naphthalene (AHTN),AqT_EPA_acute,NA,Acute
+119-61-9,Benzophenone,AqT_EPA_acute,NA,Acute
+76-22-2,Camphor,AqT_EPA_acute,NA,Acute
+5989-27-5,d-Limonene,AqT_EPA_acute,NA,Acute
+1222-05-5,Hexahydrohexamethyl cyclopentabenzopyran (HHCB),AqT_EPA_acute,NA,Acute
+120-72-9,Indole,AqT_EPA_acute,NA,Acute
+124-76-5,Isoborneol,AqT_EPA_acute,NA,Acute
+119-65-3,Isoquinoline,AqT_EPA_acute,NA,Acute
+58-08-2,Caffeine,AqT_EPA_acute,NA,Acute
+486-56-6,Cotinine,AqT_EPA_acute,NA,Acute
+89-78-1,Menthol,AqT_EPA_acute,NA,Acute
+360-68-9,3-beta-Coprostanol,AqT_EPA_acute,NA,Acute
+83-46-5,beta-Sitosterol,AqT_EPA_acute,NA,Acute
+19466-47-8,beta-Stigmastanol,AqT_EPA_acute,NA,Acute
+57-88-5,Cholesterol,AqT_EPA_acute,NA,Acute
+106-46-7,"1,4-Dichlorobenzene",AqT_EPA_acute,NA,Acute
+119-36-8,Methyl salicylate,AqT_EPA_acute,NA,Acute
+75-25-2,Tribromomethane (bromoform),AqT_EPA_acute,NA,Acute
+121-00-6,3-tert-Butyl-4-hydroxyanisole (BHA),AqT_EPA_chronic,NA,Chronic
+136-85-6,5-Methyl-1H-benzotriazole,AqT_EPA_chronic,NA,Chronic
+80-05-7,Bisphenol A,AqT_EPA_chronic,0.86,Chronic
+84-65-1,"9,10-Anthraquinone",AqT_EPA_chronic,NA,Chronic
+5436-43-1,"2,2',4,4'-Tetrabromodiphenylether (PBDE 47)",AqT_EPA_chronic,NA,Chronic
+126-73-8,Tributyl phosphate,AqT_EPA_chronic,NA,Chronic
+78-51-3,Tris(2-butoxyethyl) phosphate,AqT_EPA_chronic,NA,Chronic
+13674-87-8,Tris(dichloroisopropyl) phosphate,AqT_EPA_chronic,NA,Chronic
+120-12-7,Anthracene,AqT_EPA_chronic,20.7,Chronic
+50-32-8,Benzo(a)pyrene,AqT_EPA_chronic,1.40E-02,Chronic
+206-44-0,Fluoranthene,AqT_EPA_chronic,7.11,Chronic
+91-20-3,Naphthalene,AqT_EPA_chronic,24,Chronic
+85-01-8,Phenanthrene,AqT_EPA_chronic,6.3,Chronic
+129-00-0,Pyrene,AqT_EPA_chronic,10.1,Chronic
+117-81-7,Bis(2-ethylhexyl) phthalate (DEHP),AqT_EPA_chronic,16,Chronic
+84-66-2,Diethyl phthalate,AqT_EPA_chronic,220,Chronic
+115-86-6,Triphenyl phosphate,AqT_EPA_chronic,NA,Chronic
+115-96-8,Tris(2-chloroethyl) phosphate,AqT_EPA_chronic,NA,Chronic
+90-12-0,1-Methylnaphthalene,AqT_EPA_chronic,2.1,Chronic
+581-42-0,"2,6-Dimethylnaphthalene",AqT_EPA_chronic,NA,Chronic
+91-57-6,2-Methylnaphthalene,AqT_EPA_chronic,4.7,Chronic
+98-82-8,Isopropylbenzene (cumene),AqT_EPA_chronic,2.6,Chronic
+78-59-1,Isophorone,AqT_EPA_chronic,NA,Chronic
+127-18-4,Tetrachloroethene (PERC),AqT_EPA_chronic,NA,Chronic
+1912-24-9,Atrazine,AqT_EPA_chronic,5,Chronic
+314-40-9,Bromacil,AqT_EPA_chronic,3000,Chronic
+102-36-3,"3,4-Dichlorophenyl isocyanate",AqT_EPA_chronic,NA,Chronic
+57837-19-1,Metalaxyl,AqT_EPA_chronic,100,Chronic
+51218-45-2,Metolachlor,AqT_EPA_chronic,1,Chronic
+87-86-5,Pentachlorophenol,AqT_EPA_chronic,13,Chronic
+1610-18-0,Prometon,AqT_EPA_chronic,3450,Chronic
+63-25-2,Carbaryl,AqT_EPA_chronic,0.5,Chronic
+86-74-8,Carbazole,AqT_EPA_chronic,NA,Chronic
+2921-88-2,Chlorpyrifos,AqT_EPA_chronic,0.04,Chronic
+333-41-5,Diazinon,AqT_EPA_chronic,4.30E-02,Chronic
+62-73-7,Dichlorvos,AqT_EPA_chronic,5.80E-03,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AqT_EPA_chronic,37500,Chronic
+106-44-5,p-Cresol,AqT_EPA_chronic,NA,Chronic
+108-95-2,Phenol,AqT_EPA_chronic,110,Chronic
+3380-34-5,Triclosan,AqT_EPA_chronic,NA,Chronic
+2315-67-5,4-tert-Octylphenol monoethoxylate (OP1EO),AqT_EPA_chronic,NA,Chronic
+599-64-4,4-Cumylphenol,AqT_EPA_chronic,NA,Chronic
+84852-15-3,"4-Nonylphenol, branched",AqT_EPA_chronic,6.6,Chronic
+20427-84-3,4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO),AqT_EPA_chronic,NA,Chronic
+104-35-8,"4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)",AqT_EPA_chronic,NA,Chronic
+1806-26-4,4-tert-Octylphenol,AqT_EPA_chronic,NA,Chronic
+2315-61-9,4-tert-Octylphenol diethoxylate (OP2EO),AqT_EPA_chronic,NA,Chronic
+140-66-9,"4-(1,1,3,3-Tetramethylbutyl)phenol",AqT_EPA_chronic,NA,Chronic
+83-34-1,3-Methyl-1H-indole (Skatol),AqT_EPA_chronic,NA,Chronic
+21145-77-7,Acetyl hexamethyl tetrahydro naphthalene (AHTN),AqT_EPA_chronic,NA,Chronic
+119-61-9,Benzophenone,AqT_EPA_chronic,NA,Chronic
+76-22-2,Camphor,AqT_EPA_chronic,NA,Chronic
+5989-27-5,d-Limonene,AqT_EPA_chronic,NA,Chronic
+1222-05-5,Hexahydrohexamethyl cyclopentabenzopyran (HHCB),AqT_EPA_chronic,NA,Chronic
+120-72-9,Indole,AqT_EPA_chronic,NA,Chronic
+124-76-5,Isoborneol,AqT_EPA_chronic,NA,Chronic
+119-65-3,Isoquinoline,AqT_EPA_chronic,NA,Chronic
+58-08-2,Caffeine,AqT_EPA_chronic,NA,Chronic
+486-56-6,Cotinine,AqT_EPA_chronic,NA,Chronic
+89-78-1,Menthol,AqT_EPA_chronic,NA,Chronic
+360-68-9,3-beta-Coprostanol,AqT_EPA_chronic,NA,Chronic
+83-46-5,beta-Sitosterol,AqT_EPA_chronic,NA,Chronic
+19466-47-8,beta-Stigmastanol,AqT_EPA_chronic,NA,Chronic
+57-88-5,Cholesterol,AqT_EPA_chronic,NA,Chronic
+106-46-7,"1,4-Dichlorobenzene",AqT_EPA_chronic,15,Chronic
+119-36-8,Methyl salicylate,AqT_EPA_chronic,NA,Chronic
+75-25-2,Tribromomethane (bromoform),AqT_EPA_chronic,320,Chronic
+121-00-6,3-tert-Butyl-4-hydroxyanisole (BHA),AqT_other_acute,NA,Acute
+136-85-6,5-Methyl-1H-benzotriazole,AqT_other_acute,NA,Acute
+80-05-7,Bisphenol A,AqT_other_acute,NA,Acute
+84-65-1,"9,10-Anthraquinone",AqT_other_acute,NA,Acute
+5436-43-1,"2,2',4,4'-Tetrabromodiphenylether (PBDE 47)",AqT_other_acute,NA,Acute
+126-73-8,Tributyl phosphate,AqT_other_acute,NA,Acute
+78-51-3,Tris(2-butoxyethyl) phosphate,AqT_other_acute,NA,Acute
+13674-87-8,Tris(dichloroisopropyl) phosphate,AqT_other_acute,NA,Acute
+120-12-7,Anthracene,AqT_other_acute,13,Acute
+50-32-8,Benzo(a)pyrene,AqT_other_acute,0.24,Acute
+206-44-0,Fluoranthene,AqT_other_acute,3980,Acute
+91-20-3,Naphthalene,AqT_other_acute,190,Acute
+85-01-8,Phenanthrene,AqT_other_acute,30,Acute
+129-00-0,Pyrene,AqT_other_acute,NA,Acute
+117-81-7,Bis(2-ethylhexyl) phthalate (DEHP),AqT_other_acute,27,Acute
+84-66-2,Diethyl phthalate,AqT_other_acute,1800,Acute
+115-86-6,Triphenyl phosphate,AqT_other_acute,NA,Acute
+115-96-8,Tris(2-chloroethyl) phosphate,AqT_other_acute,NA,Acute
+90-12-0,1-Methylnaphthalene,AqT_other_acute,37,Acute
+581-42-0,"2,6-Dimethylnaphthalene",AqT_other_acute,NA,Acute
+91-57-6,2-Methylnaphthalene,AqT_other_acute,NA,Acute
+98-82-8,Isopropylbenzene (cumene),AqT_other_acute,NA,Acute
+78-59-1,Isophorone,AqT_other_acute,117000,Acute
+127-18-4,Tetrachloroethene (PERC),AqT_other_acute,830,Acute
+1912-24-9,Atrazine,AqT_other_acute,NA,Acute
+314-40-9,Bromacil,AqT_other_acute,NA,Acute
+102-36-3,"3,4-Dichlorophenyl isocyanate",AqT_other_acute,NA,Acute
+57837-19-1,Metalaxyl,AqT_other_acute,NA,Acute
+51218-45-2,Metolachlor,AqT_other_acute,NA,Acute
+87-86-5,Pentachlorophenol,AqT_other_acute,NA,Acute
+1610-18-0,Prometon,AqT_other_acute,NA,Acute
+63-25-2,Carbaryl,AqT_other_acute,3.3,Acute
+86-74-8,Carbazole,AqT_other_acute,NA,Acute
+2921-88-2,Chlorpyrifos,AqT_other_acute,0.02,Acute
+333-41-5,Diazinon,AqT_other_acute,NA,Acute
+62-73-7,Dichlorvos,AqT_other_acute,NA,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AqT_other_acute,NA,Acute
+106-44-5,p-Cresol,AqT_other_acute,NA,Acute
+108-95-2,Phenol,AqT_other_acute,10200,Acute
+3380-34-5,Triclosan,AqT_other_acute,NA,Acute
+2315-67-5,4-tert-Octylphenol monoethoxylate (OP1EO),AqT_other_acute,NA,Acute
+599-64-4,4-Cumylphenol,AqT_other_acute,NA,Acute
+84852-15-3,"4-Nonylphenol, branched",AqT_other_acute,NA,Acute
+20427-84-3,4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO),AqT_other_acute,NA,Acute
+104-35-8,"4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)",AqT_other_acute,NA,Acute
+1806-26-4,4-tert-Octylphenol,AqT_other_acute,NA,Acute
+2315-61-9,4-tert-Octylphenol diethoxylate (OP2EO),AqT_other_acute,NA,Acute
+140-66-9,"4-(1,1,3,3-Tetramethylbutyl)phenol",AqT_other_acute,NA,Acute
+83-34-1,3-Methyl-1H-indole (Skatol),AqT_other_acute,NA,Acute
+21145-77-7,Acetyl hexamethyl tetrahydro naphthalene (AHTN),AqT_other_acute,NA,Acute
+119-61-9,Benzophenone,AqT_other_acute,NA,Acute
+76-22-2,Camphor,AqT_other_acute,NA,Acute
+5989-27-5,d-Limonene,AqT_other_acute,NA,Acute
+1222-05-5,Hexahydrohexamethyl cyclopentabenzopyran (HHCB),AqT_other_acute,NA,Acute
+120-72-9,Indole,AqT_other_acute,NA,Acute
+124-76-5,Isoborneol,AqT_other_acute,NA,Acute
+119-65-3,Isoquinoline,AqT_other_acute,NA,Acute
+58-08-2,Caffeine,AqT_other_acute,NA,Acute
+486-56-6,Cotinine,AqT_other_acute,NA,Acute
+89-78-1,Menthol,AqT_other_acute,NA,Acute
+360-68-9,3-beta-Coprostanol,AqT_other_acute,NA,Acute
+83-46-5,beta-Sitosterol,AqT_other_acute,NA,Acute
+19466-47-8,beta-Stigmastanol,AqT_other_acute,NA,Acute
+57-88-5,Cholesterol,AqT_other_acute,NA,Acute
+106-46-7,"1,4-Dichlorobenzene",AqT_other_acute,180,Acute
+119-36-8,Methyl salicylate,AqT_other_acute,NA,Acute
+75-25-2,Tribromomethane (bromoform),AqT_other_acute,2300,Acute
+121-00-6,3-tert-Butyl-4-hydroxyanisole (BHA),AqT_other_chronic,NA,Chronic
+136-85-6,5-Methyl-1H-benzotriazole,AqT_other_chronic,NA,Chronic
+80-05-7,Bisphenol A,AqT_other_chronic,NA,Chronic
+84-65-1,"9,10-Anthraquinone",AqT_other_chronic,NA,Chronic
+5436-43-1,"2,2',4,4'-Tetrabromodiphenylether (PBDE 47)",AqT_other_chronic,NA,Chronic
+126-73-8,Tributyl phosphate,AqT_other_chronic,NA,Chronic
+78-51-3,Tris(2-butoxyethyl) phosphate,AqT_other_chronic,NA,Chronic
+13674-87-8,Tris(dichloroisopropyl) phosphate,AqT_other_chronic,NA,Chronic
+120-12-7,Anthracene,AqT_other_chronic,1.20E-02,Chronic
+50-32-8,Benzo(a)pyrene,AqT_other_chronic,1.50E-02,Chronic
+206-44-0,Fluoranthene,AqT_other_chronic,0.04,Chronic
+91-20-3,Naphthalene,AqT_other_chronic,1.1,Chronic
+85-01-8,Phenanthrene,AqT_other_chronic,0.4,Chronic
+129-00-0,Pyrene,AqT_other_chronic,2.50E-02,Chronic
+117-81-7,Bis(2-ethylhexyl) phthalate (DEHP),AqT_other_chronic,3.00E-01,Chronic
+84-66-2,Diethyl phthalate,AqT_other_chronic,110,Chronic
+115-86-6,Triphenyl phosphate,AqT_other_chronic,NA,Chronic
+115-96-8,Tris(2-chloroethyl) phosphate,AqT_other_chronic,NA,Chronic
+90-12-0,1-Methylnaphthalene,AqT_other_chronic,2.1,Chronic
+581-42-0,"2,6-Dimethylnaphthalene",AqT_other_chronic,NA,Chronic
+91-57-6,2-Methylnaphthalene,AqT_other_chronic,330,Chronic
+98-82-8,Isopropylbenzene (cumene),AqT_other_chronic,NA,Chronic
+78-59-1,Isophorone,AqT_other_chronic,920,Chronic
+127-18-4,Tetrachloroethene (PERC),AqT_other_chronic,45,Chronic
+1912-24-9,Atrazine,AqT_other_chronic,1.8,Chronic
+314-40-9,Bromacil,AqT_other_chronic,5,Chronic
+102-36-3,"3,4-Dichlorophenyl isocyanate",AqT_other_chronic,NA,Chronic
+57837-19-1,Metalaxyl,AqT_other_chronic,NA,Chronic
+51218-45-2,Metolachlor,AqT_other_chronic,7.8,Chronic
+87-86-5,Pentachlorophenol,AqT_other_chronic,0.5,Chronic
+1610-18-0,Prometon,AqT_other_chronic,NA,Chronic
+63-25-2,Carbaryl,AqT_other_chronic,0.2,Chronic
+86-74-8,Carbazole,AqT_other_chronic,NA,Chronic
+2921-88-2,Chlorpyrifos,AqT_other_chronic,2.00E-03,Chronic
+333-41-5,Diazinon,AqT_other_chronic,NA,Chronic
+62-73-7,Dichlorvos,AqT_other_chronic,NA,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AqT_other_chronic,NA,Chronic
+106-44-5,p-Cresol,AqT_other_chronic,NA,Chronic
+108-95-2,Phenol,AqT_other_chronic,180,Chronic
+3380-34-5,Triclosan,AqT_other_chronic,NA,Chronic
+2315-67-5,4-tert-Octylphenol monoethoxylate (OP1EO),AqT_other_chronic,NA,Chronic
+599-64-4,4-Cumylphenol,AqT_other_chronic,NA,Chronic
+84852-15-3,"4-Nonylphenol, branched",AqT_other_chronic,1,Chronic
+20427-84-3,4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO),AqT_other_chronic,NA,Chronic
+104-35-8,"4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)",AqT_other_chronic,NA,Chronic
+1806-26-4,4-tert-Octylphenol,AqT_other_chronic,NA,Chronic
+2315-61-9,4-tert-Octylphenol diethoxylate (OP2EO),AqT_other_chronic,NA,Chronic
+140-66-9,"4-(1,1,3,3-Tetramethylbutyl)phenol",AqT_other_chronic,NA,Chronic
+83-34-1,3-Methyl-1H-indole (Skatol),AqT_other_chronic,NA,Chronic
+21145-77-7,Acetyl hexamethyl tetrahydro naphthalene (AHTN),AqT_other_chronic,NA,Chronic
+119-61-9,Benzophenone,AqT_other_chronic,NA,Chronic
+76-22-2,Camphor,AqT_other_chronic,NA,Chronic
+5989-27-5,d-Limonene,AqT_other_chronic,NA,Chronic
+1222-05-5,Hexahydrohexamethyl cyclopentabenzopyran (HHCB),AqT_other_chronic,NA,Chronic
+120-72-9,Indole,AqT_other_chronic,NA,Chronic
+124-76-5,Isoborneol,AqT_other_chronic,NA,Chronic
+119-65-3,Isoquinoline,AqT_other_chronic,NA,Chronic
+58-08-2,Caffeine,AqT_other_chronic,NA,Chronic
+486-56-6,Cotinine,AqT_other_chronic,NA,Chronic
+89-78-1,Menthol,AqT_other_chronic,NA,Chronic
+360-68-9,3-beta-Coprostanol,AqT_other_chronic,NA,Chronic
+83-46-5,beta-Sitosterol,AqT_other_chronic,NA,Chronic
+19466-47-8,beta-Stigmastanol,AqT_other_chronic,NA,Chronic
+57-88-5,Cholesterol,AqT_other_chronic,NA,Chronic
+106-46-7,"1,4-Dichlorobenzene",AqT_other_chronic,9.4,Chronic
+119-36-8,Methyl salicylate,AqT_other_chronic,NA,Chronic
+75-25-2,Tribromomethane (bromoform),AqT_other_chronic,320,Chronic
+121-00-6,3-tert-Butyl-4-hydroxyanisole (BHA),EEQ,NA,EEQ
+136-85-6,5-Methyl-1H-benzotriazole,EEQ,NA,EEQ
+80-05-7,Bisphenol A,EEQ,62.5,EEQ
+84-65-1,"9,10-Anthraquinone",EEQ,NA,EEQ
+5436-43-1,"2,2',4,4'-Tetrabromodiphenylether (PBDE 47)",EEQ,NA,EEQ
+126-73-8,Tributyl phosphate,EEQ,NA,EEQ
+78-51-3,Tris(2-butoxyethyl) phosphate,EEQ,NA,EEQ
+13674-87-8,Tris(dichloroisopropyl) phosphate,EEQ,NA,EEQ
+120-12-7,Anthracene,EEQ,NA,EEQ
+50-32-8,Benzo(a)pyrene,EEQ,NA,EEQ
+206-44-0,Fluoranthene,EEQ,NA,EEQ
+91-20-3,Naphthalene,EEQ,NA,EEQ
+85-01-8,Phenanthrene,EEQ,NA,EEQ
+129-00-0,Pyrene,EEQ,NA,EEQ
+84-66-2,Diethyl phthalate,EEQ,NA,EEQ
+115-86-6,Triphenyl phosphate,EEQ,NA,EEQ
+115-96-8,Tris(2-chloroethyl) phosphate,EEQ,NA,EEQ
+90-12-0,1-Methylnaphthalene,EEQ,NA,EEQ
+581-42-0,"2,6-Dimethylnaphthalene",EEQ,NA,EEQ
+91-57-6,2-Methylnaphthalene,EEQ,NA,EEQ
+98-82-8,Isopropylbenzene (cumene),EEQ,NA,EEQ
+78-59-1,Isophorone,EEQ,NA,EEQ
+127-18-4,Tetrachloroethene (PERC),EEQ,NA,EEQ
+1912-24-9,Atrazine,EEQ,NA,EEQ
+314-40-9,Bromacil,EEQ,NA,EEQ
+102-36-3,"3,4-Dichlorophenyl isocyanate",EEQ,NA,EEQ
+57837-19-1,Metalaxyl,EEQ,NA,EEQ
+51218-45-2,Metolachlor,EEQ,NA,EEQ
+87-86-5,Pentachlorophenol,EEQ,NA,EEQ
+1610-18-0,Prometon,EEQ,NA,EEQ
+63-25-2,Carbaryl,EEQ,NA,EEQ
+86-74-8,Carbazole,EEQ,NA,EEQ
+2921-88-2,Chlorpyrifos,EEQ,NA,EEQ
+333-41-5,Diazinon,EEQ,NA,EEQ
+62-73-7,Dichlorvos,EEQ,NA,EEQ
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",EEQ,NA,EEQ
+106-44-5,p-Cresol,EEQ,NA,EEQ
+3380-34-5,Triclosan,EEQ,NA,EEQ
+2315-67-5,4-tert-Octylphenol monoethoxylate (OP1EO),EEQ,27.77777778,EEQ
+599-64-4,4-Cumylphenol,EEQ,NA,EEQ
+84852-15-3,"4-Nonylphenol, branched",EEQ,2.777777778,EEQ
+20427-84-3,4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO),EEQ,10000,EEQ
+104-35-8,"4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)",EEQ,10000,EEQ
+1806-26-4,4-tert-Octylphenol,EEQ,NA,EEQ
+2315-61-9,4-tert-Octylphenol diethoxylate (OP2EO),EEQ,27.77777778,EEQ
+140-66-9,"4-(1,1,3,3-Tetramethylbutyl)phenol",EEQ,20,EEQ
+83-34-1,3-Methyl-1H-indole (Skatol),EEQ,NA,EEQ
+21145-77-7,Acetyl hexamethyl tetrahydro naphthalene (AHTN),EEQ,NA,EEQ
+119-61-9,Benzophenone,EEQ,NA,EEQ
+76-22-2,Camphor,EEQ,NA,EEQ
+5989-27-5,d-Limonene,EEQ,NA,EEQ
+1222-05-5,Hexahydrohexamethyl cyclopentabenzopyran (HHCB),EEQ,NA,EEQ
+120-72-9,Indole,EEQ,NA,EEQ
+124-76-5,Isoborneol,EEQ,NA,EEQ
+119-65-3,Isoquinoline,EEQ,NA,EEQ
+58-08-2,Caffeine,EEQ,NA,EEQ
+486-56-6,Cotinine,EEQ,NA,EEQ
+89-78-1,Menthol,EEQ,NA,EEQ
+360-68-9,3-beta-Coprostanol,EEQ,NA,EEQ
+83-46-5,beta-Sitosterol,EEQ,NA,EEQ
+19466-47-8,beta-Stigmastanol,EEQ,NA,EEQ
+57-88-5,Cholesterol,EEQ,NA,EEQ
+106-46-7,"1,4-Dichlorobenzene",EEQ,100000,EEQ
+119-36-8,Methyl salicylate,EEQ,NA,EEQ
+75-25-2,Tribromomethane (bromoform),EEQ,NA,EEQ
+1912-24-9,Atrazine,AcuteFish,2650,Acute
+314-40-9,Bromacil,AcuteFish,18000,Acute
+63-25-2,Carbaryl,AcuteFish,110,Acute
+2921-88-2,Chlorpyrifos,AcuteFish,0.9,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteFish,37500,Acute
+333-41-5,Diazinon,AcuteFish,45,Acute
+62-73-7,Dichlorvos,AcuteFish,91.5,Acute
+57837-19-1,Metalaxyl,AcuteFish,65000,Acute
+51218-45-2,Metolachlor,AcuteFish,1900,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteFish,47.5,Acute
+1610-18-0,Prometon,AcuteFish,6000,Acute
+1912-24-9,Atrazine,ChronicFish,5,Chronic
+314-40-9,Bromacil,ChronicFish,3000,Chronic
+63-25-2,Carbaryl,ChronicFish,6,Chronic
+2921-88-2,Chlorpyrifos,ChronicFish,0.57,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",ChronicFish,NA,Chronic
+333-41-5,Diazinon,ChronicFish,< 0.55,Chronic
+62-73-7,Dichlorvos,ChronicFish,5.2,Chronic
+57837-19-1,Metalaxyl,ChronicFish,9100,Chronic
+51218-45-2,Metolachlor,ChronicFish,30,Chronic
+87-86-5,Pentachlorophenol (PCP),ChronicFish,NA,Chronic
+1610-18-0,Prometon,ChronicFish,19700,Chronic
+1912-24-9,Atrazine,AcuteInvert,360,Acute
+314-40-9,Bromacil,AcuteInvert,60500,Acute
+63-25-2,Carbaryl,AcuteInvert,0.85,Acute
+2921-88-2,Chlorpyrifos,AcuteInvert,0.05,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteInvert,37500,Acute
+333-41-5,Diazinon,AcuteInvert,0.105,Acute
+62-73-7,Dichlorvos,AcuteInvert,3.50E-02,Acute
+57837-19-1,Metalaxyl,AcuteInvert,14000,Acute
+51218-45-2,Metolachlor,AcuteInvert,550,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteInvert,25,Acute
+1610-18-0,Prometon,AcuteInvert,12850,Acute
+1912-24-9,Atrazine,ChronicInvert,60,Chronic
+314-40-9,Bromacil,ChronicInvert,8200,Chronic
+63-25-2,Carbaryl,ChronicInvert,0.5,Chronic
+2921-88-2,Chlorpyrifos,ChronicInvert,0.04,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",ChronicInvert,NA,Chronic
+333-41-5,Diazinon,ChronicInvert,0.17,Chronic
+62-73-7,Dichlorvos,ChronicInvert,5.80E-03,Chronic
+57837-19-1,Metalaxyl,ChronicInvert,100,Chronic
+51218-45-2,Metolachlor,ChronicInvert,1,Chronic
+87-86-5,Pentachlorophenol (PCP),ChronicInvert,NA,Chronic
+1610-18-0,Prometon,ChronicInvert,3450,Chronic
+1912-24-9,Atrazine,AcuteNonvascularPlants,< 1,Acute
+314-40-9,Bromacil,AcuteNonvascularPlants,6.8,Acute
+63-25-2,Carbaryl,AcuteNonvascularPlants,660,Acute
+2921-88-2,Chlorpyrifos,AcuteNonvascularPlants,140,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteNonvascularPlants,NA,Acute
+333-41-5,Diazinon,AcuteNonvascularPlants,3700,Acute
+62-73-7,Dichlorvos,AcuteNonvascularPlants,14000,Acute
+57837-19-1,Metalaxyl,AcuteNonvascularPlants,140000,Acute
+51218-45-2,Metolachlor,AcuteNonvascularPlants,10,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteNonvascularPlants,NA,Acute
+1610-18-0,Prometon,AcuteNonvascularPlants,98,Acute
+1912-24-9,Atrazine,AcuteVascularPlants,4.6,Acute
+314-40-9,Bromacil,AcuteVascularPlants,45,Acute
+63-25-2,Carbaryl,AcuteVascularPlants,1500,Acute
+2921-88-2,Chlorpyrifos,AcuteVascularPlants,NA,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteVascularPlants,NA,Acute
+333-41-5,Diazinon,AcuteVascularPlants,NA,Acute
+62-73-7,Dichlorvos,AcuteVascularPlants,NA,Acute
+57837-19-1,Metalaxyl,AcuteVascularPlants,92000,Acute
+51218-45-2,Metolachlor,AcuteVascularPlants,48,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteVascularPlants,NA,Acute
+1610-18-0,Prometon,AcuteVascularPlants,NA,Acute
+1912-24-9,Atrazine,AcuteFish,2650,Acute
+314-40-9,Bromacil,AcuteFish,18000,Acute
+63-25-2,Carbaryl,AcuteFish,110,Acute
+2921-88-2,Chlorpyrifos,AcuteFish,0.9,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteFish,37500,Acute
+333-41-5,Diazinon,AcuteFish,45,Acute
+62-73-7,Dichlorvos,AcuteFish,91.5,Acute
+57837-19-1,Metalaxyl,AcuteFish,65000,Acute
+51218-45-2,Metolachlor,AcuteFish,1900,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteFish,47.5,Acute
+1610-18-0,Prometon,AcuteFish,6000,Acute
+1912-24-9,Atrazine,ChronicFish,5,Chronic
+314-40-9,Bromacil,ChronicFish,3000,Chronic
+63-25-2,Carbaryl,ChronicFish,6,Chronic
+2921-88-2,Chlorpyrifos,ChronicFish,0.57,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",ChronicFish,,Chronic
+333-41-5,Diazinon,ChronicFish,< 0.55,Chronic
+62-73-7,Dichlorvos,ChronicFish,5.2,Chronic
+57837-19-1,Metalaxyl,ChronicFish,9100,Chronic
+51218-45-2,Metolachlor,ChronicFish,30,Chronic
+87-86-5,Pentachlorophenol (PCP),ChronicFish,,Chronic
+1610-18-0,Prometon,ChronicFish,19700,Chronic
+1912-24-9,Atrazine,AcuteInvert,360,Acute
+314-40-9,Bromacil,AcuteInvert,60500,Acute
+63-25-2,Carbaryl,AcuteInvert,0.85,Acute
+2921-88-2,Chlorpyrifos,AcuteInvert,0.05,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteInvert,37500,Acute
+333-41-5,Diazinon,AcuteInvert,0.105,Acute
+62-73-7,Dichlorvos,AcuteInvert,0.035,Acute
+57837-19-1,Metalaxyl,AcuteInvert,14000,Acute
+51218-45-2,Metolachlor,AcuteInvert,550,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteInvert,25,Acute
+1610-18-0,Prometon,AcuteInvert,12850,Acute
+1912-24-9,Atrazine,ChronicInvert,60,Chronic
+314-40-9,Bromacil,ChronicInvert,8200,Chronic
+63-25-2,Carbaryl,ChronicInvert,0.5,Chronic
+2921-88-2,Chlorpyrifos,ChronicInvert,0.04,Chronic
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",ChronicInvert,,Chronic
+333-41-5,Diazinon,ChronicInvert,0.17,Chronic
+62-73-7,Dichlorvos,ChronicInvert,0.0058,Chronic
+57837-19-1,Metalaxyl,ChronicInvert,100,Chronic
+51218-45-2,Metolachlor,ChronicInvert,1,Chronic
+87-86-5,Pentachlorophenol (PCP),ChronicInvert,,Chronic
+1610-18-0,Prometon,ChronicInvert,3450,Chronic
+1912-24-9,Atrazine,AcuteNonvascularPlants,< 1,Acute
+314-40-9,Bromacil,AcuteNonvascularPlants,6.8,Acute
+63-25-2,Carbaryl,AcuteNonvascularPlants,660,Acute
+2921-88-2,Chlorpyrifos,AcuteNonvascularPlants,140,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteNonvascularPlants,,Acute
+333-41-5,Diazinon,AcuteNonvascularPlants,3700,Acute
+62-73-7,Dichlorvos,AcuteNonvascularPlants,14000,Acute
+57837-19-1,Metalaxyl,AcuteNonvascularPlants,140000,Acute
+51218-45-2,Metolachlor,AcuteNonvascularPlants,10,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteNonvascularPlants,,Acute
+1610-18-0,Prometon,AcuteNonvascularPlants,98,Acute
+1912-24-9,Atrazine,AcuteVascularPlants,4.6,Acute
+314-40-9,Bromacil,AcuteVascularPlants,45,Acute
+63-25-2,Carbaryl,AcuteVascularPlants,1500,Acute
+2921-88-2,Chlorpyrifos,AcuteVascularPlants,,Acute
+134-62-3,"N,N-diethyl-meta-toluamide (DEET)",AcuteVascularPlants,,Acute
+333-41-5,Diazinon,AcuteVascularPlants,,Acute
+62-73-7,Dichlorvos,AcuteVascularPlants,,Acute
+57837-19-1,Metalaxyl,AcuteVascularPlants,92000,Acute
+51218-45-2,Metolachlor,AcuteVascularPlants,48,Acute
+87-86-5,Pentachlorophenol (PCP),AcuteVascularPlants,,Acute
+1610-18-0,Prometon,AcuteVascularPlants,,Acute
