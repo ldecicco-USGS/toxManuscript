@@ -283,3 +283,42 @@ unique(AOP_sites_hits[which(AOP_sites_hits$EARChem > 0.001),"chnm"])
 EARproportionGTpctThresh <- filter(AOP_joined,EARproportion>0.05)
 unique(EARproportionGTpctThresh[which(EARproportionGTpctThresh$EARAOPChem > 0.001),"chnm"])
 
+
+#How many endpoints per AOP
+endpointsPerAOP <- chemicalSummary_AOPs %>%
+  group_by(ID) %>%
+  summarize(numEndpoints = n_distinct(endPoint))
+endpointsPerAOP <- na.omit(endpointsPerAOP)
+max(endpointsPerAOP$numEndpoints)
+
+
+#Now, how many endpoints per AOP for priority endpoints (> 10^-3 for 10 or more sites)
+
+siteThres <- 10
+ear_thresh <- 0.001
+endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,date) %>%
+  summarize(EARsum = sum(EAR)) %>%
+  group_by(site,endPoint) %>%
+  summarize(EARmax = max(EARsum)) %>%
+  filter(EARmax >= ear_thresh) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites)) %>%
+  filter(numSites >= siteThres) %>%
+  mutate(hasAOP = endPoint %in% eps_with_ids)
+
+priority_endpoints <- endpoints_sites_hits$endPoint[endpoints_sites_hits$hasAOP]
+
+chemicalSummary_AOPs2 <- 
+chemicalSummary_AOPs %>%
+  filter(endPoint %in% priority_endpoints)
+
+endpointsPerAOP2 <- chemicalSummary_AOPs2 %>%
+  group_by(ID) %>%
+  summarize(numEndpoints = n_distinct(endPoint))
+endpointsPerAOP2 <- na.omit(endpointsPerAOP2)
+max(endpointsPerAOP2$numEndpoints)
+
+
+  
