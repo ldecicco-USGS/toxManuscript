@@ -218,6 +218,9 @@ plot_grid(site_graph, boxplot_top,
           labels = c("A","","B","",""))
 dev.off()
 
+length(unique(boxData_max$ID)) -1 #(1 NA) # 112 AOP IDs mapped to toxCast
+length(unique(boxData$ID)) #51 priority AOPs
+length(unique(boxData$ID[which(boxData$Relevant %in% c("Yes","Maybe"))])) #23 relevant priority AOPs
 
 ######################################################################################
 #Code for exploring data to be included in manuscript text
