@@ -7,6 +7,7 @@ full_path <- file.path(file_name)
 tox_list_wq_benchmarks <- create_toxEval(full_path)
 
 x <- tox_list_wq_benchmarks$benchmarks
+x$ACC_value <- as.numeric(x$ACC_value) 
 
 name_fix <- tox_chemicals %>%
   select(CAS=Substance_CASRN, chnm = Substance_Name) %>%

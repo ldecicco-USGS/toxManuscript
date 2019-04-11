@@ -18,7 +18,7 @@ source(file = "combo_graph_function.R")
 # guide_side is the title of the side-by-side labels
 # or...the column headers
 graphData_tox <- graph_chem_data(chemicalSummary)
-graphData_tox$guide_side <- "atop(ToxCast,Maximum~EAR[Chem]~per~Site)"
+graphData_tox$guide_side <- "atop(ToxCast,Maximum~EAR[SiteChem])"
 
 graphData_wq <- graph_chem_data(chemicalSummary_wqp, sum_logic = FALSE)
 graphData_wq$guide_side <- "atop(Traditional,Maximum~Toxicity~Quotient~per~Site)"
