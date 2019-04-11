@@ -170,7 +170,7 @@ for(i in 1:length(AOP_priority_CAS)) {
       Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
       allSTAIDs2 <- unique(c(allSTAIDs2,STAIDs))
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-    }
+
 
 
     allSTAIDs3 <- character()
@@ -187,7 +187,7 @@ for(i in 1:length(AOP_priority_CAS)) {
         Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
         allSTAIDs3 <- unique(c(allSTAIDs3,STAIDs))
         Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-      }
+
   #     # allSTAIDs4 <- character()
   #     # for(l in k:length(AOP_priority_CAS)){
   #     #   chem4 <- AOP_priority_CAS[l]
@@ -220,7 +220,7 @@ for(i in 1:length(AOP_priority_CAS)) {
   #     #     }
   #     #   }
   #     # }
-     }
+     }}}
    }
 }
 
