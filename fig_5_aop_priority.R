@@ -180,7 +180,7 @@ site_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="# Sites", 
                 label = as.character(sitehits)),
-            vjust = 0.5, size = 4, angle = 30) +
+            vjust = 0.5, size = 3.5, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
@@ -194,7 +194,7 @@ aop_label_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="AOP ID", 
                 label = as.character(ID)),
-            vjust = 0.5, size = 4, angle = 30) +
+            vjust = 0.5, size = 3.5, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
