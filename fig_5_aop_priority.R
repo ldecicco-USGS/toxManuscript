@@ -136,7 +136,7 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
   theme_bw() +
   scale_x_discrete(position="top", drop = FALSE) +
   ylab("ToxCast Assay Name") +
-  labs(fill="Mean EAR") +
+  labs(fill=expression(EAR[SiteMixture])) +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         axis.title.y = element_text(size = 20),
@@ -180,7 +180,7 @@ site_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="# Sites", 
                 label = as.character(sitehits)),
-            vjust = 0.5, size = 4) +
+            vjust = 0.5, size = 3.5, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_text(size = 15),
@@ -194,7 +194,7 @@ aop_label_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="AOP ID", 
                 label = as.character(ID)),
-            vjust = 0.5, size = 4, angle = 90) +
+            vjust = 0.5, size = 3.5, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
