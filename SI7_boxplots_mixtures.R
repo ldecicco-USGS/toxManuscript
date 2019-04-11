@@ -4,7 +4,7 @@ library(tidyr)
 library(data.table)
 #########################################################################################
 
-source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
+source(file = "Table_SI8_fig4_Data_summaries_for_manuscript.R")
 
 #This script requires running Table_SI7_fig4_Data_summaries_for_manuscript.R and saving the
 #data frame "Num_sites_by_mixture.csv" before running these plots.
