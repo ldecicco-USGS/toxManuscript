@@ -4,7 +4,7 @@ library(tidyr)
 library(data.table)
 #########################################################################################
 
-source(file = "Table_SI8_fig4_Data_summaries_for_manuscript.R")
+source(file = "Table_SI8_mixtures_v4.R")
 
 #This script requires running Table_SI7_fig4_Data_summaries_for_manuscript.R and saving the
 #data frame "Num_sites_by_mixture.csv" before running these plots.
@@ -23,7 +23,7 @@ chemSummData_max <- chemicalSummary %>%
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(2,3))
+plot_dimensions <- list(c(0,0),c(3,4),c(3,4),c(3,4))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
@@ -45,7 +45,7 @@ ToxCast_ACC <- dplyr::left_join(ToxCast_ACC,
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
-filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
+filenm <- "plots/SI7_mixtureBoxplots_A_v4.pdf"
 pdf(filenm)
 
 sub_Num_sites <- Num_sites_by_mixture %>%
