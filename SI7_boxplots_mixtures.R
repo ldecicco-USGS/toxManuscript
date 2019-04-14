@@ -46,11 +46,12 @@ ToxCast_ACC <- dplyr::left_join(ToxCast_ACC,
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
+
 filenm <- "plots/SI7_mixtureBoxplots_A_v4.pdf"
 pdf(filenm)
 
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 
@@ -105,10 +106,10 @@ dev.off()
 
 ###################################
 i <- 3
-filenm <- "plots/SI7_mixtureBoxplots_B.pdf"
+filenm <- "plots/SI7_mixtureBoxplots_B_v4.pdf"
 pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
@@ -162,7 +163,7 @@ i <- 4
 filenm <- "plots/SI7_mixtureBoxplots_C.pdf"
 pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
