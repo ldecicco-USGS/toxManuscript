@@ -158,11 +158,11 @@ for(i in 1:length(AOP_priority_CAS)) {
   
 #  if(i < length(AOP_priority_CAS)){
   allSTAIDs2 <- character()
-  list_2_mixture
   for(j in (i):length(AOP_priority_CAS)){
     chem2 <- AOP_priority_CAS[j]
     if(chem2 != chem){
       chems2 <- paste0(sort(AOP_priority_CAS[c(i,j)]),collapse="|")
+#      chems2_list <- c(chems2_list,AOP_priority_CAS[c(i,j)]))
       sites_by_vector <- filter(sites_by_vector,grepl(chem2,chemVector)) %>%
         filter(site %in% allSTAIDs1)
       STAIDs <- unique(sites_by_vector$site)
@@ -172,6 +172,56 @@ for(i in 1:length(AOP_priority_CAS)) {
       Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
       allSTAIDs2 <- unique(c(allSTAIDs2,STAIDs))
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+    }
+  }
+}
+
+chem2_df <- filter(Num_sites_by_mixture,nChems==2 & numSites > 0)
+
+
+#Filter to 2-chem mixtures with more than zero sites
+#loop through 2-chem mixtures to look for 3 chem mixtures
+
+# Determine unique 3-chem combos
+chems_char_vector <- character()
+for(m in 1:dim(chem2_df)[1]){
+  current_chems <- unlist(strsplit(chem2_df$chemVector[m],split = "|",fixed=TRUE))
+  other_chems <- AOP_priority_CAS[-which(AOP_priority_CAS %in% current_chems)]
+  for(l in 1:length(other_chems)) {
+    chems <- c(current_chems,other_chems[l])
+    chems_char_vector <- c(chems_char_vector,paste(sort(c(chems)),collapse="|"))
+  }
+}
+length(chems_char_vector)
+
+chems_char_vector <- unique(chems_char_vector)
+length(chems_char_vector)
+
+for(m in 1:length(chems_char_vector)){
+  chems_char <- chems_char_vector[m]
+  chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
+  mixture_df <- Chem_vectors_by_site
+  for (i in  1:3){
+    mixture_df <- mixture_df[grep(chems[i], mixture_df$chemVector),]
+  }
+  # mixture_rows <- intersect(intersect(
+  #   grep(chems[1],Chem_vectors_by_site$chemVector),
+  #   grep(chems[2],Chem_vectors_by_site$chemVector)),
+  #   grep(chems[3],Chem_vectors_by_site$chemVector))
+  #mixture_df <- Chem_vectors_by_site[mixture_rows,]
+  unique(mixture_df$site)
+  STAIDs <- unique(mixture_df$site)
+  Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
+  Num_sites_by_vector$chemVector <- chems_char
+  Num_sites_by_vector$nChems <- 3
+  Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
+  
+  Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+  
+}
+
+
+
 
 
 
