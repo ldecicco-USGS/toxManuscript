@@ -265,8 +265,10 @@ for(i in 1:dim(Num_sites_by_mixture)[1]){
 Num_sites_by_mixture$siteVector <- siteColumn
 
 ####Add chemical names from CAS vector
-chemList <- as.character(tox_list[["chem_info"]]$"Chemical Name")
-names(chemList) <- tox_list[["chem_info"]]$CAS
+chemList <- tox_chemicals$Substance_Name[tox_chemicals$Substance_CASRN %in% tox_list[["chem_info"]]$CAS]
+names(chemList) <- tox_chemicals$Substance_CASRN[tox_chemicals$Substance_CASRN %in% tox_list[["chem_info"]]$CAS]
+#chemList <- as.character(tox_list[["chem_info"]]$"Chemical Name")
+#names(chemList) <- tox_list[["chem_info"]]$CAS
 
 chemColumn <- character()
 for(i in 1:dim(Num_sites_by_mixture)[1]){
