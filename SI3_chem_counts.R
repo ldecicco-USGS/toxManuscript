@@ -92,26 +92,31 @@ chemPlot <- ggplot(data = all_data) +
   geom_bar(aes(x=chnm, y=number, fill = criteria),stat = "identity") +
   geom_text(data = textData, 
             aes(x=chnm, y=y, label = textExplain)) +
-  geom_text(aes(x=chnm, y= 2, label = has_info)) +
+  geom_point(data = filter(all_data, has_info == "*"),
+             aes(x=chnm, y= 2, shape = has_info)) +
   theme_bw() +
   facet_grid(. ~ guide_side) +
   xlab("") +
   scale_fill_manual(labels = c("Detected", 
                                bquote(EAR[max] > 10^-3),
-                               bquote(TQ[max] > 0.1)), values = c("#E2E2E2","#023FA5","#8E063B")) +
+                               bquote(TQ[max] > 0.1)), 
+                    values = c("#E2E2E2","#023FA5","#8E063B")) +
+  scale_shape_manual(labels = "No benchmark", values = 19) +
   ylab("Number of Sites") +
   coord_flip() +
   theme(legend.title = element_blank(),
-        legend.position = c(0.87, 0.13),
+        legend.position = c(0.9, 0.15),
+        legend.text = element_text(size = 7),
+        legend.key.size = unit(0.75, "lines"),
         legend.background = element_rect(color = "black", size = 0.5, linetype = "solid")) 
 
 chemPlot_w_cap <- chemPlot  +
-  labs(caption = bquote(atop(bold("Figure SI-3:")~"Number of sites with at least one sample that resulted in an exposure activity ratio"~ (EAR[SiteChem])~
-                        ">" ~  10^-3 ~ 
-                        "(A) or toxicity quotient" ~ (TQ[max]) ~ "> 0.1 (B) for chemicals measured in water samples at Great Lakes tributaries, 2010-2013.  "))) +
-  theme(plot.caption = element_text(hjust = 0, size = 6))
+  labs(caption = bquote(atop(bold("Figure SI-3:")~"Number of sites with at least one sample that resulted in an exposure activity ratio"~(EAR[SiteChem])~
+                        ">"~10^-3~ 
+                        "(A)","or toxicity quotient" ~ (TQ[max]) ~ "> 0.1 (B) for chemicals measured in water samples at Great Lakes tributaries, 2010-2013."))) +
+  theme(plot.caption = element_text(hjust = 0, size = 7))
 
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 ggsave(chemPlot_w_cap, filename = "plots/SI3_chem_counts_2.pdf", width = 8, height = 5)
-ggsave(chemPlot_w_cap, filename = "plots/SI3_chem_counts_2_all.png", width = 8, height = 8)
+ggsave(chemPlot_w_cap, filename = "plots/SI3_chem_counts_2.png", width = 8, height = 5)
