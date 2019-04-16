@@ -6,6 +6,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   gd_1_priority <- get_priority_chms(gd_1, 0.001)
   gd_2_priority <- get_priority_chms(gd_2, 0.1)
+  gd_3_priority <- get_priority_chms(gd_3, 0.1)
   
   gd_1$priority <- FALSE
   gd_2$priority <- FALSE
@@ -13,7 +14,7 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   gd_1$priority[gd_1$CAS %in% gd_1_priority] <- TRUE
   gd_2$priority[gd_2$CAS %in% gd_2_priority] <- TRUE
-  gd_3$priority[gd_3$CAS %in% gd_2_priority] <- TRUE
+  gd_3$priority[gd_3$CAS %in% gd_3_priority] <- TRUE
   
   if(all(is.null(gd_3))){
     orderChem_1_2 <- bind_rows(gd_1,
