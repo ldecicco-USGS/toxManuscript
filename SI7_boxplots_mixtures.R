@@ -4,7 +4,7 @@ library(tidyr)
 library(data.table)
 #########################################################################################
 
-source(file = "Table_SI7_fig4_Data_summaries_for_manuscript.R")
+source(file = "Table_SI8_mixtures_v4.R")
 
 #This script requires running Table_SI7_fig4_Data_summaries_for_manuscript.R and saving the
 #data frame "Num_sites_by_mixture.csv" before running these plots.
@@ -23,21 +23,35 @@ chemSummData_max <- chemicalSummary %>%
 EAR_thresh <- 0.00001
 
 
-plot_dimensions <- list(c(0,0),c(3,4),c(3,3),c(1,3))
+plot_dimensions <- list(c(0,0),c(4,4),c(3,4),c(3,4))
 margins <- c(4,0.5,1,0)
 outer_margins <- c(7,5,2,1)
 axis_text_cex <- 0.6
 title_text_cex <- 0.6
 
 y_label <- bquote(EAR[SiteAOP])
+
+# Add chemical names into ToxCast_ACC df
+library(toxEval)
+rm(ToxCast_ACC)
+ToxCast_ACC <- ToxCast_ACC 
+tox_chemicals <- tox_chemicals
+
+ToxCast_ACC <- dplyr::left_join(ToxCast_ACC,
+                                dplyr::select(tox_chemicals,
+                                              CAS = Substance_CASRN,
+                                              chnm = Substance_Name),
+                                by="CAS")
+
 ToxCast_ACC$chnm[!is.na(ToxCast_ACC$chnm) & ToxCast_ACC$chnm == "TDCPP"] <- "Tris(1,3-dichloro-2-propyl)phosphate"
 ###################################
 i <- 2
-filenm <- "plots/SI7_mixtureBoxplots_A.pdf"
+
+filenm <- "plots/SI7_mixtureBoxplots_A_v4.pdf"
 pdf(filenm)
 
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 
@@ -54,7 +68,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
     summarize(EARsum = sum(maxEAR))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-  yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  yaxt <- ifelse(j %in%  (0:32*plot_dimensions[[i]][2] +1),"s","n")
   
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
@@ -75,7 +89,8 @@ for(j in 1:dim(sub_Num_sites)[1]){
   if(j==1){AOP_EAR_medians <- AOP_EAR_median_mixture
   }else{AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   }
-}
+
+  if(round(j/16) * 16  == j | j == dim(sub_Num_sites)[1]){
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 # mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label)),
@@ -85,15 +100,16 @@ mtext(side = 1, cex = 0.5,adj = 0,line = 2,
                            .(y_label)  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
                     "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
-
+  }
+}
 dev.off()
 
 ###################################
 i <- 3
-filenm <- "plots/SI7_mixtureBoxplots_B.pdf"
+filenm <- "plots/SI7_mixtureBoxplots_B_v4.pdf"
 pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]
@@ -108,7 +124,7 @@ for(j in 1:dim(sub_Num_sites)[1]){
     summarize(EARsum = sum(maxEAR))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
-  yaxt <- ifelse(j %in%  (0:4*plot_dimensions[[i]][2] +1),"s","n")
+  yaxt <- ifelse(j %in%  (0:500*plot_dimensions[[i]][2] +1),"s","n")
   boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
           log="y",
           las=2,
@@ -127,7 +143,8 @@ for(j in 1:dim(sub_Num_sites)[1]){
     mutate(Chnm_mixture = sub_Num_sites$chnmVector[j])
   AOP_EAR_medians <- rbind(AOP_EAR_medians,AOP_EAR_median_mixture)
   
-}
+  if(round(j/16) * 16  == j | j == dim(sub_Num_sites)[1]){
+    
 mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 # mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(.(y_label[["y_label"]])),
@@ -137,15 +154,16 @@ mtext(side = 1, cex = 0.5,adj = 0,line = 2,
                            .(y_label)  *
                            ") by adverse outcome pathway for" ~ .(i) ~ "-chemical mixtures present",
                          "in samples that occurred at a minimum of 4 sites during monitoring of Great Lakes tributaries, 2010-2013.")),outer=TRUE)
-
+}
+}
 dev.off()
 
 ################################
 i <- 4
 filenm <- "plots/SI7_mixtureBoxplots_C.pdf"
-pdf(filenm, height = 4)
+pdf(filenm)
 sub_Num_sites <- Num_sites_by_mixture %>%
-  filter(nChems == i,numSites>=4)
+  filter(nChems == i,numSites>=5)
 par(mfrow=plot_dimensions[[i]],mar=margins,oma=outer_margins)
 for(j in 1:dim(sub_Num_sites)[1]){
   CASnums <- strsplit(sub_Num_sites$chemVector[j],"\\|")[[1]]

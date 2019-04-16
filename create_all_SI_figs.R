@@ -27,5 +27,5 @@ working_dir <- getwd()
 output_file <- "SI_figs.pdf"
 plots_dir <- file.path(working_dir,"plots")
 #setwd(plots_dir)
-staple_pdf(input_directory = plots_dir, input_files = NULL, output_file)
+staple_pdf(input_directory = plots_dir, input_files = NULL, output_filepath = output_file)
 #setwd(working_dir)
