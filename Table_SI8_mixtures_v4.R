@@ -168,9 +168,11 @@ length(chems_char_vector)
 
 #Determine how many sites for each 2-chem combo
 for(m in 1:length(chems_char_vector)){
+
   chems_char <- chems_char_vector[m]
   chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-  mixture_df <- Chem_vectors_by_site
+
+  #2 chem combos appear when 
   rows1 <- grep(chems[1],Chem_vectors_by_site$chemVector) 
   rows2 <- grep(chems[2],Chem_vectors_by_site$chemVector)
   mixture_rows <- intersect(rows1,rows2)
