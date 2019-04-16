@@ -87,7 +87,7 @@ test$chnm <- as.character(test$chnm)
 options(scipen=10)
 par(mar =c(5,15,2,1))
 boxplot(EAR_percent ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
-boxplot(EARsum ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
+boxplot(maxEAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
 
 #Check 3,4-dichlorophenyl isocyanate
 test <- chemicalSummary %>% filter(CAS == "102-36-3") %>%
@@ -170,7 +170,6 @@ length(chems_char_vector)
 for(m in 1:length(chems_char_vector)){
   chems_char <- chems_char_vector[m]
   chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-  mixture_df <- Chem_vectors_by_site
   rows1 <- grep(chems[1],Chem_vectors_by_site$chemVector) 
   rows2 <- grep(chems[2],Chem_vectors_by_site$chemVector)
   mixture_rows <- intersect(rows1,rows2)
@@ -218,11 +217,6 @@ for(z in 3:max_mixture){
     for(m in 1:length(chems_char_vector)){
       chems_char <- chems_char_vector[m]
       chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-      mixture_df <- Chem_vectors_by_site
-      # for (i in  1:3){
-      #   mixture_df <- mixture_df[grep(chems[i], mixture_df$chemVector),]
-      # }
-      
       rows_with_chem <- grep(chems[1],Chem_vectors_by_site$chemVector) 
       for(y in 2:z){
         mixture_rows <- grep(chems[y],Chem_vectors_by_site$chemVector) 
