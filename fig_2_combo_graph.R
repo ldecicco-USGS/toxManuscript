@@ -134,6 +134,15 @@ plot_grid(site_graph, no_axis,
 
 dev.off()
 
+pdf("plots/Fig2.pdf", width = 11, height = 9)
+plot_grid(site_graph, no_axis,
+          NULL,legend_box,
+          align = "h", nrow = 2,ncol=2, 
+          rel_widths =  c(2.5/9, 6.5/9),
+          rel_heights = c(0.9,0.1))
+
+dev.off()
+
 # ggsave(toxPlot_wq, filename = "plots/fig1.png", width = 12, height = 12)
 
 # dir.create("plots", showWarnings = FALSE)
