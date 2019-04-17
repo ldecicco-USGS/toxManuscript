@@ -254,7 +254,7 @@ max_mixture <- 12
 
 for(z in 3:max_mixture){
   
-  chem_df <- filter(Num_sites_by_mixture,nChems==(z-1) & numSites > 0)
+  chem_df <- filter(Num_sites_by_mixture,nChems==(z-1) & numSitesContributing > 0)
   if(dim(chem_df)[1] > 0){
     #Filter to z-1 chem mixtures with more than zero sites
     #loop through z-1 chem mixtures to look for z chem mixtures
@@ -275,17 +275,28 @@ for(z in 3:max_mixture){
     length(chems_char_vector)
     
     #Determine how many sites for each 3-chem combo
-    for(m in 1:length(chems_char_vector)){
-      chems_char <- chems_char_vector[m]
-      chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-      rows_with_chem <- grep(chems[1],Chem_vectors_by_site$chemVector) 
-      for(y in 2:z){
-        mixture_rows <- grep(chems[y],Chem_vectors_by_site$chemVector) 
-        mixture_rows <- intersect(mixture_rows,rows_with_chem)
+    # for(m in 1:length(chems_char_vector)){
+    #   chems_char <- chems_char_vector[m]
+    #   chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
+    #   rows_with_chem <- grep(chems[1],Chem_vectors_by_site$chemVector) 
+    #   for(y in 2:z){
+    #     mixture_rows <- grep(chems[y],Chem_vectors_by_site$chemVector) 
+    #     mixture_rows <- intersect(mixture_rows,rows_with_chem)
+    #   }
+    #   
+    #   mixture_df <- Chem_vectors_by_site[mixture_rows,]
+    #   STAIDs <- unique(mixture_df$site)
+
+      numMatches <- numeric()
+      for(m in 1:length(chems_char_vector)) {
+        chems_char <- chems_char_vector[m]
+        chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
+        numMatches <- c(numMatches,sum(chems %in% unlist(
+          strsplit(as.character(Chem_vectors_by_site[m,"chemVector"]),split="|",fixed=TRUE))))
       }
+      mixture_rows <- which(numMatches == z)
       mixture_df <- Chem_vectors_by_site[mixture_rows,]
       STAIDs <- unique(mixture_df$site)
-
       
       chemInSamples <- chemPresentAllSamples %>%
         filter(CAS %in% chems) %>% 
