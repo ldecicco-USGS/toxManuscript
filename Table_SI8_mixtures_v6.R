@@ -191,19 +191,19 @@ for(i in 1:length(AOP_priority_CAS)) {
 }
 ####### 2- chem combos ##############
 
-
-# Determine unique 2-chem combos
-chems_char_vector <- character()
-for(m in 1:(length(AOP_priority_CAS)-1)){
-  for(l in (m+1):length(AOP_priority_CAS)){
-    chems <- AOP_priority_CAS[c(m,l)]
-    chems_char_vector <- c(chems_char_vector,paste(sort(c(chems)),collapse="|"))
-  }
-}
-
-#Determine unique 2-chem combos
-chems_char_vector <- unique(chems_char_vector)
-length(chems_char_vector)
+# 
+# # Determine unique 2-chem combos
+# chems_char_vector <- character()
+# for(m in 1:(length(AOP_priority_CAS)-1)){
+#   for(l in (m+1):length(AOP_priority_CAS)){
+#     chems <- AOP_priority_CAS[c(m,l)]
+#     chems_char_vector <- c(chems_char_vector,paste(sort(c(chems)),collapse="|"))
+#   }
+# }
+# 
+# #Determine unique 2-chem combos
+# chems_char_vector <- unique(chems_char_vector)
+# length(chems_char_vector)
 
 #Determine how many sites for each 2-chem combo
 #Eval #1: Use Chem_vectors_by_site for mixtures contributing > 1% of EARs > 0.001
@@ -212,44 +212,44 @@ length(chems_char_vector)
 #Eval #3 Use chemSumPriority_samples for determining all sites that include 
 #        sum of EAR for ONLY CHEMICALS IN THE CURRENT MIXTURE regardless of EAR
 
-for(m in 1:length(chems_char_vector)){
-  chems_char <- chems_char_vector[m]
-  chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-  rows1 <- grep(chems[1],Chem_vectors_by_site$chemVector) 
-  rows2 <- grep(chems[2],Chem_vectors_by_site$chemVector)
-  mixture_rows <- intersect(rows1,rows2)
-  mixture_df <- Chem_vectors_by_site[mixture_rows,]
-  STAIDs <- unique(mixture_df$site)
-  
-  chemInSamples <- chemPresentAllSamplesVector %>%
-    filter(grepl(chems[1],chemVector) & grepl(chems[2],chemVector))
-  
-  MixturesSamples <- chemSumPriority_samples %>%
-    filter(CAS %in% chems) %>%
-    group_by(sample) %>%
-    summarize(nChems = length(unique(CAS))) %>%
-    filter(nChems > 1)
-  numSitesMixturesOnlydf <- chemSumPriority_samples %>%
-    filter(sample %in% MixturesSamples$sample) %>%
-    filter(CAS %in% chems) %>%
-    group_by(ID,site,date) %>%
-    summarize(EARsum = sum(maxEAR)) %>%
-    filter(EARsum > EAR_thresh)
-  
-  numSitesAll <- length(unique(chemInSamples$site))#All samples, any EAR level
-  numSites <- length(STAIDs) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
-  numSitesMixturesOnly <- length(unique(numSitesMixturesOnlydf$site))
-  
-  Num_sites_by_vector <- data.frame(numSitesAll = numSitesAll, 
-                                    numSitesContributing = numSites,
-                                    numSitesMixturesOnly = numSitesMixturesOnly)
-  Num_sites_by_vector$chemVector <- chems_char
-  Num_sites_by_vector$nChems <- 2
-  Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
-  
-  Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-  
-}
+# for(m in 1:length(chems_char_vector)){
+#   chems_char <- chems_char_vector[m]
+#   chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
+#   rows1 <- grep(chems[1],Chem_vectors_by_site$chemVector) 
+#   rows2 <- grep(chems[2],Chem_vectors_by_site$chemVector)
+#   mixture_rows <- intersect(rows1,rows2)
+#   mixture_df <- Chem_vectors_by_site[mixture_rows,]
+#   STAIDs <- unique(mixture_df$site)
+#   
+#   chemInSamples <- chemPresentAllSamplesVector %>%
+#     filter(grepl(chems[1],chemVector) & grepl(chems[2],chemVector))
+#   
+#   MixturesSamples <- chemSumPriority_samples %>%
+#     filter(CAS %in% chems) %>%
+#     group_by(sample) %>%
+#     summarize(nChems = length(unique(CAS))) %>%
+#     filter(nChems > 1)
+#   numSitesMixturesOnlydf <- chemSumPriority_samples %>%
+#     filter(sample %in% MixturesSamples$sample) %>%
+#     filter(CAS %in% chems) %>%
+#     group_by(ID,site,date) %>%
+#     summarize(EARsum = sum(maxEAR)) %>%
+#     filter(EARsum > EAR_thresh)
+#   
+#   numSitesAll <- length(unique(chemInSamples$site))#All samples, any EAR level
+#   numSites <- length(STAIDs) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
+#   numSitesMixturesOnly <- length(unique(numSitesMixturesOnlydf$site))
+#   
+#   Num_sites_by_vector <- data.frame(numSitesAll = numSitesAll, 
+#                                     numSitesContributing = numSites,
+#                                     numSitesMixturesOnly = numSitesMixturesOnly)
+#   Num_sites_by_vector$chemVector <- chems_char
+#   Num_sites_by_vector$nChems <- 2
+#   Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
+#   
+#   Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
+#   
+# }
 
 max_mixture <- 12
 ####### 3- chem combos ##############
@@ -276,19 +276,6 @@ for(z in 3:max_mixture){
     chems_char_vector <- unique(chems_char_vector)
     length(chems_char_vector)
     
-    #Determine how many sites for each 3-chem combo
-    # for(m in 1:length(chems_char_vector)){
-    #   chems_char <- chems_char_vector[m]
-    #   chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-    #   rows_with_chem <- grep(chems[1],Chem_vectors_by_site$chemVector) 
-    #   for(y in 2:z){
-    #     mixture_rows <- grep(chems[y],Chem_vectors_by_site$chemVector) 
-    #     mixture_rows <- intersect(mixture_rows,rows_with_chem)
-    #   }
-    #   
-    #   mixture_df <- Chem_vectors_by_site[mixture_rows,]
-    #   STAIDs <- unique(mixture_df$site)
-    
     #Determine how many sites match criteria of >1% contribution when EARAOP > 0.001
     for (l in 1:length(chems_char_vector)){
       chems_char <- chems_char_vector[l]
@@ -304,7 +291,7 @@ for(z in 3:max_mixture){
       
       mixture_rows <- which(numMatches == z)
       mixture_df <- Chem_vectors_by_site[mixture_rows,]
-      STAIDs <- unique(mixture_df$site)
+      STAIDs1 <- unique(mixture_df$site)
       
       
       chemInSamples <- chemPresentAllSamples %>%
@@ -327,8 +314,9 @@ for(z in 3:max_mixture){
         filter(EARsum > EAR_thresh)
       
       numSitesAll <- length(unique(chemInSamples$site))#All samples, any EAR level
-      numSites <- length(STAIDs) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
+      numSites <- length(STAIDs1) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
       numSitesMixturesOnly <- length(unique(numSitesMixturesOnlydf$site))
+      STAIDs <- unique(numSitesMixturesOnlydf$site)
       
       Num_sites_by_vector <- data.frame(numSitesAll = numSitesAll, 
                                         numSitesContributing = numSites,
