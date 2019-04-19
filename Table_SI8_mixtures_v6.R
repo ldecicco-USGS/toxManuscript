@@ -22,6 +22,7 @@ source(file = "combo_graph_function.R")
 # 6. Remove chemicals in each sample that do not contribute at least 1% of EARsumAOP
 # 7. Retain only chemicals that show up at a minimum of 5 sites
 
+start.time <- Sys.time()
 
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
@@ -309,6 +310,9 @@ for(i in 1:dim(Num_sites_by_mixture)[1]){
 }
 Num_sites_by_mixture$chnmVector <- chemColumn
 
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 
 write.csv(Num_sites_by_mixture,file="SI_table7 Num_sites_by_mixture_temp.csv",row.names = FALSE)
 
@@ -320,3 +324,4 @@ write.csv(TableSI8,file="tables/SI_table8_Num_sites_by_mixture_v4.1.csv",row.nam
 
 
 mixtures_5plus_sites <- filter(Num_sites_by_mixture,numSites>=5)
+
