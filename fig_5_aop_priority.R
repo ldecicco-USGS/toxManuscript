@@ -9,23 +9,18 @@ library(grid)
 
 ####################################
 source(file = "data_setup.R")
-source(file = "MakeTitles.R")
+AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 
 ear_thresh <- 0.001
 siteThres <- 10
 # ep_percent_thres <- 0.5
 
-AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
-AOP <- AOP_crosswalk %>%
+AOP <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE) %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
-relevance <- read.csv("AOP_relevance.csv", stringsAsFactors = FALSE)
-relevance$Relevant <- MakeTitles(relevance$Relevant)
-
-relevance <- relevance %>%
-  rename(ID=AOP,
-         endPoint = Endpoint.s.) 
+relevance <- data.table::fread("AOP_relevance.csv", data.table = FALSE) %>%
+  distinct()
 
 eps_with_ids <- unique(AOP$endPoint)
 
@@ -42,6 +37,17 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   mutate(hasAOP = endPoint %in% eps_with_ids)
 
 priority_endpoints <- endpoints_sites_hits$endPoint[endpoints_sites_hits$hasAOP]
+
+AOP_full_info <- relevance %>%
+  select(-`Endpoint(s)`) %>%
+  left_join(AOP, by=c("AOP"="ID")) %>%
+  left_join(select(AOP_info, `Abbreviated AOP description` = `...5`, AOP), by="AOP") %>%
+  select(AOP, Relevant, Rationale, `Abbreviated AOP description`, `Tox Cast Endpoints`=endPoint) %>%
+  arrange(AOP) %>%
+  distinct()
+
+AOP_full_info_priorities <- AOP_full_info %>%
+  filter(`Tox Cast Endpoints` %in% priority_endpoints )
 
 boxData_max <- chemicalSummary %>%
   left_join(AOP, by="endPoint") %>%
@@ -64,19 +70,17 @@ priority_AOPs <- boxData %>%
   summarise(siteDet = n_distinct(site)) %>%
   filter(siteDet >= siteThres)
 
-# boxData_max <- filter(boxData_max, ID %in% priority_AOPs$ID)
-# boxData <- filter(boxData, ID %in% priority_AOPs$ID)
-
-relevance <- relevance %>%
-  filter(ID %in% priority_AOPs$ID)
+AOP_priorities_all <- AOP_full_info_priorities %>%
+  filter(AOP %in% priority_AOPs$ID)
 
 boxData <- boxData %>%
-  left_join(select(relevance, ID, Relevant), by="ID") %>%
+  left_join(select(AOP_priorities_all, ID=AOP, Relevant), by="ID") %>%
+  filter(!is.na(Relevant)) %>% # This takes out 57 and 214 because we don't have an endpoint match for them
   mutate(ID = factor(ID)) %>%
   filter(ID %in% priority_AOPs$ID)
 
+boxData$Relevant[boxData$Relevant == "NO"] <- "No"
 boxData$Relevant <- factor(boxData$Relevant, levels = c("Yes","No","Maybe"))
-
 
 chem_sum_AOP <- boxData_max %>%
   ungroup() %>%
@@ -97,13 +101,6 @@ nSites <- boxData %>%
   distinct() %>%
   group_by(ID) %>%
   summarize(sitehits = sum(maxMaxEAR > ear_thresh)) 
-  # ungroup() %>%
-  # filter(!is.na(ID),
-  #        ID %in% priority_AOPs$ID) %>%
-  # mutate(ID = as.factor(ID))
-
-# chem_sum_AOP <- filter(chem_sum_AOP, ID %in% priority_AOPs$ID)
-# chem_sum_AOP$endPoint <- droplevels(chem_sum_AOP$endPoint )
 
 pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 
