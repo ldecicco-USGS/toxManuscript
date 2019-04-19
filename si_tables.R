@@ -40,8 +40,9 @@ write.csv(cas_key_ordered, file = "tables/cas_names.csv", row.names = FALSE, na 
 # 
 endPointInfo <- clean_endPoint_info(end_point_info)
 
-si_3_endpoints <- select(filtered_ep, 
+si_3_endpoints <- select(chemicalSummary, 
                          `ToxCast Endpoint` = endPoint) %>%
+  distinct() %>%
   left_join(select(endPointInfo, 
                    `ToxCast Endpoint`=assay_component_endpoint_name, 
                    `Assay Source`=assay_source_long_name),by = "ToxCast Endpoint") %>%
@@ -112,11 +113,14 @@ x <- x %>%
   distinct()
 
 y <- x %>%
+  distinct() %>%
   group_by(AOP, Relevant, Rationale, `Abbreviated AOP description`) %>%
   summarise(`Tox Cast Endpoints` = list(`Tox Cast Endpoints`[`Tox Cast Endpoints` %in% priority_endpoints])) %>%
-  filter(!is.na(Relevant))
+  filter(!is.na(Relevant)) 
 
 y$`Tox Cast Endpoints`[sapply(y$`Tox Cast Endpoints`, length) == 0] <- ""
+
+y <- y[!duplicated(y$AOP),]
 
 fwrite(y, file = "tables/SI6.csv", na = "")
 rm(list=ls())
