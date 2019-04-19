@@ -1,4 +1,3 @@
-
 combo_plot_matches <- function(gd_1, gd_2,
                                thres_1, thres_2,
                                drop = TRUE,
@@ -7,11 +6,15 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   gd_1_priority <- get_priority_chms(gd_1, 0.001)
   gd_2_priority <- get_priority_chms(gd_2, 0.1)
+  # gd_3_priority <- get_priority_chms(gd_3, 0.1)
   
   gd_1$priority <- FALSE
   gd_2$priority <- FALSE
-  gd_1$priority[gd_1$chnm %in% gd_1_priority] <- TRUE
-  gd_2$priority[gd_2$chnm %in% gd_2_priority] <- TRUE
+  gd_3$priority <- FALSE
+  
+  gd_1$priority[gd_1$CAS %in% gd_1_priority] <- TRUE
+  gd_2$priority[gd_2$CAS %in% gd_2_priority] <- TRUE
+  # gd_3$priority[gd_3$CAS %in% gd_3_priority] <- TRUE
   
   if(all(is.null(gd_3))){
     orderChem_1_2 <- bind_rows(gd_1,
@@ -21,8 +24,8 @@ combo_plot_matches <- function(gd_1, gd_2,
       data.frame()
   } else {
     orderChem_1_2 <- bind_rows(gd_1, 
-                               filter(gd_2, !(chnm %in% levels(gd_1$chnm))),
-                               filter(gd_3, !(chnm %in% c(levels(gd_1$chnm),levels(gd_2$chnm))))) %>%
+                               filter(gd_2, !(chnm %in% unique(gd_1$chnm))),
+                               filter(gd_3, !(chnm %in% c(unique(gd_1$chnm),unique(gd_2$chnm))))) %>%
       group_by(chnm,Class) %>%
       summarise(median = quantile(meanEAR[meanEAR != 0],0.5)) %>%
       data.frame()      
@@ -30,11 +33,11 @@ combo_plot_matches <- function(gd_1, gd_2,
 
   if(all(is.null(gd_3))){
     class_order <- toxEval:::orderClass(bind_rows(gd_1, 
-                                                filter(gd_2, !(chnm %in% levels(gd_1$chnm)))))
+                                                filter(gd_2, !(chnm %in% unique(gd_1$chnm)))))
   } else {
     class_order <- toxEval:::orderClass(bind_rows(gd_1, 
-                                                  filter(gd_2, !(chnm %in% levels(gd_1$chnm))),
-                                                  filter(gd_3, !(chnm %in% c(levels(gd_1$chnm),levels(gd_2$chnm))))))
+                                                  filter(gd_2, !(chnm %in% unique(gd_1$chnm))),
+                                                  filter(gd_3, !(chnm %in% c(unique(gd_1$chnm),unique(gd_2$chnm))))))
   }
   
   orderChem_1_2 <- orderChem_1_2 %>%
@@ -130,19 +133,7 @@ combo_plot_matches <- function(gd_1, gd_2,
     geom_boxplot(aes(x=chnm, y=meanEAR, fill=Class, color=priority),
                  outlier.size=1) +
     theme_bw() +
-    coord_flip() 
-  
-  if(grid){
-    toxPlot_1_2 <- toxPlot_1_2 +
-      facet_grid(guide_up ~ guide_side, scales = "free", space = "free", labeller = label_parsed)+
-      theme(strip.text.y = element_blank())
-    
-  } else {
-    toxPlot_1_2 <- toxPlot_1_2 +
-      facet_grid(. ~ guide_side, scales = "free")
-  }
-  
-  toxPlot_1_2 <- toxPlot_1_2 +
+    coord_flip() +
     theme(axis.text = element_text( color = "black"),
           axis.text.y = element_text(size=9, vjust=.35),
           axis.title=element_blank(),
@@ -161,11 +152,25 @@ combo_plot_matches <- function(gd_1, gd_2,
     scale_fill_manual(values = cbValues, drop=FALSE) +
     scale_color_manual(values = c("black","red"), 
                        na.value = "black", guide = "none")
-  
   if(!drop){
     toxPlot_1_2 <- toxPlot_1_2 +
       scale_x_discrete(drop=TRUE) 
   }
+  
+  if(grid){
+    toxPlot_1_2 <- toxPlot_1_2 +
+      facet_grid(guide_up ~ guide_side, 
+                 scales = "free",
+                 space = "free_y", 
+                 labeller = label_parsed)+
+      theme(strip.text.y = element_blank())
+    
+  } else {
+    toxPlot_1_2 <- toxPlot_1_2 +
+      facet_grid(. ~ guide_side, scales = "free")
+  }
+  
+
   
   plot_info <- ggplot_build(toxPlot_1_2)
   layout_stuff <- plot_info$layout
@@ -258,13 +263,16 @@ combo_plot_matches <- function(gd_1, gd_2,
   
   labels_1_2$guide_side <- factor(labels_1_2$guide_side, levels = c(guide_side_1, guide_side_2))
   
+  countNonZero_1_2$nonZero[countNonZero_1_2$nonZero != "*"] <- ""
+  
   toxPlot_1_2 <- toxPlot_1_2 +
-    geom_text(data=countNonZero_1_2, size=2.5, 
+    geom_text(data=countNonZero_1_2, 
+              size=4, color = "blue",nudge_x = -0.3,
               aes(x= chnm, label = nonZero, y=ymin)) +
-    geom_text(data=countNonZero_1_2, size=2.5, 
-              aes(x= chnm, label = hits, y=ymax)) +
-    geom_text(data=labels_1_2, size=2.5,vjust=-0.5,
-              aes(x = x,  y=y, label = label)) +
+    # geom_text(data=countNonZero_1_2, size=2.5, 
+    #           aes(x= chnm, label = hits, y=ymax)) +
+    # geom_text(data=labels_1_2, size=2.5,vjust=-0.5,
+    #           aes(x = x,  y=y, label = label)) +
     geom_segment(data = thresh_df, aes(y = thres, yend = thres),
                  linetype="dashed", 
                  x = 1,
@@ -275,23 +283,58 @@ combo_plot_matches <- function(gd_1, gd_2,
 }
 
 get_priority_chms <- function(gd, thresh){
+  
   priority_chems_a <- gd %>%
     filter(meanEAR > 0) %>%
-    group_by(chnm) %>%
+    group_by(CAS) %>%
     summarise(count = length(unique(site))) %>%
     filter(count >= 10) %>%
-    mutate(chnm = as.character(chnm)) %>%
-    pull(chnm)
+    mutate(CAS = as.character(CAS)) %>%
+    pull(CAS)
   
   priority_chems_b <- gd %>%
-    filter(chnm %in% priority_chems_a) %>%
+    filter(CAS %in% priority_chems_a) %>%
     filter(meanEAR > thresh) %>%
-    group_by(chnm) %>%
+    group_by(CAS) %>%
     summarize(count = length(unique(site))) %>%
     filter(count >= 5) %>%
-    mutate(chnm = as.character(chnm)) %>%
-    pull(chnm)
+    mutate(CAS = as.character(CAS)) %>%
+    pull(CAS)
   
   return(priority_chems_b)
   
+}
+
+graph_chem_data_CAS <- function(chemical_summary, 
+                                manual_remove=NULL,
+                                mean_logic = FALSE,
+                                sum_logic = TRUE){
+  
+  site <- chnm <- Class <- EAR <- sumEAR <- meanEAR <- ".dplyr"
+  
+  chemical_summary <- chemical_summary %>%
+    select(-chnm) %>%
+    distinct()
+  
+  if(!sum_logic){
+    graphData <- chemical_summary %>%
+      dplyr::group_by(site, CAS, Class) %>%
+      dplyr::summarise(meanEAR=ifelse(mean_logic,mean(EAR),max(EAR))) %>%
+      dplyr::ungroup()     
+  } else {
+    #With new dplyr...will need to filter out na's in meanEAR
+    graphData <- chemical_summary %>%
+      dplyr::group_by(site,date,CAS,Class) %>%
+      dplyr::summarise(sumEAR=sum(EAR,na.rm = TRUE)) %>%
+      dplyr::ungroup() %>%
+      dplyr::group_by(site, CAS,Class) %>%
+      dplyr::summarise(meanEAR=ifelse(mean_logic,mean(sumEAR),max(sumEAR))) %>%
+      dplyr::ungroup() 
+  }
+  
+  if(!is.null(manual_remove)){
+    graphData <- dplyr::filter(graphData, !(chnm %in% manual_remove))
+  }
+  
+  return(graphData)
 }

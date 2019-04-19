@@ -10,19 +10,34 @@ library(data.table)
 # si_1 <- readxl::read_excel("M:/QW Monitoring Team/GLRI toxics/ToxCast/JAs/ToxEval 1/Manuscript/Supplemental.xlsx",sheet = "SI-1 Watershed Characteristics")
 # si_2 <- readxl::read_excel("M:/QW Monitoring Team/GLRI toxics/ToxCast/JAs/ToxEval 1/Manuscript/Supplemental.xlsx",sheet = "SI-2 Chemical Classes")
 
+####################################
+source(file = "data_setup.R")
+
+cas <- readxl::read_excel("Supplemental_v16.xlsx", sheet = "SI-2 Chemical Classes", skip = 4) %>%
+  select(CAS = `...3`) %>%
+  filter(!is.na(CAS))
+  
+cas_key <- toxEval::tox_chemicals %>%
+  select(CAS = Substance_CASRN, chnm_tox = Substance_Name) %>%
+  full_join(select(tox_list$chem_info, CAS, orig_name = `Chemical Name`), by="CAS") %>%
+  filter(CAS %in% tox_list$chem_info$CAS) 
+
+cas_key$chnm_tox[is.na(cas_key$chnm_tox)] <- cas_key$orig_name[is.na(cas_key$chnm_tox)]
+cas_key$chnm_tox[cas_key$chnm_tox =="4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)"] <- paste0("M",cas_key$chnm_tox[cas_key$chnm_tox =="4-Nonylphenol monoethoxylate, (sum of all isomers; NP1EO)"])
+cas_key$chnm_tox[cas_key$chnm_tox =="4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)"] <- paste0("M",cas_key$chnm_tox[cas_key$chnm_tox =="4-Nonylphenol diethoxylate  (sum of all isomers; NP2EO)"])
+cas_key$chnm_tox[cas_key$chnm_tox =="4-tert-Octylphenol diethoxylate (OP2EO)"] <- paste0("M",cas_key$chnm_tox[cas_key$chnm_tox =="4-tert-Octylphenol diethoxylate (OP2EO)"])
+cas_key$chnm_tox[cas_key$chnm_tox =="4-tert-Octylphenol monoethoxylate (OP1EO)"] <- paste0("M",cas_key$chnm_tox[cas_key$chnm_tox =="4-tert-Octylphenol monoethoxylate (OP1EO)"])
+cas_key$chnm <- cas_key$chnm_tox
+
+cas_key_ordered <- cas %>%
+  left_join(select(cas_key, CAS, chnm), by="CAS")
+
+dir.create("tables", showWarnings = FALSE)
+write.csv(cas_key_ordered, file = "tables/cas_names.csv", row.names = FALSE, na = "")
+
 #########################################
 # SI 3:
 # 
-file_name <- "OWC_data_fromSup.xlsx"
-full_path <- file.path(file_name)
-
-tox_list <- create_toxEval(full_path)
-ACClong <- get_ACC(tox_list$chem_info$CAS)
-ACClong <- remove_flags(ACClong)
-
-cleaned_ep <- clean_endPoint_info(end_point_info)
-filtered_ep <- filter_groups(cleaned_ep)
-
 endPointInfo <- clean_endPoint_info(end_point_info)
 
 si_3_endpoints <- select(filtered_ep, 
