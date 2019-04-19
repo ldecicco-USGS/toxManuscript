@@ -6,6 +6,44 @@ library(readxl)
 source(file = "data_setup.R")
 AOP_info <- read_xlsx("SI_6_AOP_relevance With Short AOP name.xlsx", sheet = "SI_AOP_relevance")
 
+ear_thresh <- 0.001
+siteThres <- 10
+# ep_percent_thres <- 0.5
+
+AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
+AOP <- AOP_crosswalk %>%
+  select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
+  distinct()
+
+relevance <- data.table::fread("AOP_relevance.csv", data.table = FALSE) %>%
+  select(-`Endpoint(s)`) %>%
+  distinct()
+
+AOP_full_info <- relevance %>%
+  full_join(select(AOP, AOP=ID, `Tox Cast Endpoints` = endPoint), by="AOP") %>%
+  full_join(select(AOP_info, `Abbreviated AOP description` = `...5`, AOP), by="AOP") %>%
+  select(AOP, Relevant, Rationale, `Abbreviated AOP description`, `Tox Cast Endpoints`) %>%
+  arrange(AOP) %>%
+  distinct()
+
+ear_thresh <- 0.001
+siteThres <- 10
+
+endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
+  group_by(endPoint,site,date) %>%
+  summarize(EARsum = sum(EAR)) %>%
+  group_by(site,endPoint) %>%
+  summarize(EARmax = max(EARsum)) %>%
+  filter(EARmax >= ear_thresh) %>%
+  group_by(endPoint) %>%
+  summarize(numSites = n_distinct(site)) %>%
+  arrange(desc(numSites)) %>%
+  filter(numSites >= siteThres)
+
+priority_endpoints <- endpoints_sites_hits$endPoint
+
+AOP_full_info_priority <- AOP_full_info %>%
+  filter(`Tox Cast Endpoints` %in% priority_endpoints)
 
 plot_heat_AOPs <- function(chemical_summary,AOP_info,
                                 chem_site,
@@ -14,18 +52,16 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
   
   SiteID <- site_grouping <- `Short Name` <- chnm <- maxEAR <- ".dplyr"
   site <- EAR <- sumEAR <- meanEAR <- ".dplyr"
-  
-  graphData <- toxEval:::graph_chem_data(chemical_summary, 
-                               mean_logic=mean_logic,
-                               sum_logic = sum_logic)
-  
+
   if(!("site_grouping" %in% names(chem_site))){
     chem_site$site_grouping <- "Sites"
   }
   
   graphData <- chemical_summary %>%
     select(-Class) %>%
-    left_join(select(AOP_info, AOP, endPoint=`Endpoint(s)`, Class=`X__1`), by="endPoint") %>%
+    left_join(select(AOP_info, AOP, 
+                     endPoint=`Tox Cast Endpoints`, 
+                     Class=`Abbreviated AOP description`), by="endPoint") %>%
     group_by(site,date,AOP, Class) %>%
     summarise(sumEAR=sum(EAR)) %>%
     data.frame() %>%
@@ -83,7 +119,18 @@ plot_heat_AOPs <- function(chemical_summary,AOP_info,
   
 }
 
-aop_heat <- plot_heat_AOPs(chemicalSummary, AOP_info, tox_list$chem_site, 
+aop_heat <- plot_heat_AOPs(chemicalSummary, 
+                           AOP_full_info, 
+                           tox_list$chem_site, 
                sum_logic = FALSE, mean_logic = FALSE)
 
-ggsave(aop_heat, file="plots/SI6_AOP_heat.pdf", height = 9, width = 11)
+# ggsave(aop_heat, file="plots/SI6_AOP_heat.pdf", height = 9, width = 11)
+
+ggsave(aop_heat, file="plots/SI6_AOP_heat_all.pdf", height = 20, width = 11)
+
+aop_heat2 <- plot_heat_AOPs(chemicalSummary, 
+                           AOP_full_info_priority, 
+                           tox_list$chem_site, 
+                           sum_logic = FALSE, mean_logic = FALSE)
+
+ggsave(aop_heat2, file="plots/SI6_AOP_heat_priorityEPs.pdf", height = 9, width = 11)
