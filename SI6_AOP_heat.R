@@ -10,24 +10,14 @@ ear_thresh <- 0.001
 siteThres <- 10
 # ep_percent_thres <- 0.5
 
-AOP_crosswalk <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE)
-AOP <- AOP_crosswalk %>%
+AOP <- read.csv("AOP_crosswalk_Dec_2018.csv", stringsAsFactors = FALSE) %>%
   select(endPoint=Component.Endpoint.Name, ID=AOP..) %>%
   distinct()
 
 relevance <- data.table::fread("AOP_relevance.csv", data.table = FALSE) %>%
-  select(-`Endpoint(s)`) %>%
   distinct()
 
-AOP_full_info <- relevance %>%
-  full_join(select(AOP, AOP=ID, `Tox Cast Endpoints` = endPoint), by="AOP") %>%
-  full_join(select(AOP_info, `Abbreviated AOP description` = `...5`, AOP), by="AOP") %>%
-  select(AOP, Relevant, Rationale, `Abbreviated AOP description`, `Tox Cast Endpoints`) %>%
-  arrange(AOP) %>%
-  distinct()
-
-ear_thresh <- 0.001
-siteThres <- 10
+eps_with_ids <- unique(AOP$endPoint)
 
 endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint,site,date) %>%
@@ -38,12 +28,21 @@ endpoints_sites_hits <- filter(chemicalSummary,EAR > 0) %>%
   group_by(endPoint) %>%
   summarize(numSites = n_distinct(site)) %>%
   arrange(desc(numSites)) %>%
-  filter(numSites >= siteThres)
+  filter(numSites >= siteThres) %>%
+  mutate(hasAOP = endPoint %in% eps_with_ids)
 
-priority_endpoints <- endpoints_sites_hits$endPoint
+priority_endpoints <- endpoints_sites_hits$endPoint[endpoints_sites_hits$hasAOP]
 
-AOP_full_info_priority <- AOP_full_info %>%
-  filter(`Tox Cast Endpoints` %in% priority_endpoints)
+AOP_full_info <- relevance %>%
+  select(-`Endpoint(s)`) %>%
+  left_join(AOP, by=c("AOP"="ID")) %>%
+  left_join(select(AOP_info, `Abbreviated AOP description` = `...5`, AOP), by="AOP") %>%
+  select(AOP, Relevant, Rationale, `Abbreviated AOP description`, `Tox Cast Endpoints`=endPoint) %>%
+  arrange(AOP) %>%
+  distinct()
+
+AOP_full_info_prior <- AOP_full_info %>%
+  filter(`Tox Cast Endpoints` %in% priority_endpoints )
 
 plot_heat_AOPs <- function(chemical_summary,AOP_info,
                                 chem_site,
@@ -128,7 +127,7 @@ aop_heat <- plot_heat_AOPs(chemicalSummary,
 
 ggsave(aop_heat, file="plots/SI6_AOP_heat_all.pdf", height = 20, width = 11)
 
-aop_heat2 <- plot_heat_AOPs(chemicalSummary, 
+aop_heat2 <- plot_heat_AOPs(filter(chemicalSummary, endPoint %in% priority_endpoints), 
                            AOP_full_info_priority, 
                            tox_list$chem_site, 
                            sum_logic = FALSE, mean_logic = FALSE)
