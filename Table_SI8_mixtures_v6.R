@@ -22,6 +22,7 @@ source(file = "combo_graph_function.R")
 # 6. Remove chemicals in each sample that do not contribute at least 1% of EARsumAOP
 # 7. Retain only chemicals that show up at a minimum of 5 sites
 
+start.time <- Sys.time()
 
 EAR_thresh <- 0.001
 # ep_percent_thres <- 0.5
@@ -118,31 +119,61 @@ boxplot(EAR ~ chnm,data=test,log="x",horizontal=TRUE,las=2)
 EAR_thresh <- 0.001
 
 chemSummaryAOP <- boxData_max %>%
-  group_by(ID, site, date) %>%
+  group_by(ID, site, date, sample) %>%
   summarize(EARsum = sum(maxEAR, na.rm = TRUE))%>%
-  filter(EARsum > EAR_thresh) %>%
-  mutate(sample = paste(site,date))
+  filter(EARsum > EAR_thresh) 
 
 EAR_thresh_individual_chem <- 0.00001
 
-#Find samples with priority chemicals
-Chem_vectors_by_site <- chemicalSummary %>%
-  mutate(sample = paste(site,date)) %>%
-  filter(sample %in% chemSummaryAOP$sample)%>%
+Chem_vectors_by_site <- boxData_pct %>%
+  #  mutate(sample = paste(site,date)) %>%
+  #  filter(sample %in% chemSummaryAOP$sample)%>%
   filter(CAS %in% AOP_priority_CAS) %>% 
-  filter(EAR > EAR_thresh_individual_chem) %>%
-  group_by(site,date) %>%
+  #  filter(EAR > EAR_thresh_individual_chem) %>%
+  group_by(site,date,sample) %>%
   summarize(chemVector = paste(sort(unique(CAS)),collapse = "|"))
 
 #Count how many sites had detections of each priority chemical within the 
 #limits from above (>1% of EAR when EARAOP > 0.001)
+
+
+#Sum all EARAOPs by sample and include a chemvector and EARsum
+#Use this df for determining how many sites a mixture is present regardless of EAR level
+chemPresentAllSamples <- chemicalSummary %>%
+  filter(EAR>0,CAS %in% AOP_priority_CAS) 
+
+chemPresentAllSamplesVector <- chemicalSummary %>%
+  filter(EAR>0,CAS %in% AOP_priority_CAS) %>%
+  group_by(site,date) %>%
+  summarise(chemVector = paste(sort(unique(CAS)),collapse = "|"))
+
+#filter chemicalSummary to samples with priority AOP chems, add AOP relevance, filtered to greatest EAR for each AOP ID and chemical per sample
+chemSumPriority_samples <- chemicalSummary %>%
+  filter(EAR>0,CAS %in% AOP_priority_CAS) %>%
+  left_join(AOP_relevance, by="endPoint") %>%
+  filter(grepl("yes|maybe",Relevant,ignore.case = TRUE)) %>%
+  group_by(ID, chnm, CAS, site, date) %>%
+  summarize(maxEAR = max(EAR, na.rm = TRUE),
+            endPoint_used = endPoint[which.max(EAR)]) %>%
+  mutate(sample = paste(site,date))
+
 
 allSTAIDs1 <- character()
 for(i in 1:length(AOP_priority_CAS)) {
   chem <- AOP_priority_CAS[i]
   sites_by_vector <- filter(Chem_vectors_by_site,grepl(chem,chemVector))
   STAIDs <- unique(sites_by_vector$site)
-  Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
+  chemInSamples <- chemPresentAllSamplesVector %>%
+    filter(grepl(chem,chemVector))
+  numSitesAll <- length(unique(chemInSamples$site))#All samples, any EAR level
+  numSites <- length(STAIDs) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
+  numSitesMixturesOnlydf <- chemSumPriority_samples %>%
+    filter(CAS %in% chem,maxEAR > EAR_thresh)
+  numSitesMixturesOnly <- length(unique(numSitesMixturesOnlydf$site))
+  
+  Num_sites_by_vector <- data.frame(numSitesAll = numSitesAll, 
+                                    numSitesContributing = numSites,
+                                    numSitesMixturesOnly = numSitesMixturesOnly)
   Num_sites_by_vector$chemVector <- chem
   Num_sites_by_vector$nChems <- 1
   Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
@@ -150,50 +181,14 @@ for(i in 1:length(AOP_priority_CAS)) {
   if(i==1) {Num_sites_by_mixture <- Num_sites_by_vector
   } else Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
 }
-####### 2- chem combos ##############
-
-
-# Determine unique 2-chem combos
-chems_char_vector <- character()
-for(m in 1:(length(AOP_priority_CAS)-1)){
-  for(l in (m+1):length(AOP_priority_CAS)){
-    chems <- AOP_priority_CAS[c(m,l)]
-    chems_char_vector <- c(chems_char_vector,paste(sort(c(chems)),collapse="|"))
-  }
-}
-
-#Determine unique 2-chem combos
-chems_char_vector <- unique(chems_char_vector)
-length(chems_char_vector)
-
-#Determine how many sites for each 2-chem combo
-for(m in 1:length(chems_char_vector)){
-  chems_char <- chems_char_vector[m]
-  chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-  rows1 <- grep(chems[1],Chem_vectors_by_site$chemVector) 
-  rows2 <- grep(chems[2],Chem_vectors_by_site$chemVector)
-  mixture_rows <- intersect(rows1,rows2)
-  mixture_df <- Chem_vectors_by_site[mixture_rows,]
-  unique(mixture_df$site)
-  STAIDs <- unique(mixture_df$site)
-  Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
-  Num_sites_by_vector$chemVector <- chems_char
-  Num_sites_by_vector$nChems <- 2
-  Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
-  
-  Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-  
-}
-
-
 
 
 max_mixture <- 12
-####### 3- chem combos ##############
+####### 2+  chem combos ##############
 
-for(z in 3:max_mixture){
+for(z in 2:max_mixture){
   
-  chem_df <- filter(Num_sites_by_mixture,nChems==(z-1) & numSites > 0)
+  chem_df <- filter(Num_sites_by_mixture,nChems==(z-1) & numSitesContributing > 0)
   if(dim(chem_df)[1] > 0){
     #Filter to z-1 chem mixtures with more than zero sites
     #loop through z-1 chem mixtures to look for z chem mixtures
@@ -203,8 +198,8 @@ for(z in 3:max_mixture){
     for(m in 1:dim(chem_df)[1]){
       current_chems <- unlist(strsplit(chem_df$chemVector[m],split = "|",fixed=TRUE))
       other_chems <- AOP_priority_CAS[-which(AOP_priority_CAS %in% current_chems)]
-      for(l in 1:length(other_chems)) {
-        chems <- c(current_chems,other_chems[l])
+      for(n in 1:length(other_chems)) {
+        chems <- c(current_chems,other_chems[n])
         chems_char_vector <- c(chems_char_vector,paste(sort(c(chems)),collapse="|"))
       }
     }
@@ -213,38 +208,82 @@ for(z in 3:max_mixture){
     chems_char_vector <- unique(chems_char_vector)
     length(chems_char_vector)
     
-    #Determine how many sites for each 3-chem combo
-    for(m in 1:length(chems_char_vector)){
-      chems_char <- chems_char_vector[m]
+    #Determine how many sites match criteria of >1% contribution when EARAOP > 0.001
+    for (l in 1:length(chems_char_vector)){
+      chems_char <- chems_char_vector[l]
       chems <- unlist(strsplit(chems_char,split = "|",fixed=TRUE))
-      rows_with_chem <- grep(chems[1],Chem_vectors_by_site$chemVector) 
-      for(y in 2:z){
-        mixture_rows <- grep(chems[y],Chem_vectors_by_site$chemVector) 
-        mixture_rows <- intersect(mixture_rows,rows_with_chem)
+      
+      
+      numMatches <- numeric()
+      for(m in 1:dim(Chem_vectors_by_site)[1]) {
+        chemsCurrent <- unlist(strsplit(as.character(Chem_vectors_by_site[m,"chemVector"]),split="|",fixed=TRUE))
+        numMatchesCurrent <- sum(chems %in% chemsCurrent)
+        numMatches <- c(numMatches,numMatchesCurrent)
       }
+      
+      mixture_rows <- which(numMatches == z)
       mixture_df <- Chem_vectors_by_site[mixture_rows,]
-      unique(mixture_df$site)
-      STAIDs <- unique(mixture_df$site)
-      Num_sites_by_vector <- data.frame(numSites =length(STAIDs))
+      STAIDs1 <- unique(mixture_df$site)
+      
+      
+      chemInSamples <- chemPresentAllSamples %>%
+        filter(CAS %in% chems) %>% 
+        group_by(site,date) %>%
+        summarize(nChems = length(unique(CAS))) %>%
+        filter(nChems == z)
+      
+      
+      MixturesSamples <- chemSumPriority_samples %>%
+        filter(CAS %in% chems) %>%
+        group_by(sample) %>%
+        summarize(nChems = length(unique(CAS))) %>%
+        filter(nChems == z)
+      numSitesMixturesOnlydf <- chemSumPriority_samples %>%
+        filter(sample %in% MixturesSamples$sample) %>%
+        filter(CAS %in% chems) %>%
+        group_by(ID,site,date) %>%
+        summarize(EARsum = sum(maxEAR)) %>%
+        filter(EARsum > EAR_thresh)
+      
+      numSitesAll <- length(unique(chemInSamples$site))#All samples, any EAR level
+      numSites <- length(STAIDs1) #number of sites meeting criteria: EARAOP > 0.001 and >1% contribution
+      numSitesMixturesOnly <- length(unique(numSitesMixturesOnlydf$site))
+      STAIDs <- unique(numSitesMixturesOnlydf$site)
+      
+      Num_sites_by_vector <- data.frame(numSitesAll = numSitesAll, 
+                                        numSitesContributing = numSites,
+                                        numSitesMixturesOnly = numSitesMixturesOnly)
       Num_sites_by_vector$chemVector <- chems_char
       Num_sites_by_vector$nChems <- z
       Num_sites_by_vector$STAIDs <- paste(STAIDs,collapse = "|")
       
       Num_sites_by_mixture <- rbind(Num_sites_by_mixture,Num_sites_by_vector)
-      
     }
   }
 }
 
+Num_sites_by_mixture_orig <- Num_sites_by_mixture
+
+# sum(Num_sites_by_mixture$numSitesAll < Num_sites_by_mixture$numSitesMixturesOnly)
+# sum(Num_sites_by_mixture$numSitesContributing < Num_sites_by_mixture$numSitesMixturesOnly)
+# sum(Num_sites_by_mixture$numSitesAll < Num_sites_by_mixture$numSitesContributing)
+# 
+# which(Num_sites_by_mixture_orig$numSitesContributing<Num_sites_by_mixture_orig$numSitesMixturesOnly)
+
+
 ################### Now clean up mixtures df  ##################################
 
+#Num_sites_by_mixture <- Num_sites_by_mixture_orig
 
-
-Num_sites_by_mixture <- filter(Num_sites_by_mixture,numSites>0) %>%
+Num_sites_by_mixture <- filter(Num_sites_by_mixture,numSitesAll>0) %>%
   group_by(chemVector,STAIDs) %>%
   # summarize(numSites =max(numSites),
   #           nChems = max(nChems)) %>%
-  arrange(nChems,desc(numSites))
+  arrange(nChems,desc(numSitesMixturesOnly))
+
+plot(Num_sites_by_mixture$numSitesAll,col=Num_sites_by_mixture$nChems)
+#points(Num_sites_by_mixture$numSitesContributing,col=Num_sites_by_mixture$nChems,pch=20,cex=2)
+points(Num_sites_by_mixture$numSitesMixturesOnly,col=Num_sites_by_mixture$nChems,pch=20,cex=1)
 
 
 ####Add site names from siteID vector
@@ -271,13 +310,18 @@ for(i in 1:dim(Num_sites_by_mixture)[1]){
 }
 Num_sites_by_mixture$chnmVector <- chemColumn
 
+end.time <- Sys.time()
+time.taken <- end.time - start.time
+time.taken
 
 write.csv(Num_sites_by_mixture,file="SI_table7 Num_sites_by_mixture_temp.csv",row.names = FALSE)
 
-TableSI8 <- Num_sites_by_mixture[,c("nChems","numSites","chemVector","chnmVector","siteVector","STAIDs")]
-names(TableSI8) <- c("Number of Chemicals","Number of sites", "CAS#","Chemical Names","Site Short Names","USGS Station IDs")
+TableSI8 <- Num_sites_by_mixture[,c("nChems","numSitesAll","numSitesMixturesOnly","chemVector","chnmVector","siteVector","STAIDs")]
+names(TableSI8) <- c("Number of Chemicals","Number of Sites Mixture Detected","Number of Sites EARmixture > 0.001",
+                     "CAS#","Chemical Names","Site Short Names","USGS Station IDs")
 
 write.csv(TableSI8,file="tables/SI_table8_Num_sites_by_mixture_v4.1.csv",row.names = FALSE)
 
 
 mixtures_5plus_sites <- filter(Num_sites_by_mixture,numSites>=5)
+
