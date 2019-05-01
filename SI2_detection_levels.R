@@ -194,13 +194,29 @@ plot_chemical_boxplots_mod <- function(chemicalSummary,
 plot_DL <- plot_chemical_boxplots_mod(chemicalSummary, 
                              font_size = 7, title = " ")
 
+library(gridExtra)
+
 plot_DL_w_cap <- plot_DL +
-  labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios" ~ (EAR[Chem]) ~ "using ToxCast endpoints and the detection level of",
-                             "chemicals monitored in Great Lakes tributaries, 2010-2013.                                                              "))) +
-  theme(plot.caption = element_text(hjust = -0.35))
+  labs(caption = bquote(atop(bold("Figure SI-2:") ~ "Exposure activity ratios" ~ (EAR[Chem]) ~ "using ToxCast endpoints and the detection level of chemicals monitored in Great Lakes tributaries, 2010-2013.",
+                             "Boxes, 25th to 75th percentiles; dark line, median; whiskers, data within 1.5 x the interquartile range (IQR); circles, values outside 1.5 x the IQR."))) +
+  theme(plot.caption = element_text(hjust = 0, size = 6))
 
 dir.create(file.path("plots"), showWarnings = FALSE)
-ggsave(plot_DL_w_cap, filename = "plots/SI2_detection_levels.pdf", width = 9, height = 11)
+ggsave(plot_DL_w_cap, filename = "plots/SI2_detection_levels1.pdf", width = 9, height = 11)
+
+# line_1 <- expression(bold("Figure SI-2:")*" Exposure activity ratios ("*EAR[Chem]*") using ToxCast endpoints and the detection level of chemicals monitored in Great Lakes")
+# line_2 <- expression("tributaries, 2010-2013. Boxes, 25th to 75th percentiles; dark line, median; whiskers, data within 1.5 x the interquartile range (IQR); circles, values outside 1.5 x the IQR.")
+
+# plot_DL_w_cap <- plot_DL +
+#   annotation_custom(grid::textGrob(line_1,
+#                                    gp = grid::gpar(fontsize = 7)),
+#                                    xmin = -6.5, xmax = -6.5, ymin = -4, ymax = -4) +
+#   annotation_custom(grid::textGrob(line_2,
+#                                    gp = grid::gpar(fontsize = 7)),
+#                     xmin = -7.5, xmax = -7.5, ymin = -4, ymax = -4)
+
+
+
 
 
 
