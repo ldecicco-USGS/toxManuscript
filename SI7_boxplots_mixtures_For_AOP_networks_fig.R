@@ -4,6 +4,8 @@ library(tidyr)
 library(data.table)
 #########################################################################################
 source(file = "data_setup.R")
+source(file = "Table_SI8_mixtures_v4.R")
+
 #source(file = "MakeTitles.R")
 #source(file = "combo_graph_function.R")
 
@@ -91,7 +93,7 @@ for (i in 1:length(mixture_CAS)){
   mixtureEARs$ID <- factor(mixtureEARs$ID,levels = AOPs,ordered = TRUE)
   
   bp <- boxplot(mixtureEARs$EARsum ~ mixtureEARs$ID, 
-                log="y",
+                log="y",xlab = "",
                 las=2,
                 ylim=c(1e-5,10),
                 cex.axis=axis_text_cex,
@@ -111,12 +113,13 @@ mtext("AOP ID",side=1,outer=TRUE, line = -1.5, cex = 0.65)
 # mtext(paste(i,"-Compound Mixtures"),outer=TRUE)
 mtext(bquote(paste('EAR'['SiteAOP'])),side=2,line=3,outer=TRUE)
 mtext(side = 1, cex = 0.75,adj = 0,line = 2,
-      text = bquote(atop(bold("Figure SI-7:") ~ "Boxplots of exposure activity ratios (" *
+      text = bquote(bold("Figure SI-7:") ~ "Boxplots of exposure activity ratios (" *
                            .(y_label)  *
-                           ") by adverse outcome pathway for" ~ .(i) ~ "-",
-                         )),outer=TRUE)
-mtext("chemical mixtures present in samples of Great Lakes tributaries, 2010-2013.",
+                           ") by adverse outcome pathway for" ~ .(i) ~ "-",),outer=TRUE)
+mtext("chemical mixtures present in samples of Great Lakes tributaries, 2010-2013. Boxes, 25th to 75th percentiles; dark",
       outer=TRUE,side=1,line=3,cex=0.75,adj=0)
+mtext("line, median; whiskers, data within 1.5 x the interquartile range (IQR); circles, values outside 1.5 x the IQR.",
+      outer=TRUE,side=1,line=4,cex=0.75,adj=0)
 dev.off()
 #shell.exec(filenm)
 

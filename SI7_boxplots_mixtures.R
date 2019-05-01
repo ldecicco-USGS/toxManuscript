@@ -65,13 +65,15 @@ for(j in 1:dim(sub_Num_sites)[1]){
     group_by(site,date) %>%
     filter(grepl(paste(CASnums,collapse="|"), CAS)) %>%
     group_by(site,date,ID) %>%
-    summarize(EARsum = sum(maxEAR))
+    summarize(EARsum = sum(maxEAR)) %>%
+    ungroup() %>%
+    mutate(ID = as.character(ID))
   
   yaxis_plot_nums <- plot_dimensions[[i]][1]*j-1
   yaxt <- ifelse(j %in%  (0:32*plot_dimensions[[i]][2] +1),"s","n")
   
-  boxplot(subChemSummary$EARsum ~ as.character(subChemSummary$ID), 
-          log="y",
+  boxplot(subChemSummary$EARsum ~ subChemSummary$ID, 
+          log="y",xlab = "",ylab = "",
           las=2,
           ylim=c(1e-5,10),
           cex.axis=axis_text_cex,
