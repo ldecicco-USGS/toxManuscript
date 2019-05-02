@@ -134,19 +134,20 @@ combo_plot_matches <- function(gd_1, gd_2,
                  outlier.size=1) +
     theme_bw() +
     coord_flip() +
-    theme(axis.text = element_text( color = "black"),
-          axis.text.y = element_text(size=9, vjust=.35),
+    theme(axis.text = element_text(size=10, color = "black"),
+          axis.text.y = element_text(vjust=.35),
           axis.title=element_blank(),
           panel.background = element_blank(),
           plot.background = element_rect(fill = "transparent",colour = NA),
           strip.background = element_rect(fill = "transparent",colour = NA),
-          strip.text.y = element_blank()) +
+          strip.text.y = element_blank(),
+          strip.text.x = element_text(size = 12)) +
     guides(fill=guide_legend(ncol=6)) +
     theme(legend.position="bottom",
           legend.justification = "left",
           legend.background = element_rect(fill = "transparent", colour = "transparent"),
           legend.title=element_blank(),
-          legend.text = element_text(size=8),
+          legend.text = element_text(size=10),
           legend.key.height = unit(1,"line"),
           axis.ticks.y = element_blank()) +
     scale_fill_manual(values = cbValues, drop=FALSE) +
