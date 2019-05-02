@@ -76,7 +76,7 @@ textData <- data.frame(guide_up = c("A","A","B","B"),
                                              levels(plot_data$guide_side)[1],
                                              levels(plot_data$guide_side)[2]),levels = levels(plot_data$guide_side))) %>%
   mutate(textExplain = c("A","B","C","D"),
-         y = c(10,100,10,100),
+         y = c(5,100,5,100),
          chnm = factor(c("4-Nonylphenol, branched","4-Nonylphenol, branched",
                          "4-tert-Octylphenol monoethoxylate","4-tert-Octylphenol monoethoxylate"), 
                        levels = levels(plot_data$chnm)))
@@ -110,9 +110,13 @@ site_graph <- ggplot(data = site_counts) +
   coord_flip() +
   scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
   theme(axis.text.x = element_text( color = "transparent"),
-        axis.text.y = element_text(size=9, vjust=.35, color = "black"),
+        axis.text.y = element_text(size=10, vjust=.35, color = "black"),
         axis.title=element_blank(),
         panel.background = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.text.x = element_text(size = 12),
+        panel.grid.major = element_blank(),
+        panel.border = element_rect(fill = "transparent", color = "transparent"),
         plot.background = element_rect(fill = "transparent",colour = NA),
         strip.background = element_rect(fill = "transparent",colour = NA),
         strip.text.y = element_blank(),
@@ -125,11 +129,11 @@ legend_box <- get_legend(no_axis +
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 
-png("plots/Fig2.png", width = 1800, height = 1200, res = 142)
+png("plots/Fig2.png", width = 1400, height = 1600, res = 142)
 plot_grid(site_graph, no_axis,
           NULL,legend_box,
           align = "h", nrow = 2,ncol=2, 
-          rel_widths =  c(2/9, 7/9),
+          rel_widths =  c(2.8/9, 6.2/9),
           rel_heights = c(0.9,0.1))
 
 dev.off()
