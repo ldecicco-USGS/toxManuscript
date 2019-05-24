@@ -131,25 +131,25 @@ combo_plot_matches <- function(gd_1, gd_2,
   toxPlot_1_2 <- ggplot(data=graphData_1_2) +
     scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
     geom_boxplot(aes(x=chnm, y=meanEAR, fill=Class, color=priority),
-                 outlier.size=1) +
+                 outlier.size=0.5, lwd=0.01, fatten=1) +
     theme_bw() +
     coord_flip() +
-    theme(axis.text = element_text(size=10, color = "black"),
-          axis.text.y = element_text(vjust=.35),
+    theme(axis.text.y = element_text(vjust=.35),
           axis.title=element_blank(),
           panel.background = element_blank(),
           plot.background = element_rect(fill = "transparent",colour = NA),
           strip.background = element_rect(fill = "transparent",colour = NA),
-          strip.text.y = element_blank(),
-          strip.text.x = element_text(size = 12)) +
-    guides(fill=guide_legend(ncol=6)) +
+          strip.text.y = element_blank()) +
+    guides(fill=guide_legend(ncol=5)) +
     theme(legend.position="bottom",
           legend.justification = "left",
           legend.background = element_rect(fill = "transparent", colour = "transparent"),
           legend.title=element_blank(),
           legend.text = element_text(size=10),
           legend.key.height = unit(1,"line"),
-          axis.ticks.y = element_blank()) +
+          axis.ticks.y = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_line(size = 0.1)) +
     scale_fill_manual(values = cbValues, drop=FALSE) +
     scale_color_manual(values = c("black","red"), 
                        na.value = "black", guide = "none")

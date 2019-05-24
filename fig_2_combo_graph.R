@@ -82,13 +82,17 @@ textData <- data.frame(guide_up = c("A","A","B","B"),
                        levels = levels(plot_data$chnm)))
 
 toxPlot_wq <- toxPlot_wq +
-  geom_text(data = textData, aes(label = textExplain, x = chnm, y=y),size = 3)
+  geom_text(data = textData, aes(label = textExplain, x = chnm, y=y),
+            size = 2.5)
 
 
 no_axis <- toxPlot_wq +
   theme(axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         axis.ticks.y=element_blank(),
+        strip.text =  element_text(size=7),
+        axis.ticks = element_line(size = 0.1),
+        # axis.text = element_text(size=10, color = "black"),
         legend.position = "none")
 
 site_counts <- tox_list$chem_data %>%
@@ -104,17 +108,17 @@ site_counts$nSites[is.na(site_counts$nSites)] <- 0
 pretty_logs_new <- toxEval:::prettyLogs(c(10,100,1000))
 
 site_graph <- ggplot(data = site_counts) +
-  geom_text(aes(x=chnm, label = nSites, y=100), size = 3) +
+  geom_text(aes(x=chnm, label = nSites, y=100), size = 2.5) +
   facet_grid(guide_up ~ guide_side, scales = "free", space = "free_y", labeller = label_parsed)+
   theme_bw() +
   coord_flip() +
   scale_y_log10(labels=toxEval:::fancyNumbers,breaks=pretty_logs_new)  +
   theme(axis.text.x = element_text( color = "transparent"),
-        axis.text.y = element_text(size=10, vjust=.35, color = "black"),
+        axis.text.y = element_text(size=7, vjust=.35, color = "black"),
         axis.title=element_blank(),
         panel.background = element_blank(),
         panel.grid.minor = element_blank(),
-        strip.text.x = element_text(size = 12),
+        strip.text.x = element_text(size = 7),
         panel.grid.major = element_blank(),
         panel.border = element_rect(fill = "transparent", color = "transparent"),
         plot.background = element_rect(fill = "transparent",colour = NA),
@@ -125,24 +129,25 @@ site_graph <- ggplot(data = site_counts) +
 
 library(cowplot)
 legend_box <- get_legend(no_axis + 
-                           theme(legend.position = "bottom") )
+                           theme(legend.position = "bottom",
+                                 legend.text = element_text(size = 6.5)) )
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 
-png("plots/Fig2.png", width = 1400, height = 1600, res = 142)
+# png("plots/Fig2.png", width = 1400, height = 1600, res = 142)
+# plot_grid(site_graph, no_axis,
+#           NULL,legend_box,
+#           align = "h", nrow = 2,ncol=2, 
+#           rel_widths =  c(2.8/9, 6.2/9),
+#           rel_heights = c(0.9,0.1))
+# 
+# dev.off()
+
+pdf("plots/Fig2.pdf", width = 6.5, height = 6.5)
 plot_grid(site_graph, no_axis,
           NULL,legend_box,
           align = "h", nrow = 2,ncol=2, 
-          rel_widths =  c(2.8/9, 6.2/9),
-          rel_heights = c(0.9,0.1))
-
-dev.off()
-
-pdf("plots/Fig2.pdf", width = 11, height = 9)
-plot_grid(site_graph, no_axis,
-          NULL,legend_box,
-          align = "h", nrow = 2,ncol=2, 
-          rel_widths =  c(2.5/9, 6.5/9),
+          rel_widths =  c(3/9, 6/9),
           rel_heights = c(0.9,0.1))
 
 dev.off()

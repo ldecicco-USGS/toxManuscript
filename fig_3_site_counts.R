@@ -49,12 +49,16 @@ countPlot <- ggplot(graphData, aes(x=`Short Name`))+
         strip.text.x = element_text(size = 8),
         strip.background = element_rect(fill="transparent", colour = NA),
         axis.text = element_text(size=8),
-        axis.text.x = element_text( angle = 90,vjust=0.5,hjust = 1),
+        axis.text.x = element_text( angle = 90,vjust=0.5,
+                                    hjust = 1),
         panel.spacing = unit(0.15, "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=0.1),
+        axis.ticks = element_line(size = 0.1),
+        axis.title.y = element_text(size = 8),
         plot.background = element_rect(fill = "transparent",colour = NA)) +
-  geom_text(data = label_samples,vjust=0.5,hjust=1.1,
+  geom_text(data = label_samples,vjust=0.5,hjust=1.05,
             aes(x=x,y=y,label=label),
             size=2,inherit.aes = FALSE) +
   coord_cartesian(clip="off")
@@ -67,3 +71,5 @@ dir.create(file.path("plots"), showWarnings = FALSE)
 png("plots/fig3_site_count.png", width = 1000, height = 800, res = 142)
 print(countPlot)
 dev.off()
+
+ggsave(plot = countPlot, filename = "plots/Fig3.pdf", width = 6.5, height = 3.25)

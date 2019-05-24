@@ -43,18 +43,20 @@ chemicalSummaryPriority$has_AOP[chemicalSummaryPriority$endPoint %in% eps_with_i
 
 endpointPlot <- plot_tox_endpoints_manuscript(chemicalSummaryPriority, 
                                               category = "Chemical", 
-                                              font_size = 7,title = " ",
+                                              font_size = 4,title = " ",
                                               pallette = c("steelblue", "white"))
 
-gb <- ggplot2::ggplot_build(endpointPlot)
-gt <- ggplot2::ggplot_gtable(gb)
+ggsave(plot = endpointPlot, filename = "plots/Fig4.pdf", width = 5, height = 3.5)
 
-gt$layout$clip[gt$layout$name=="panel"] <- "off"
-
-dir.create(file.path("plots"), showWarnings = FALSE)
-png("plots/fig4_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
-grid::grid.draw(gt)
-dev.off()
+# gb <- ggplot2::ggplot_build(endpointPlot)
+# gt <- ggplot2::ggplot_gtable(gb)
+# 
+# gt$layout$clip[gt$layout$name=="panel"] <- "off"
+# 
+# dir.create(file.path("plots"), showWarnings = FALSE)
+# png("plots/fig4_endpoint_boxplots.png", width = 1000, height = 800, res = 142)
+# grid::grid.draw(gt)
+# dev.off()
 
 # Determine number of chemicals and sites per endpoint
 endpoints_unique_chems <- filter(chemicalSummaryPriority,EAR > 0) %>%

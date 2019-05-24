@@ -6,6 +6,7 @@ library(data.table)
 library(dataRetrieval)
 library(cowplot)
 library(grid)
+library(readxl)
 
 ####################################
 source(file = "data_setup.R")
@@ -107,7 +108,8 @@ pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 y_label <- expression(EAR[SiteAOP])
 
 boxplot_top <- ggplot(data = boxData) +
-  geom_boxplot(aes(x=ID, y=maxMaxEAR, fill = Relevant), outlier.size = 0.5) +
+  geom_boxplot(aes(x=ID, y=maxMaxEAR, fill = Relevant), 
+               outlier.size = 0.5, lwd=0.01, fatten=1) +
   theme_bw() +
   theme(axis.ticks.x = element_blank(),
         panel.border = element_blank(),
@@ -117,6 +119,8 @@ boxplot_top <- ggplot(data = boxData) +
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = 20),
         axis.text = element_text(size = 15),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(size = 0.1),
         legend.position = "none",
         legend.text = element_text(size = 17),
         legend.title = element_text(size = 17, hjust = 0),
@@ -206,7 +210,7 @@ legend_box <- get_legend(boxplot_top +
                          theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-png("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
+pdf("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
           plot_grid(legend_box, legend_aop, ncol = 2),
@@ -214,6 +218,15 @@ plot_grid(site_graph, boxplot_top,
           rel_heights = c(1/20, 7/20, 2/20, 9/20,1/10),
           labels = c("A","","B","",""))
 dev.off()
+
+# png("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
+# plot_grid(site_graph, boxplot_top, 
+#           aop_label_graph, aop_ep, 
+#           plot_grid(legend_box, legend_aop, ncol = 2),
+#           align = "v", nrow = 5, 
+#           rel_heights = c(1/20, 7/20, 2/20, 9/20,1/10),
+#           labels = c("A","","B","",""))
+# dev.off()
 
 length(unique(boxData_max$ID)) -1 #(1 NA) # 112 AOP IDs mapped to toxCast
 length(unique(boxData$ID)) #51 priority AOPs
