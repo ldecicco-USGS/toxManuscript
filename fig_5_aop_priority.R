@@ -107,6 +107,10 @@ pretty_logs_new <- toxEval:::prettyLogs(boxData$maxMaxEAR)
 
 y_label <- expression(EAR[SiteAOP])
 
+font_size <- 7
+legend_scale <- 0.8
+text_scale <- 4
+
 boxplot_top <- ggplot(data = boxData) +
   geom_boxplot(aes(x=ID, y=maxMaxEAR, fill = Relevant), 
                outlier.size = 0.5, lwd=0.01, fatten=1) +
@@ -117,15 +121,19 @@ boxplot_top <- ggplot(data = boxData) +
         panel.grid.minor.y = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_text(size = 20),
-        axis.text = element_text(size = 15),
+        axis.title.y = element_text(size = font_size),
+        axis.text = element_text(size = font_size),
+        axis.ticks.y = element_line(size = 0.1),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_line(size = 0.1),
+        plot.margin = unit(c(0,1,0,1), "lines"),
         legend.position = "none",
-        legend.text = element_text(size = 17),
-        legend.title = element_text(size = 17, hjust = 0),
+        legend.margin=margin(t=0.1, r=0.1, b=0.1, l=0.1, unit="cm"),
+        legend.text = element_text(size = font_size*legend_scale),
+        legend.title = element_text(size = font_size*legend_scale, hjust = 0),
         legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black")) +
+        legend.box.background = element_blank()) +
+          # element_rect(colour = "black", size =  0.1)) +
   scale_fill_manual(values=c("#E69F00", "#009E73", "white","#999999")) +
   scale_y_log10(y_label,
                 labels=toxEval:::fancyNumbers,
@@ -133,19 +141,22 @@ boxplot_top <- ggplot(data = boxData) +
   guides(fill = guide_legend(title.position="top", title.hjust = 0.5))
 
 aop_ep <- ggplot(data = chem_sum_AOP) +
-  geom_tile(aes(x=ID, y=endPoint, fill=meanEAR)) +
+  geom_tile(aes(x=ID, y=endPoint, fill=meanEAR), color = "black") +
   theme_bw() +
   scale_x_discrete(position="top", drop = FALSE) +
   ylab("ToxCast Assay Name") +
   labs(fill=expression(EAR[SiteMixture])) +
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        axis.title.y = element_text(size = 20),
+        axis.title.y = element_text(size = font_size),
         legend.position = "none",
-        legend.text = element_text(size = 17),
-        legend.title = element_text(size = 17),
+        plot.margin = unit(c(0,1,0,1), "lines"),
+        legend.margin=margin(t=0.1, r=0.1, b=0.1, l=0.1, unit="cm"),
+        legend.text = element_text(size = font_size*legend_scale),
+        legend.title = element_text(size = font_size*legend_scale),
         legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black")) +
+        legend.box.background = element_blank()) +
+          # element_rect(colour = "black", size =  0.1)) +
   scale_y_discrete(drop=FALSE) +
   scale_fill_gradient( guide = "legend",
                        trans = 'log',limits = c(1e-4,1),
@@ -153,10 +164,11 @@ aop_ep <- ggplot(data = chem_sum_AOP) +
                        breaks = c(1e-5,1e-4,1e-3,1e-2,1e-1,1),
                        labels = toxEval:::fancyNumbers2,
                        na.value = 'transparent') +
-  theme(panel.grid.major.y = element_blank(),
-        panel.grid.minor.y = element_blank(),
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_line(size = 0.1),
+        panel.grid.major.y = element_blank(),
         axis.ticks = element_blank(),
-        axis.text = element_text(size = 12),
+        axis.text = element_text(size = font_size-1),
         panel.border = element_blank(),
         plot.background = element_rect(fill = "transparent",colour = NA)) +
   guides(fill = guide_legend(title.position="top", title.hjust = 0.5))
@@ -181,12 +193,13 @@ site_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="# Sites", 
                 label = as.character(sitehits)),
-            vjust = 0.5, size = 3.5, angle = 35) +
+            vjust = 0.5, size = font_size/text_scale, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 15),
+        axis.text.y = element_text(size = font_size),
         axis.title = element_blank(),
         axis.ticks = element_blank(),
+        plot.margin = unit(c(0,1,0,1), "lines"),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_blank())
@@ -195,28 +208,31 @@ aop_label_graph <- ggplot() +
   geom_text(data = nSites,
             aes(x = ID, y="AOP ID", 
                 label = as.character(ID)),
-            vjust = 0.5, size = 3.5, angle = 35) +
+            vjust = 0.5, size = font_size/text_scale, angle = 35) +
   theme_bw() +
   theme(axis.text.x = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(size = 15),
+        axis.text.y = element_text(size = font_size),
         axis.ticks = element_blank(),
+        plot.margin = unit(c(0,1,0,1), "lines"),
         panel.grid.major.y = element_blank(),
         panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_line(size = 0.1),
         panel.border = element_blank())
 
 legend_box <- get_legend(boxplot_top + 
                          theme(legend.position = "bottom") )
 legend_aop <- get_legend(aop_ep + theme(legend.position="bottom"))
 
-pdf("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
+pdf("plots/Fig5_aop_cow.pdf", width = 6, height = 4.5)
 plot_grid(site_graph, boxplot_top, 
           aop_label_graph, aop_ep, 
-          plot_grid(legend_box, legend_aop, ncol = 2),
+          plot_grid(legend_box, NULL, legend_aop, NULL, 
+                    ncol = 4, rel_widths = c(4/10,1/20,5/10,1/20)),
           align = "v", nrow = 5, 
-          rel_heights = c(1/20, 7/20, 2/20, 9/20,1/10),
-          labels = c("A","","B","",""))
+          rel_heights = c(1.75/20, 4.5/20, 1.75/20, 9/20, 3/20),
+          labels = c("A","","B","",""), label_size = 12)
 dev.off()
 
 # png("plots/Fig5_aop_cow.png", width = 1800, height = 1200, res = 142)
