@@ -130,7 +130,7 @@ site_graph <- ggplot(data = site_counts) +
 library(cowplot)
 legend_box <- get_legend(no_axis + 
                            theme(legend.position = "bottom",
-                                 legend.text = element_text(size = 6.5)) )
+                                 legend.text = element_text(size = 6.25)) )
 
 dir.create(file.path("plots"), showWarnings = FALSE)
 
